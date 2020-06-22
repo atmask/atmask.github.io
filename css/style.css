@@ -1,0 +1,324 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap');
+
+
+/* For the scroll effect*/
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+    background-color: rgb(27, 27, 27);
+}
+
+.drawing{
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: -60px;
+    margin-right: auto;
+    width: 50%;
+    height: 90%;
+    
+}
+
+a{
+  color: inherit;
+}
+a:hover{
+   font-size: 105%;
+}
+
+.icons{ 
+  position: fixed;
+  bottom: 1vh;
+  margin-left: 93vw;
+}
+
+.icon{
+  padding: 3px;
+  max-width: 40%;
+  max-height: 40%;
+}
+
+.icon:hover{
+  max-width: 45%;
+  max-height: 45%;
+}
+
+.frame {
+  height: 100vh;
+  width: 100vw;
+}
+
+/* Second frame*/
+#frame2 {
+    background-color: #fff;
+    background-image: url(../imgs/websiteBg.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    align-items: center;
+    height: 200vh
+}
+
+#frame2 h2 {
+  font-family: sans-serif;
+  font-weight: 300;
+  font-size: 3em;
+  vertical-align: middle;
+  text-align: center;
+  margin: auto;
+  padding-top: 50vh;
+}
+
+/* Picture of me */
+#bio-div{
+  display: inline-block;
+  align-items: center;
+  max-width: 21vw;
+  margin-left: 20vw;
+  margin-top: 25vh;
+}
+#profile-pic{
+  display: block;
+  margin: auto;
+  max-width: 60%;
+  max-height: 60%;
+  padding-bottom: 10px;
+}
+
+#bio-text{
+  display: inline;
+  font-family: sans-serif;
+  font-weight: 100;
+  font-size: 1.1em;
+  /*letter-spacing: 0.02em;*/
+  line-height: 18px;
+}
+
+#info-div{
+  vertical-align: top;
+  display: inline-block;
+  align-items: center;
+  max-width: 35vw;
+  margin-left: 8vw;
+  margin-top: 21vh;
+}
+
+.info-title{
+  padding-top: 20px;
+  font-family: sans-serif;
+  font-weight: 700;
+  font-size: 1.3em;
+  text-align: left;
+  letter-spacing: 0.05em;
+
+}
+
+.info-text{
+  text-align: left;
+  padding-left: 20px;
+  font-size: 1.1em;
+  text-align: left;
+}
+
+.info-text li{
+  padding-bottom: 10px;
+  line-height: 25px;
+}
+
+
+/* Rolling I am text */
+.adjective {
+  font-size: 3em;
+  text-transform: uppercase;
+  letter-spacing: 0.5em;
+  font-weight: 600;
+}
+
+.adjective .letter {
+  display: inline-block;
+  line-height: 1em;
+}
+
+
+/* The arrow */
+*, *:before, *:after {
+  -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+ }
+
+
+.mouse_scroll {
+	display: block;
+	margin: 0 auto;
+	width: 24px;
+  height: 100px;
+}
+
+
+.m_scroll_arrows
+{
+  display: block;
+  width: 5px;
+  height: 5px;
+  -ms-transform: rotate(45deg); /* IE 9 */
+  -webkit-transform: rotate(45deg); /* Chrome, Safari, Opera */
+  transform: rotate(45deg);
+   
+  border-right: 2px solid white;
+  border-bottom: 2px solid white;
+  margin: 0 0 3px 4px;
+  
+  width: 16px;
+  height: 16px;
+}
+
+
+.one
+{
+    -webkit-animation: mouse-scroll 1s infinite;
+    -moz-animation: mouse-scroll 1s infinite;
+    animation: mouse-scroll 1s infinite;
+  
+}
+
+
+
+.one
+{
+  -webkit-animation-delay: .2s;
+  -moz-animation-delay: .2s;
+  -webkit-animation-direction: alternate;
+  
+  animation-delay: .2s;
+  animation-direction: alternate;
+  
+  margin-top: -6px;
+}
+
+
+.mouse {
+  height: 42px;
+  width: 24px;
+  border-radius: 14px;
+  transform: none;
+  border: 2px solid white;
+  top: 170px;
+}
+
+.two
+{
+  border-right: 2px solid #111;
+  border-bottom: 2px solid #111;
+  vertical-align: bottom;
+  margin-top: 37vh;
+}
+
+
+
+@-webkit-keyframes mouse-wheel{
+   0% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+    -ms-transform: translateY(0);
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    -webkit-transform: translateY(6px);
+    -ms-transform: translateY(6px);
+    transform: translateY(6px);
+  }
+}
+@-moz-keyframes mouse-wheel {
+  0% { top: 1px; }
+  25% { top: 2px; }
+  50% { top: 3px;}
+  75% { top: 2px;}
+  100% { top: 1px;}
+}
+@-o-keyframes mouse-wheel {
+
+   0% { top: 1px; }
+  25% { top: 2px; }
+  50% { top: 3px;}
+  75% { top: 2px;}
+  100% { top: 1px;}
+}
+@keyframes mouse-wheel {
+
+   0% { top: 1px; }
+  25% { top: 2px; }
+  50% { top: 3px;}
+  75% { top: 2px;}
+  100% { top: 1px;}
+}
+
+@-webkit-keyframes mouse-scroll {
+
+  0%   { opacity: 0;}
+  50%  { opacity: .5;}
+  100% { opacity: 1;}
+}
+@-moz-keyframes mouse-scroll {
+
+  0%   { opacity: 0; }
+  50%  { opacity: .5; }
+  100% { opacity: 1; }
+}
+@-o-keyframes mouse-scroll {
+
+  0%   { opacity: 0; }
+  50%  { opacity: .5; }
+  100% { opacity: 1; }
+}
+@keyframes mouse-scroll {
+
+  0%   { opacity: 0; }
+  50%  { opacity: .5; }
+  100% { opacity: 1; }
+}
+
+
+
+/* Moving text*/
+.name {
+  /* font-family: 'Montserrat', sans-serif;
+  font-weight: 700; */
+
+  font-family: sans-serif;
+  font-weight: 100;
+  font-size: 3.3em;
+  color: #fff;
+  display: inline;/* My change */
+  margin-left: 140px;
+  margin-right: 0;
+}
+
+.name .text-wrapper {
+  position: relative;
+  display: inline-block;
+  padding-top: 0.1em;
+  padding-right: 0.05em;
+  padding-bottom: 0.15em;
+}
+
+.name .line {
+  opacity: 0;
+  position: absolute;
+  left: 0;
+  height: 100%;
+  width: 3px;
+  background-color: #fff;
+  transform-origin: 0 50%;
+}
+
+.name .line1 { 
+  top: 0; 
+  left: 0;
+}
+
+.name .letter {
+  display: inline-block;
+  line-height: 1em;
+}
