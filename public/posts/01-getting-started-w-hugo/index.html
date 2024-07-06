@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Getting Started with Hugo &amp; Github Pages | Ben Mask</title>
 <meta name="keywords" content="hugo, tutorial, github pages">
-<meta name="description" content="Big Idea The goal of this post is to capture the steps required to get started with Hugo and Github pages. Hugo is a GO based static site generation tool. Github pages is a feature of Github that allows anyone with a GitHub account host a static site.
+<meta name="description" content="Big Idea The goal of this post is to capture the steps required to get started with Hugo and Github Pages. Hugo is a Go based static site generation tool. Github Pages is a feature of Github that allows anyone with a GitHub account host a static site.
 Part 1: Setting up GitHub Pages In order to server your site you will need to somewhere to host it. Github offers a free service called Github Pages that we will use for this purpose.">
 <meta name="author" content="">
 <link rel="canonical" href="http://localhost:1313/posts/01-getting-started-w-hugo/">
@@ -181,12 +181,12 @@ Part 1: Setting up GitHub Pages In order to server your site you will need to so
 </div>
 
   <div class="post-content"><h1 id="big-idea">Big Idea<a hidden class="anchor" aria-hidden="true" href="#big-idea">#</a></h1>
-<p>The goal of this post is to capture the steps required to get started with Hugo and Github pages. Hugo is a GO based static site generation tool. Github pages is a feature of Github that allows anyone with a GitHub account host a static site.</p>
+<p>The goal of this post is to capture the steps required to get started with Hugo and Github Pages. Hugo is a Go based static site generation tool. Github Pages is a feature of Github that allows anyone with a GitHub account host a static site.</p>
 <h1 id="part-1-setting-up-github-pages">Part 1: Setting up GitHub Pages<a hidden class="anchor" aria-hidden="true" href="#part-1-setting-up-github-pages">#</a></h1>
 <p>In order to server your site you will need to somewhere to host it. Github offers a free service called Github Pages that we will use for this purpose. Github Pages offers the free hosting of static website content. This means we will be able to build or Hugo site into a static site and then serve that via
 Github pages.</p>
 <h3 id="create-github-pages-repo">Create Github Pages Repo<a hidden class="anchor" aria-hidden="true" href="#create-github-pages-repo">#</a></h3>
-<p>To get started with Github Pages for your blog you will first need a repo in which you&rsquo;ll store your website content. Github pages offers websites for individual projects or for your user. For this tutorial we will use the user Github Pages. The first step to creating this Pages site is creating a repo in your Github account that follows the naming scheme: <code>&lt;username&gt;.github.io</code> (substitute <code>&lt;username&gt;</code> with your Github username). Select <strong>Initialize this repository with a README</strong> and then then create the repo.</p>
+<p>To get started with Github Pages for your blog, you will first need a repo in which you&rsquo;ll store your website content. Github pages offers websites for individual projects or for your user. For this tutorial we will use the user Github Pages. The first step to creating this Pages site is creating a repo in your Github account that follows the naming scheme: <code>&lt;username&gt;.github.io</code> (substitute <code>&lt;username&gt;</code> with your Github username). Select <strong>Initialize this repository with a README</strong> and then then create the repo.</p>
 <blockquote>
 <p><strong>Note:</strong> Your repository must be a public repo for pages to work.</p>
 </blockquote>
@@ -213,7 +213,7 @@ the repository main page and click on <strong>Settings</strong>:
 <p>This will create a new directory named <code>&lt;github-username&gt;.github.io</code> that is pre-populated with the Hugo starter boilerplate. You don&rsquo;t have to use the site name <code>&lt;github-username&gt;.github.io</code>. You can change it whatever you would like. However, in the case of Github pages, you created your pages site in a repo named <code>&lt;github-username&gt;.github.io</code>. To keep naming consistent use the name of the existing repo.</p>
 <h3 id="connect-your-local-hugo-project-to-the-git-repo">Connect your local Hugo Project to the Git Repo<a hidden class="anchor" aria-hidden="true" href="#connect-your-local-hugo-project-to-the-git-repo">#</a></h3>
 <p>Now that you have created a new Hugo site you will want to connect it to the Github repository you created earlier. To do this we will first initialize your new local project as a git project. This can be done by entering your project directory and the running <code>git init</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cd <span style="color:#e6db74">`</span>&lt;github-username&gt;.github.io<span style="color:#e6db74">`</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cd &lt;github-username&gt;.github.io/
 </span></span><span style="display:flex;"><span>git init
 </span></span></code></pre></div><p>This enables version control for your project. Let&rsquo;s create an initial commit of the Hugo site and push to git:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git add .
@@ -236,10 +236,10 @@ the repository main page and click on <strong>Settings</strong>:
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">theme</span>:
 </span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">PaperMod</span> <span style="color:#75715e">## If you chose a different theme put the name of the theme here. This is the folder under /themes that contains the theme</span>
 </span></span></code></pre></div><h3 id="run-hugo-locally">Run Hugo Locally<a hidden class="anchor" aria-hidden="true" href="#run-hugo-locally">#</a></h3>
-<p>You can now run your site locally by running <code>hugo server</code> from the terminal within your project. This bring up your site at http://localhost:1313/.</p>
-<p>You can change the Title on your site by editing the <code>hugo.yaml</code> file. All PaperMod features and customizations can be found documented here: <a href="https://github.com/adityatelange/hugo-PaperMod/wiki/Features">PaperMod Features</a></p>
+<p>You can now run your site locally by running <code>hugo server</code> from the terminal within your project. This bring up your site at <a href="http://localhost:1313/">http://localhost:1313/</a>.</p>
+<p>You can change the title on your site by editing the <code>hugo.yaml</code> file. All PaperMod features and customizations can be found documented here: <a href="https://github.com/adityatelange/hugo-PaperMod/wiki/Features">PaperMod Features</a></p>
 <h3 id="deploy-to-github-pages">Deploy to Github Pages<a hidden class="anchor" aria-hidden="true" href="#deploy-to-github-pages">#</a></h3>
-<p>Next we will deploy to Github pages. Remember that earlier we changed the <strong>Build and deployment</strong> setting to Github Actions,. This means that we need to specify a Github Actions workflow for Github Runners to execute when you push your repo. Github Actions are a series of jobs that will be performed on your code base when you push to Github. In our case we will use Github Actions to build our Hugo site and deploy to Pages. To do this we must create the following workflow file in our repo: <code>&lt;github-username&gt;.github.io/.github/workflows/hugo.yaml</code></p>
+<p>Next we will deploy to Github pages. Remember that earlier we changed the <strong>Build and deployment</strong> setting to Github Actions. This means that we need to specify a Github Actions workflow for Github Runners to execute when you push your repo. Github Actions are a series of jobs that will be performed on your code base when you push to Github. In our case we will use Github Actions to build our Hugo site and deploy to Pages. To do this we must create the following workflow file in our repo: <code>&lt;github-username&gt;.github.io/.github/workflows/hugo.yaml</code></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e"># Sample workflow for building and deploying a Hugo site to GitHub Pages</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">name</span>: <span style="color:#ae81ff">Deploy Hugo site to Pages</span>
 </span></span><span style="display:flex;"><span>
@@ -320,9 +320,9 @@ the repository main page and click on <strong>Settings</strong>:
 </span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/deploy-pages@v4</span>
 </span></span></code></pre></div><p>After adding this run:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git add .
-</span></span><span style="display:flex;"><span>git ci -m <span style="color:#e6db74">&#34;Add theme and release workflow
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">git push
-</span></span></span></code></pre></div><p>This will push your changes to Github. From the Github repo page for your project you can open the <strong>Actions</strong> tab to see your defined workflow running. Once this has completed you can navigate to <code>&lt;github-username&gt;.github.io</code> to view your site! This could take ~10 mins to become visible so don&rsquo;t worry if you don&rsquo;t see it right away.</p>
+</span></span><span style="display:flex;"><span>git ci -m <span style="color:#e6db74">&#34;Add theme and release workflow&#34;</span>
+</span></span><span style="display:flex;"><span>git push
+</span></span></code></pre></div><p>This will push your changes to Github. From the Github repo page for your project you can open the <strong>Actions</strong> tab to see your defined workflow running. Once this has completed you can navigate to <code>&lt;github-username&gt;.github.io</code> to view your site! This could take ~10 mins to become visible so don&rsquo;t worry if you don&rsquo;t see it right away.</p>
 <h1 id="part-3-adding-a-custom-domain">Part 3: Adding a Custom Domain<a hidden class="anchor" aria-hidden="true" href="#part-3-adding-a-custom-domain">#</a></h1>
 <p>To add a custom domain you will need to follow a few steps. First, if you do not have one already, you will need to purchase a domain from a registrar such as Cloudflare, GoDaddy, or NameCheap. Doing this is beyond the scope of this blog and there are multitudes of online guides that will explain this in more detail than I can here.</p>
 <h3 id="specify-domain-in-github-pages">Specify Domain in Github Pages<a hidden class="anchor" aria-hidden="true" href="#specify-domain-in-github-pages">#</a></h3>

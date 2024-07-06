@@ -8,7 +8,7 @@ draft: false
 
 # Big Idea
 
-The goal of this post is to capture the steps required to get started with Hugo and Github pages. Hugo is a GO based static site generation tool. Github pages is a feature of Github that allows anyone with a GitHub account host a static site.
+The goal of this post is to capture the steps required to get started with Hugo and Github Pages. Hugo is a Go based static site generation tool. Github Pages is a feature of Github that allows anyone with a GitHub account host a static site.
 
 
 # Part 1: Setting up GitHub Pages
@@ -17,7 +17,7 @@ Github pages.
 
 
 ### Create Github Pages Repo
-To get started with Github Pages for your blog you will first need a repo in which you'll store your website content. Github pages offers websites for individual projects or for your user. For this tutorial we will use the user Github Pages. The first step to creating this Pages site is creating a repo in your Github account that follows the naming scheme: `<username>.github.io` (substitute `<username>` with your Github username). Select **Initialize this repository with a README** and then then create the repo.
+To get started with Github Pages for your blog, you will first need a repo in which you'll store your website content. Github pages offers websites for individual projects or for your user. For this tutorial we will use the user Github Pages. The first step to creating this Pages site is creating a repo in your Github account that follows the naming scheme: `<username>.github.io` (substitute `<username>` with your Github username). Select **Initialize this repository with a README** and then then create the repo.
 
 > **Note:** Your repository must be a public repo for pages to work.
 
@@ -55,7 +55,7 @@ This will create a new directory named `<github-username>.github.io` that is pre
 ### Connect your local Hugo Project to the Git Repo
 Now that you have created a new Hugo site you will want to connect it to the Github repository you created earlier. To do this we will first initialize your new local project as a git project. This can be done by entering your project directory and the running `git init`
 ```bash
-cd `<github-username>.github.io`
+cd <github-username>.github.io/
 git init
 ```
 This enables version control for your project. Let's create an initial commit of the Hugo site and push to git:
@@ -90,13 +90,13 @@ theme:
 ```
 
 ### Run Hugo Locally
-You can now run your site locally by running `hugo server` from the terminal within your project. This bring up your site at http://localhost:1313/.
+You can now run your site locally by running `hugo server` from the terminal within your project. This bring up your site at [http://localhost:1313/](http://localhost:1313/).
 
-You can change the Title on your site by editing the `hugo.yaml` file. All PaperMod features and customizations can be found documented here: [PaperMod Features](https://github.com/adityatelange/hugo-PaperMod/wiki/Features)
+You can change the title on your site by editing the `hugo.yaml` file. All PaperMod features and customizations can be found documented here: [PaperMod Features](https://github.com/adityatelange/hugo-PaperMod/wiki/Features)
 
 ### Deploy to Github Pages
 
-Next we will deploy to Github pages. Remember that earlier we changed the **Build and deployment** setting to Github Actions,. This means that we need to specify a Github Actions workflow for Github Runners to execute when you push your repo. Github Actions are a series of jobs that will be performed on your code base when you push to Github. In our case we will use Github Actions to build our Hugo site and deploy to Pages. To do this we must create the following workflow file in our repo: `<github-username>.github.io/.github/workflows/hugo.yaml`
+Next we will deploy to Github pages. Remember that earlier we changed the **Build and deployment** setting to Github Actions. This means that we need to specify a Github Actions workflow for Github Runners to execute when you push your repo. Github Actions are a series of jobs that will be performed on your code base when you push to Github. In our case we will use Github Actions to build our Hugo site and deploy to Pages. To do this we must create the following workflow file in our repo: `<github-username>.github.io/.github/workflows/hugo.yaml`
 ```yaml
 # Sample workflow for building and deploying a Hugo site to GitHub Pages
 name: Deploy Hugo site to Pages
@@ -181,7 +181,7 @@ jobs:
 After adding this run:
 ```bash
 git add .
-git ci -m "Add theme and release workflow
+git ci -m "Add theme and release workflow"
 git push
 ```
 
