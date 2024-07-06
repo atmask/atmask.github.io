@@ -14,7 +14,7 @@ From the start of my career I have been fascinated by Kubernetes. I love distrib
 
 One of the main drivers for our current state has been the advent of containerization and container orchestration. The goal of this blog is to go over the considerations and design of my baremetal Raspberry Pi Kubernetes cluster. This project was my adventure in going beyond being a user of Kubernetes services from Cloud Provider to understanding the physical magic behind the scenes.
 
-> **Full discalimer:** This project is largely based-off Anthony Simon's own project for a similar build. I found his blog post lacked a lot of details though so I want to capture those missing parts here and go into more detail about my setup. You can find his great post [here](https://anthonynsimon.com/blog/kubernetes-cluster-raspberry-pi/)!
+> **Full disclaimer:** This project is largely based-off Anthony Simon's own project for a similar build. I found his blog post lacked a lot of details though so I want to capture those missing parts here and go into more detail about my setup. You can find his great post [here](https://anthonynsimon.com/blog/kubernetes-cluster-raspberry-pi/)!
 
 You can find the Ansible scripts and Helm charts that I manage for this project on my Github:
 - [Helm Charts](https://github.com/atmask/helm-charts)
