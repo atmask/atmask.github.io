@@ -10,10 +10,10 @@
     <atom:link href="http://localhost:1313/tags/networking/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Bare Metal K3s on Rpi</title>
-      <link>http://localhost:1313/posts/bare-metal-k3s-on-rpi/</link>
+      <link>http://localhost:1313/posts/02-bare-metal-k3s-on-rpi/</link>
       <pubDate>Fri, 05 Jul 2024 20:01:16 -0400</pubDate>
-      <guid>http://localhost:1313/posts/bare-metal-k3s-on-rpi/</guid>
-      <description>Big Idea Build List UCTronics RPi CLuster Case x1 Raspberry Pi 4b 8Gb x1 Rapsberry Pi 4b 2Gb x3 1 TB SSD x1 SATA to USB 3.0 Adapter x 1 TP-Link 5 port Gigabit PoE Network Switch x1 TP-Link Nano Router x1 0.3M Ethernet Cables x4 RPi PoE Hat x4 Note: I do not receive any comission when you purchase via the above the links. These are just whate worked for my build and are what I reccomend.</description>
+      <guid>http://localhost:1313/posts/02-bare-metal-k3s-on-rpi/</guid>
+      <description>Big Idea From the start of my career I have been fascinated by Kubernetes. I love distributed systems and the rich history of how we have arrived where we are today with distributed system. We are living in the active evolution of our understanding of a vision for cloud computing. In the early years the vision was to present a homogenous Unix-like interface for managing an underlying collection of servers such as BOINC.</description>
     </item>
   </channel>
 </rss>
