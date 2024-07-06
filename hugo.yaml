@@ -24,6 +24,7 @@ outputs:
     - JSON # necessary for search
 
 params:
+  env: production
   homeInfoParams:
     title: Hi there!
     # subtitle: Software Engineer/DevOps/Cloud Developer
