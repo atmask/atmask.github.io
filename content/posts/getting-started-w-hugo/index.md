@@ -1,8 +1,9 @@
-+++
-title = 'Getting Started with Hugo & Github Pages'
-date = 2024-07-05T17:54:14-04:00
-draft = false
-+++
+---
+title: 'Getting Started with Hugo & Github Pages'
+tags: ["hugo","tutorial","github pages"]
+date: '2024-07-05T17:54:14-04:00'
+draft: false
+---
 
 # Big Idea
 

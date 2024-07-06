@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="noindex, nofollow">
 <title>Getting Started with Hugo &amp; Github Pages | Ben Mask</title>
-<meta name="keywords" content="">
+<meta name="keywords" content="hugo, tutorial, github pages">
 <meta name="description" content="Big Idea The goal of this post is to capture the steps required to get started with Hugo and Github pages. Hugo is a GO based static site generation tool. Github pages is a feature of Github that allows anyone with a GitHub account host a static site.
 Part 1: Creating a GitHub Pages Repo Part 2: Setting Up Hugo Locally The following section covers getting your static site on your local machine.">
 <meta name="author" content="">
@@ -99,6 +99,21 @@ Part 1: Creating a GitHub Pages Repo Part 2: Setting Up Hugo Locally The followi
             </div>
         </div>
         <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/posts/" title="Posts">
+                    <span>Posts</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
         </ul>
     </nav>
 </header>
@@ -106,11 +121,11 @@ Part 1: Creating a GitHub Pages Repo Part 2: Setting Up Hugo Locally The followi
 
 <article class="post-single">
   <header class="post-header">
-    
+    <div class="breadcrumbs"><a href="http://localhost:1313/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/posts/">Posts</a></div>
     <h1 class="post-title entry-hint-parent">
       Getting Started with Hugo &amp; Github Pages
     </h1>
-    <div class="post-meta"><span title='2024-07-05 17:54:14 -0400 EDT'>July 5, 2024</span>
+    <div class="post-meta"><span title='2024-07-05 17:54:14 -0400 EDT'>July 5, 2024</span>&nbsp;·&nbsp;2 min
 
 </div>
   </header> 
@@ -138,7 +153,11 @@ Part 1: Creating a GitHub Pages Repo Part 2: Setting Up Hugo Locally The followi
 
   <footer class="post-footer">
     <ul class="post-tags">
+      <li><a href="http://localhost:1313/tags/hugo/">Hugo</a></li>
+      <li><a href="http://localhost:1313/tags/tutorial/">Tutorial</a></li>
+      <li><a href="http://localhost:1313/tags/github-pages/">Github Pages</a></li>
     </ul>
+
   </footer>
 </article>
     </main>
@@ -211,6 +230,53 @@ Part 1: Creating a GitHub Pages Repo Part 2: Setting Up Hugo Locally The followi
         }
     })
 
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
 </script>
 </body>
 
