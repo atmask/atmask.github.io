@@ -193,7 +193,7 @@ To add a custom domain you will need to follow a few steps. First, if you do not
 ### Specify Domain in Github Pages
 After acquiring a domain, return to the Pages tab under **Settings > Build and Automation > Pages** in Github. Here you will see the **Custom domain** option. Add your domain to the custom domain settings. This can be the Apex domain if such as `fallow.app` if you want your blog to be the root page of your domain. If you'd prefer to host your blog on a subdomain such as `blog.fallow.app` then enter that as your custom domain.. Replace `fallow.app` with your domain.
 
-## Configure CNAME Record in your DNS Provider.
+### Configure CNAME Record in your DNS Provider.
 The registrar from whom you purchased your domain will have DNS settings available for your domain. There are two main DNS record types `A records` and `CNAME records`. An A record points to an IP. CNAME records are aliases to other domains. In our case we will create a CNAME record to our github pages domain. If you are doing this for the sudomain `blog.<your domain>`, then add `blog` as your CNAME record and `<github-username>.github.io` as your target. If you are doing this for the Apex domain (i.e. no subdomain), then use `@` (this represent the apex domain) instead of `blog`.
 
 > **Note:** DNS records take a while to propagate. You will no longer be able to reach your blog at `<github-username>.github.io` and it may take 24hrs for your site te become available. In my experience it has never been that long and has taken at most 30 mins.
