@@ -1,6 +1,7 @@
 ---
-title: 'Bare Metal K3s on Rpi'
+title: 'Buidling a Bare Metal Kubernetes Cluster on Raspberry Pis'
 tags: ["kubernetes", "raspberry pi", "k3s", "clusters", "homelab", "ansible", "tailscale", "networking", "pi-hole", "cloud"]
+ShowToc: true
 date: '2024-07-05T20:01:16-04:00'
 draft: false
 ---
@@ -13,6 +14,12 @@ From the start of my career I have been fascinated by Kubernetes. I love distrib
 
 One of the main drivers for our current state has been the advent of containerization and container orchestration. The goal of this blog is to go over the considerations and design of my baremetal Raspberry Pi Kubernetes cluster. This project was my adventure in going beyond being a user of Kubernetes services from Cloud Provider to understanding the physical magic behind the scenes.
 
+> **Full discalimer:** This project is largely based-off Anthony Simon's own project for a similar build. I found his blog post lacked a lot of details though so I want to capture those missing parts here and go into more detail about my setup. You can find his great post [here](https://anthonynsimon.com/blog/kubernetes-cluster-raspberry-pi/)!
+
+You can find the Ansible scripts and Helm charts that I manage for this project on my Github:
+- [Helm Charts](https://github.com/atmask/helm-charts)
+- [Ansible Scripts](https://github.com/atmask/homelab-ansible)
+
 
 # Architecture and Requirements
 
@@ -24,8 +31,11 @@ First, portability. I am in a season of live that is nomadic. I'm in different a
 ### Isolation & Security
 Second, and closely rleated, isolation. I want the network that my cluster runs on to be on a subnet isolated from the LAN network to which it connects. I want all IPs to be in their own non-overlapping address space. I also don't want my service publicly available or available to anyone connected to the LAN of my home network. They should only be accessible via VPN connection to the cluster network or via wireless/wired connection to the cluster LAN.
 
+### Persistent Storage & Back-ups
+Third, I wanted my cluster to support some implementation of data persistence vis PVs and PVCs. I wanted this to be affordable and to be reliable. This ruled out out buying SSD storage for each node and using a distributed file store like Rook/Ceph or Longhorn. It also ruled out using hostPath storage on SD cards. (Spolier) My final end result uses a single Terabyte SSD that is running as an SMB share which can be mounted via the SMB csi.
+
 ### HTTPs
-My third requirement is that all of my services should be available over an HTTPs connection. Sure, the VPN is encrpyted, however, I want TLS termination at the cluster and not the only the VPN. Further, I don't want browsers complaining that the site I am visiting is not secure. That is a bother for me and red flag for any firends or family who connect to my services.
+My fourth requirement is that all of my services should be available over an HTTPs connection. Sure, the VPN is encrpyted, however, I want TLS termination at the cluster and not the only the VPN. Further, I don't want browsers complaining that the site I am visiting is not secure. That is a bother for me and red flag for any firends or family who connect to my services.
 
 ### DNS
 Lastly, I want my services acessible via DNS records when a user is connected via VPN. I want the DNS server to sit on the LAN network and become the primary DNS server for users when they connect to the network. This keeps my A records off of public DNS servers.
@@ -48,19 +58,18 @@ The following is my build list for the project:
 
 
 # Configuring Networking
-With a project like this you need to start small and work up. Realistically, this means breaking up your end goal into small problems that you can manageably troubleshoot and solve as you go. Trying to take on too much with so many variables and unknowns in one swing will be fatal for a project of this kind.
+With a project like this you need to start small and work up. Realistically, this means breaking up your end goal into small problems that you can manageably troubleshoot and solve as you go. Trying to take on too much with so many variables and unknowns in one swing will be fatal for a project of this kind. I have broken down this section into the incremental steps I took accomplish my vision for the networking.
+
+### Creating the Subnet
+TP-Link in WISP mode.
 
 ### Static Node IPs
+Assign static IPs to the nodes
 
 ### DHCP Settings
+Later on we'll come back here and configure the DNS
 
 ### Validate TailScale Connectivity
-
-# Persistent Storage
-
-
-# Configuring Persistent Storage
-
 
 
 # Load-Balancing, Ingress, and SSL/TLS Management
@@ -77,4 +86,15 @@ With a project like this you need to start small and work up. Realistically, thi
 ### Configureing Cert-Manager
 
 
-### DNS Management
+### Local DNS Management with Pi-Hole
+
+
+
+# Persistent Storage
+
+
+### Creating the SMB share
+
+### Setting up the SMB CSI Driver
+
+### Creating a PVC

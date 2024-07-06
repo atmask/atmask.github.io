@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="noindex, nofollow">
-<title>Bare Metal K3s on Rpi | Ben Mask</title>
+<title>Buidling a Bare Metal Kubernetes Cluster on Raspberry Pis | Ben Mask</title>
 <meta name="keywords" content="kubernetes, raspberry pi, k3s, clusters, homelab, ansible, tailscale, networking, pi-hole, cloud">
 <meta name="description" content="Big Idea From the start of my career I have been fascinated by Kubernetes. I love distributed systems and the rich history of how we have arrived where we are today with distributed system. We are living in the active evolution of our understanding of a vision for cloud computing. In the early years the vision was to present a homogenous Unix-like interface for managing an underlying collection of servers such as BOINC.">
 <meta name="author" content="">
@@ -122,25 +122,110 @@
   <header class="post-header">
     <div class="breadcrumbs"><a href="http://localhost:1313/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/posts/">Posts</a></div>
     <h1 class="post-title entry-hint-parent">
-      Bare Metal K3s on Rpi
+      Buidling a Bare Metal Kubernetes Cluster on Raspberry Pis
     </h1>
-    <div class="post-meta"><span title='2024-07-05 20:01:16 -0400 EDT'>July 5, 2024</span>&nbsp;·&nbsp;3 min
+    <div class="post-meta"><span title='2024-07-05 20:01:16 -0400 EDT'>July 5, 2024</span>&nbsp;·&nbsp;4 min
 
 </div>
-  </header> 
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#big-idea" aria-label="Big Idea">Big Idea</a></li>
+                <li>
+                    <a href="#architecture-and-requirements" aria-label="Architecture and Requirements">Architecture and Requirements</a><ul>
+                        <ul>
+                        
+                <li>
+                    <a href="#portability" aria-label="Portability">Portability</a></li>
+                <li>
+                    <a href="#isolation--security" aria-label="Isolation &amp; Security">Isolation &amp; Security</a></li>
+                <li>
+                    <a href="#persistent-storage--back-ups" aria-label="Persistent Storage &amp; Back-ups">Persistent Storage &amp; Back-ups</a></li>
+                <li>
+                    <a href="#https" aria-label="HTTPs">HTTPs</a></li>
+                <li>
+                    <a href="#dns" aria-label="DNS">DNS</a></li></ul>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#build-list" aria-label="Build List">Build List</a></li>
+                <li>
+                    <a href="#configuring-networking" aria-label="Configuring Networking">Configuring Networking</a><ul>
+                        <ul>
+                        
+                <li>
+                    <a href="#creating-the-subnet" aria-label="Creating the Subnet">Creating the Subnet</a></li>
+                <li>
+                    <a href="#static-node-ips" aria-label="Static Node IPs">Static Node IPs</a></li>
+                <li>
+                    <a href="#dhcp-settings" aria-label="DHCP Settings">DHCP Settings</a></li>
+                <li>
+                    <a href="#validate-tailscale-connectivity" aria-label="Validate TailScale Connectivity">Validate TailScale Connectivity</a></li></ul>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#load-balancing-ingress-and-ssltls-management" aria-label="Load-Balancing, Ingress, and SSL/TLS Management">Load-Balancing, Ingress, and SSL/TLS Management</a><ul>
+                        <ul>
+                        
+                <li>
+                    <a href="#configuring-metallb" aria-label="Configuring MetalLB">Configuring MetalLB</a></li>
+                <li>
+                    <a href="#validate-with-loadbalancer" aria-label="Validate with LoadBalancer">Validate with LoadBalancer</a></li>
+                <li>
+                    <a href="#configuring-nginx-ingress" aria-label="Configuring Nginx-Ingress">Configuring Nginx-Ingress</a></li>
+                <li>
+                    <a href="#configureing-cert-manager" aria-label="Configureing Cert-Manager">Configureing Cert-Manager</a></li>
+                <li>
+                    <a href="#local-dns-management-with-pi-hole" aria-label="Local DNS Management with Pi-Hole">Local DNS Management with Pi-Hole</a></li></ul>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#persistent-storage" aria-label="Persistent Storage">Persistent Storage</a><ul>
+                        <ul>
+                        
+                <li>
+                    <a href="#creating-the-smb-share" aria-label="Creating the SMB share">Creating the SMB share</a></li>
+                <li>
+                    <a href="#setting-up-the-smb-csi-driver" aria-label="Setting up the SMB CSI Driver">Setting up the SMB CSI Driver</a></li>
+                <li>
+                    <a href="#creating-a-pvc" aria-label="Creating a PVC">Creating a PVC</a>
+                </li>
+            </ul>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
   <div class="post-content"><h1 id="big-idea">Big Idea<a hidden class="anchor" aria-hidden="true" href="#big-idea">#</a></h1>
 <p><img loading="lazy" src="images/cluster.png" alt="cluster"  />
 </p>
 <p>From the start of my career I have been fascinated by Kubernetes. I love distributed systems and the rich history of how we have arrived where we are today with distributed system. We are living in the active evolution of our understanding of a vision for cloud computing. In the early years the vision was to present a homogenous Unix-like interface for managing an underlying collection of servers such as BOINC. Now we live in the world of many small virtualized unix environments distributed across servers, sharing compute.</p>
 <p>One of the main drivers for our current state has been the advent of containerization and container orchestration. The goal of this blog is to go over the considerations and design of my baremetal Raspberry Pi Kubernetes cluster. This project was my adventure in going beyond being a user of Kubernetes services from Cloud Provider to understanding the physical magic behind the scenes.</p>
+<blockquote>
+<p><strong>Full discalimer:</strong> This project is largely based-off Anthony Simon&rsquo;s own project for a similar build. I found his blog post lacked a lot of details though so I want to capture those missing parts here and go into more detail about my setup. You can find his great post <a href="https://anthonynsimon.com/blog/kubernetes-cluster-raspberry-pi/">here</a>!</p>
+</blockquote>
+<p>You can find the Ansible scripts and Helm charts that I manage for this project on my Github:</p>
+<ul>
+<li><a href="https://github.com/atmask/helm-charts">Helm Charts</a></li>
+<li><a href="https://github.com/atmask/homelab-ansible">Ansible Scripts</a></li>
+</ul>
 <h1 id="architecture-and-requirements">Architecture and Requirements<a hidden class="anchor" aria-hidden="true" href="#architecture-and-requirements">#</a></h1>
 <p>Before diving into the build list, architecture, and design for my build I want to review what, for me, were goals and requirements for setting up this project.</p>
 <h3 id="portability">Portability<a hidden class="anchor" aria-hidden="true" href="#portability">#</a></h3>
 <p>First, portability. I am in a season of live that is nomadic. I&rsquo;m in different apartments for a year or two  at a time. I want a build that I can easily unplug, bring somewhere else, and plug-in without needing any extra steps for set up.</p>
 <h3 id="isolation--security">Isolation &amp; Security<a hidden class="anchor" aria-hidden="true" href="#isolation--security">#</a></h3>
 <p>Second, and closely rleated, isolation. I want the network that my cluster runs on to be on a subnet isolated from the LAN network to which it connects. I want all IPs to be in their own non-overlapping address space. I also don&rsquo;t want my service publicly available or available to anyone connected to the LAN of my home network. They should only be accessible via VPN connection to the cluster network or via wireless/wired connection to the cluster LAN.</p>
+<h3 id="persistent-storage--back-ups">Persistent Storage &amp; Back-ups<a hidden class="anchor" aria-hidden="true" href="#persistent-storage--back-ups">#</a></h3>
+<p>Third, I wanted my cluster to support some implementation of data persistence vis PVs and PVCs. I wanted this to be affordable and to be reliable. This ruled out out buying SSD storage for each node and using a distributed file store like Rook/Ceph or Longhorn. It also ruled out using hostPath storage on SD cards. (Spolier) My final end result uses a single Terabyte SSD that is running as an SMB share which can be mounted via the SMB csi.</p>
 <h3 id="https">HTTPs<a hidden class="anchor" aria-hidden="true" href="#https">#</a></h3>
-<p>My third requirement is that all of my services should be available over an HTTPs connection. Sure, the VPN is encrpyted, however, I want TLS termination at the cluster and not the only the VPN. Further, I don&rsquo;t want browsers complaining that the site I am visiting is not secure. That is a bother for me and red flag for any firends or family who connect to my services.</p>
+<p>My fourth requirement is that all of my services should be available over an HTTPs connection. Sure, the VPN is encrpyted, however, I want TLS termination at the cluster and not the only the VPN. Further, I don&rsquo;t want browsers complaining that the site I am visiting is not secure. That is a bother for me and red flag for any firends or family who connect to my services.</p>
 <h3 id="dns">DNS<a hidden class="anchor" aria-hidden="true" href="#dns">#</a></h3>
 <p>Lastly, I want my services acessible via DNS records when a user is connected via VPN. I want the DNS server to sit on the LAN network and become the primary DNS server for users when they connect to the network. This keeps my A records off of public DNS servers.</p>
 <h1 id="build-list">Build List<a hidden class="anchor" aria-hidden="true" href="#build-list">#</a></h1>
@@ -160,18 +245,24 @@
 <p><strong>Note:</strong> I do not receive any commission when you purchase via the above the links. These are just what worked for my build and are what I recommend.</p>
 </blockquote>
 <h1 id="configuring-networking">Configuring Networking<a hidden class="anchor" aria-hidden="true" href="#configuring-networking">#</a></h1>
-<p>With a project like this you need to start small and work up. Realistically, this means breaking up your end goal into small problems that you can manageably troubleshoot and solve as you go. Trying to take on too much with so many variables and unknowns in one swing will be fatal for a project of this kind.</p>
+<p>With a project like this you need to start small and work up. Realistically, this means breaking up your end goal into small problems that you can manageably troubleshoot and solve as you go. Trying to take on too much with so many variables and unknowns in one swing will be fatal for a project of this kind. I have broken down this section into the incremental steps I took accomplish my vision for the networking.</p>
+<h3 id="creating-the-subnet">Creating the Subnet<a hidden class="anchor" aria-hidden="true" href="#creating-the-subnet">#</a></h3>
+<p>TP-Link in WISP mode.</p>
 <h3 id="static-node-ips">Static Node IPs<a hidden class="anchor" aria-hidden="true" href="#static-node-ips">#</a></h3>
+<p>Assign static IPs to the nodes</p>
 <h3 id="dhcp-settings">DHCP Settings<a hidden class="anchor" aria-hidden="true" href="#dhcp-settings">#</a></h3>
+<p>Later on we&rsquo;ll come back here and configure the DNS</p>
 <h3 id="validate-tailscale-connectivity">Validate TailScale Connectivity<a hidden class="anchor" aria-hidden="true" href="#validate-tailscale-connectivity">#</a></h3>
-<h1 id="persistent-storage">Persistent Storage<a hidden class="anchor" aria-hidden="true" href="#persistent-storage">#</a></h1>
-<h1 id="configuring-persistent-storage">Configuring Persistent Storage<a hidden class="anchor" aria-hidden="true" href="#configuring-persistent-storage">#</a></h1>
 <h1 id="load-balancing-ingress-and-ssltls-management">Load-Balancing, Ingress, and SSL/TLS Management<a hidden class="anchor" aria-hidden="true" href="#load-balancing-ingress-and-ssltls-management">#</a></h1>
 <h3 id="configuring-metallb">Configuring MetalLB<a hidden class="anchor" aria-hidden="true" href="#configuring-metallb">#</a></h3>
 <h3 id="validate-with-loadbalancer">Validate with LoadBalancer<a hidden class="anchor" aria-hidden="true" href="#validate-with-loadbalancer">#</a></h3>
 <h3 id="configuring-nginx-ingress">Configuring Nginx-Ingress<a hidden class="anchor" aria-hidden="true" href="#configuring-nginx-ingress">#</a></h3>
 <h3 id="configureing-cert-manager">Configureing Cert-Manager<a hidden class="anchor" aria-hidden="true" href="#configureing-cert-manager">#</a></h3>
-<h3 id="dns-management">DNS Management<a hidden class="anchor" aria-hidden="true" href="#dns-management">#</a></h3>
+<h3 id="local-dns-management-with-pi-hole">Local DNS Management with Pi-Hole<a hidden class="anchor" aria-hidden="true" href="#local-dns-management-with-pi-hole">#</a></h3>
+<h1 id="persistent-storage">Persistent Storage<a hidden class="anchor" aria-hidden="true" href="#persistent-storage">#</a></h1>
+<h3 id="creating-the-smb-share">Creating the SMB share<a hidden class="anchor" aria-hidden="true" href="#creating-the-smb-share">#</a></h3>
+<h3 id="setting-up-the-smb-csi-driver">Setting up the SMB CSI Driver<a hidden class="anchor" aria-hidden="true" href="#setting-up-the-smb-csi-driver">#</a></h3>
+<h3 id="creating-a-pvc">Creating a PVC<a hidden class="anchor" aria-hidden="true" href="#creating-a-pvc">#</a></h3>
 
 
   </div>
