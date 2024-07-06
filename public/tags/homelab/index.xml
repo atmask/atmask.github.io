@@ -1,27 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>Posts on Ben Mask</title>
-    <link>http://localhost:1313/posts/</link>
-    <description>Recent content in Posts on Ben Mask</description>
+    <title>Homelab on Ben Mask</title>
+    <link>http://localhost:1313/tags/homelab/</link>
+    <description>Recent content in Homelab on Ben Mask</description>
     <generator>Hugo -- 0.128.2</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 05 Jul 2024 20:01:16 -0400</lastBuildDate>
-    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/homelab/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Bare Metal K3s on Rpi</title>
       <link>http://localhost:1313/posts/bare-metal-k3s-on-rpi/</link>
       <pubDate>Fri, 05 Jul 2024 20:01:16 -0400</pubDate>
       <guid>http://localhost:1313/posts/bare-metal-k3s-on-rpi/</guid>
       <description>Big Idea Build List UCTronics RPi CLuster Case x1 Raspberry Pi 4b 8Gb x1 Rapsberry Pi 4b 2Gb x3 1 TB SSD x1 SATA to USB 3.0 Adapter x 1 TP-Link 5 port Gigabit PoE Network Switch x1 TP-Link Nano Router x1 0.3M Ethernet Cables x4 RPi PoE Hat x4 Note: I do not receive any comission when you purchase via the above the links. These are just whate worked for my build and are what I reccomend.</description>
-    </item>
-    <item>
-      <title>Getting Started with Hugo &amp; Github Pages</title>
-      <link>http://localhost:1313/posts/getting-started-w-hugo/</link>
-      <pubDate>Fri, 05 Jul 2024 17:54:14 -0400</pubDate>
-      <guid>http://localhost:1313/posts/getting-started-w-hugo/</guid>
-      <description>Big Idea The goal of this post is to capture the steps required to get started with Hugo and Github pages. Hugo is a GO based static site generation tool. Github pages is a feature of Github that allows anyone with a GitHub account host a static site.
-Part 1: Setting up GitHub Pages In order to server your site you will need to somewhere to host it. Github offers a free service called Github Pages that we will use for this purpose.</description>
     </item>
   </channel>
 </rss>

@@ -2,10 +2,43 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>http://localhost:1313/tags/ansible/</loc>
+    <lastmod>2024-07-05T20:01:16-04:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/bare-metal-k3s-on-rpi/</loc>
+    <lastmod>2024-07-05T20:01:16-04:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/</loc>
     <lastmod>2024-07-05T20:01:16-04:00</lastmod>
   </url><url>
+    <loc>http://localhost:1313/tags/clusters/</loc>
+    <lastmod>2024-07-05T20:01:16-04:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/homelab/</loc>
+    <lastmod>2024-07-05T20:01:16-04:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/k3s/</loc>
+    <lastmod>2024-07-05T20:01:16-04:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/kubernetes/</loc>
+    <lastmod>2024-07-05T20:01:16-04:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/networking/</loc>
+    <lastmod>2024-07-05T20:01:16-04:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/pi-hole/</loc>
+    <lastmod>2024-07-05T20:01:16-04:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/posts/</loc>
+    <lastmod>2024-07-05T20:01:16-04:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/raspberry-pi/</loc>
+    <lastmod>2024-07-05T20:01:16-04:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/</loc>
+    <lastmod>2024-07-05T20:01:16-04:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/tailscale/</loc>
     <lastmod>2024-07-05T20:01:16-04:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/posts/getting-started-w-hugo/</loc>
@@ -15,9 +48,6 @@
     <lastmod>2024-07-05T17:54:14-04:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/hugo/</loc>
-    <lastmod>2024-07-05T17:54:14-04:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/</loc>
     <lastmod>2024-07-05T17:54:14-04:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/tutorial/</loc>

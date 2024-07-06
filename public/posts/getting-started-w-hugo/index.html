@@ -168,11 +168,11 @@ Part 1: Setting up GitHub Pages In order to server your site you will need to so
                         <ul>
                         
                 <li>
-                    <a href="#specify-domain-in-github-pages" aria-label="Specify Domain in Github Pages">Specify Domain in Github Pages</a></li></ul>
-                    
+                    <a href="#specify-domain-in-github-pages" aria-label="Specify Domain in Github Pages">Specify Domain in Github Pages</a></li>
                 <li>
                     <a href="#configure-cname-record-in-your-dns-provider" aria-label="Configure CNAME Record in your DNS Provider.">Configure CNAME Record in your DNS Provider.</a>
                 </li>
+            </ul>
             </ul>
             </li>
             </ul>
@@ -327,7 +327,7 @@ the repository main page and click on <strong>Settings</strong>:
 <p>To add a custom domain you will need to follow a few steps. First, if you do not have one already, you will need to purchase a domain from a registrar such as Cloudflare, GoDaddy, or NameCheap. Doing this is beyond the scope of this blog and there are multitudes of onlines guide that will explain this in more detail than I can here.</p>
 <h3 id="specify-domain-in-github-pages">Specify Domain in Github Pages<a hidden class="anchor" aria-hidden="true" href="#specify-domain-in-github-pages">#</a></h3>
 <p>After acquiring a domain, return to the Pages tab under <strong>Settings &gt; Build and Automation &gt; Pages</strong> in Github. Here you will see the <strong>Custom domain</strong> option. Add your domain to the custom domain settings. This can be the Apex domain if such as <code>fallow.app</code> if you want your blog to be the root page of your domain. If you&rsquo;d prefer to host your blog on a subdomain such as <code>blog.fallow.app</code> then enter that as your custom domain.. Replace <code>fallow.app</code> with your domain.</p>
-<h2 id="configure-cname-record-in-your-dns-provider">Configure CNAME Record in your DNS Provider.<a hidden class="anchor" aria-hidden="true" href="#configure-cname-record-in-your-dns-provider">#</a></h2>
+<h3 id="configure-cname-record-in-your-dns-provider">Configure CNAME Record in your DNS Provider.<a hidden class="anchor" aria-hidden="true" href="#configure-cname-record-in-your-dns-provider">#</a></h3>
 <p>The registrar from whom you purchased your domain will have DNS settings available for your domain. There are two main DNS record types <code>A records</code> and <code>CNAME records</code>. An A record points to an IP. CNAME records are aliases to other domains. In our case we will create a CNAME record to our github pages domain. If you are doing this for the sudomain <code>blog.&lt;your domain&gt;</code>, then add <code>blog</code> as your CNAME record and <code>&lt;github-username&gt;.github.io</code> as your target. If you are doing this for the Apex domain (i.e. no subdomain), then use <code>@</code> (this represent the apex domain) instead of <code>blog</code>.</p>
 <blockquote>
 <p><strong>Note:</strong> DNS records take a while to propagate. You will no longer be able to reach your blog at <code>&lt;github-username&gt;.github.io</code> and it may take 24hrs for your site te become available. In my experience it has never been that long and has taken at most 30 mins.</p>

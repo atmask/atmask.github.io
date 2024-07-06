@@ -24,7 +24,7 @@ params:
   homeInfoParams:
     title: Hi there!
     # subtitle: Software Engineer/DevOps/Cloud Developer
-    Content: "My name's Ben. Welcome to my blog. I'm a software engineer with a passion for understanding systems, interactions, and architecture. I'm always looking for new opportunities to learn and grow."
+    Content: "My name's Ben. Welcome to my blog. I'm a software engineer with a passion for understanding systems, interactions, abstractions, and architecture. I'm always looking for new opportunities to learn and grow. Feel free to reach out if you're interested in any of my work and want to chat!"
   socialIcons: # optional
     - name: Github
       url: https://github.com/atmask
