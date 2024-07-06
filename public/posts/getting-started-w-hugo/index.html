@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head>
-	<meta name="generator" content="Hugo 0.128.2"><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="noindex, nofollow">
-<title>Ben Mask</title>
-
-<meta name="description" content="">
+<title>Getting Started with Hugo &amp; Github Pages | Ben Mask</title>
+<meta name="keywords" content="">
+<meta name="description" content="Big Idea The goal of this post is to capture the steps required to get started with Hugo and Github pages. Hugo is a GO based static site generation tool. Github pages is a feature of Github that allows anyone with a GitHub account host a static site.
+Part 1: Creating a GitHub Pages Repo Part 2: Setting Up Hugo Locally The following section covers getting your static site on your local machine.">
 <meta name="author" content="">
-<link rel="canonical" href="http://localhost:1313/">
+<link rel="canonical" href="http://localhost:1313/posts/getting-started-w-hugo/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.fc220c15db4aef0318bbf30adc45d33d4d7c88deff3238b23eb255afdc472ca6.css" integrity="sha256-/CIMFdtK7wMYu/MK3EXTPU18iN7/MjiyPrJVr9xHLKY=" rel="preload stylesheet" as="style">
 <link rel="icon" href="http://localhost:1313/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
@@ -19,8 +19,7 @@
 <link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" type="application/rss+xml" href="http://localhost:1313/index.xml">
-<link rel="alternate" hreflang="en" href="http://localhost:1313/">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/getting-started-w-hugo/">
 <noscript>
     <style>
         #theme-toggle,
@@ -60,7 +59,7 @@
 </noscript>
 </head>
 
-<body class="list" id="top">
+<body class="" id="top">
 <script>
     if (localStorage.getItem("pref-theme") === "dark") {
         document.body.classList.add('dark');
@@ -103,19 +102,44 @@
         </ul>
     </nav>
 </header>
-<main class="main"> 
+<main class="main">
 
-<article class="first-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Getting Started with Hugo &amp; Github Pages
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Big Idea The goal of this post is to capture the steps required to get started with Hugo and Github pages. Hugo is a GO based static site generation tool. Github pages is a feature of Github that allows anyone with a GitHub account host a static site.
-Part 1: Creating a GitHub Pages Repo Part 2: Setting Up Hugo Locally The following section covers getting your static site on your local machine....</p>
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Getting Started with Hugo &amp; Github Pages
+    </h1>
+    <div class="post-meta"><span title='2024-07-05 17:54:14 -0400 EDT'>July 5, 2024</span>
+
+</div>
+  </header> 
+  <div class="post-content"><h1 id="big-idea">Big Idea<a hidden class="anchor" aria-hidden="true" href="#big-idea">#</a></h1>
+<p>The goal of this post is to capture the steps required to get started with Hugo and Github pages. Hugo is a GO based static site generation tool. Github pages is a feature of Github that allows anyone with a GitHub account host a static site.</p>
+<h1 id="part-1-creating-a-github-pages-repo">Part 1: Creating a GitHub Pages Repo<a hidden class="anchor" aria-hidden="true" href="#part-1-creating-a-github-pages-repo">#</a></h1>
+<h1 id="part-2-setting-up-hugo-locally">Part 2: Setting Up Hugo Locally<a hidden class="anchor" aria-hidden="true" href="#part-2-setting-up-hugo-locally">#</a></h1>
+<p>The following section covers getting your static site on your local machine. This will allow you to modify your themes and posts from your editor of choice and see updates via the local Hugo dev server.</p>
+<h3 id="install-hugo-to-your-local-machine">Install Hugo to your local machine<a hidden class="anchor" aria-hidden="true" href="#install-hugo-to-your-local-machine">#</a></h3>
+<p>To get started with Hugo on your machine you&rsquo;ll need to first install Hugo. On MacOS you can do this via Brew:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>brew install hugo
+</span></span></code></pre></div><h3 id="create-a-new-hugo-site-locally">Create a new Hugo Site Locally<a hidden class="anchor" aria-hidden="true" href="#create-a-new-hugo-site-locally">#</a></h3>
+<p>To start a new hugo project run:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>hugo new site &lt;github-username&gt;.github.io --format yaml
+</span></span></code></pre></div><blockquote>
+<p><strong>Note:</strong> Using <code>--format yaml</code> is optional. The default config format for Hugo is toml.</p>
+</blockquote>
+<p>This will create a new directory named <code>&lt;github-username&gt;.github.io</code> that is pre-populated with the Hugo starter boilerplate. You don&rsquo;t have to use the site name <code>&lt;github-username&gt;.github.io</code>. You can change it whatever you would like. However, in the case of Github pages, you will create your pages site in a repo named <code>&lt;github-username&gt;.github.io</code>. I would like this repo to become that future repo so I will choose this naming for now in order to be consistent.</p>
+<h2 id="add-a-hugo-theme-to-your-site">Add a Hugo Theme to your site<a hidden class="anchor" aria-hidden="true" href="#add-a-hugo-theme-to-your-site">#</a></h2>
+<p>By default Hugo does not include a theme for you site. This is where you get to pick how you want your site to look once built and deployed. You can find a complete list of themes on the <a href="https://themes.gohugo.io/">Hugo themes page</a>. For this wiki I will use the theme <a href="https://themes.gohugo.io/themes/hugo-papermod/">PaperMod</a> as that is the theme of this blog.</p>
+<p>Once you have selected a theme, you will want to clone that theme into the <code>/themes</code> directory contained within the Hugo project created above. There are two commons ways that others online will reccomend doing this. One way requires downloading the theme&rsquo;s repo as a zipfile form Github, extracting the contents and moving them into the <code>/themes</code> directory. This method does not maintain the git history of the selected theme. It means that as the upstream theme repo changes you will not be able to pull those changes via git. The second method involves cloning the repo</p>
+
+
   </div>
-  <footer class="entry-footer"><span title='2024-07-05 17:54:14 -0400 EDT'>July 5, 2024</span></footer>
-  <a class="entry-link" aria-label="post link to Getting Started with Hugo &amp; Github Pages" href="http://localhost:1313/posts/getting-started-w-hugo/"></a>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
 </article>
     </main>
     
