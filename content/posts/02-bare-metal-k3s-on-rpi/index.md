@@ -10,9 +10,9 @@ draft: false
 
 ![cluster](images/cluster.png)
 
-From the start of my career I have been fascinated by Kubernetes. I love distributed systems and the rich history of how we have arrived where we are today with distributed system. We are living in the active evolution of our understanding of a vision for cloud computing. In the early years the vision was to present a homogenous Unix-like interface for managing an underlying collection of servers such as BOINC. Now we live in the world of many small virtualized unix environments distributed across servers, sharing compute. 
+From the start of my career I have been fascinated by Kubernetes. I love distributed systems and the rich history of how we have arrived where we are today with distributed computing. We are living in the ongoing evolution of our communal vision for cloud computing. In the early years the vision was to present a homogenous Unix-like interface for managing an underlying collection of servers such as BOINC. Now we live in the world of many small virtualized unix environments distributed across servers and sharing compute. 
 
-One of the main drivers for our current state has been the advent of containerization and container orchestration. The goal of this blog is to go over the considerations and design of my baremetal Raspberry Pi Kubernetes cluster. This project was my adventure in going beyond being a user of Kubernetes services from Cloud Provider to understanding the physical magic behind the scenes.
+One of the main drivers of our current state has been the advent of containerization and container orchestration. The goal of this blog is to go over the considerations and design of my baremetal Raspberry Pi Kubernetes cluster. This project was my adventure in going beyond being a user of Kubernetes services from Cloud Provider to understanding the physical magic behind the scenes.
 
 > **Full disclaimer:** This project is largely based-off Anthony Simon's own project for a similar build. I found his blog post lacked a lot of details though so I want to capture those missing parts here and go into more detail about my setup. You can find his great post [here](https://anthonynsimon.com/blog/kubernetes-cluster-raspberry-pi/)!
 
@@ -21,7 +21,7 @@ You can find the Ansible scripts and Helm charts that I manage for this project 
 - [Ansible Scripts](https://github.com/atmask/homelab-ansible)
 
 
-# Architecture and Requirements
+# Goals & Requirements
 
 Before diving into the build list, architecture, and design for my build I want to review what, for me, were goals and requirements for setting up this project. 
 
@@ -40,6 +40,11 @@ My fourth requirement is that all of my services should be available over an HTT
 ### DNS
 Lastly, I want my services acessible via DNS records when a user is connected via VPN. I want the DNS server to sit on the LAN network and become the primary DNS server for users when they connect to the network. This keeps my A records off of public DNS servers.
 
+# Architecture
+
+> **Note:** This is not intended to be a HA cluster. I only have single master node. The numbers aren't ideal for concensus. In this build I just want to learn the basics.
+
+
 
 # Build List
 The following is my build list for the project:
@@ -56,26 +61,36 @@ The following is my build list for the project:
 > **Note:** I do not receive any commission when you purchase via the above the links. These are just what worked for my build and are what I recommend.
 
 
-
 # Configuring Networking
-With a project like this you need to start small and work up. Realistically, this means breaking up your end goal into small problems that you can manageably troubleshoot and solve as you go. Trying to take on too much with so many variables and unknowns in one swing will be fatal for a project of this kind. I have broken down this section into the incremental steps I took accomplish my vision for the networking.
+With a project like this you need to start small and work up. Realistically, this means breaking up your end goal into small problems that you can manageably troubleshoot and solve as you go. Trying to take on too much with so many variables and unknowns in one swing will be fatal for a project of this kind. I have broken down this section into the incremental steps I took accomplish my vision for the networking. These steps were goals I wanted to achieve before approaching the problem of setting up Kubernetes.
 
 ### Creating the Subnet
-TP-Link in WISP mode.
+When setting up the TP-Link Router the goal is to create subnet. The TP-Link router will be a gateway to my home network LAN and from there traffic will be routed to the internet via my home network route. To do this, I configured the TP-Link Router in WISP mode. In WISP mode, the router adopts the home network as the WAN network and then broadcasts it's own LAN network to which wired/wireless devices can connect. This results in two isolated networks. 
 
-### Static Node IPs
-Assign static IPs to the nodes
+**WAN Settings**:
+In this configuration, your TP-Link cluster router will be assigned and IP on your home network. The gateway for the cluster router will be the IP of your home network router.
+
+**LAN Settings**:
+In the TP-Link router's LAN settings you'll need to configure the LAN. This is where you can specify the subnet that your cluster nodes will run on. I chose to use the `10.100.0.0/24` CIDR for my cluster network. This will assign a gateway IP to your TP-Link router on this network.
 
 ### DHCP Settings
+In the TP-Link router DHCP settings you'll want to configure the IP range (within your LAN subnet) that the DHCP server can pull from when assigning IPs to devices joining the cluster network. A DHCP server is a Dynamic Host Configuration Protocol server. When new devices join a network they send out a discovery call to the DHCP server. The DHCP server then returns an offer containing an IP for the devices to use in the network and other configurations such as the DNS server to use.
+
 Later on we'll come back here and configure the DNS
 
-### Validate TailScale Connectivity
+### Static Node IPs
+For this build, I did not want to bother with IPs changing for the nodes in my cluster. For this reason I assigned each node linked to the network a static IP.
+
+### Adding a TailScale Subnet Router
+Out of my four Raspberry Pis, I have comitted three to the cluster and one to running a TailScale SubnetRouter and Pi-Hole. 
 
 
 # Load-Balancing, Ingress, and SSL/TLS Management
 
 
 ### Configuring MetalLB
+
+Ensure it is in the LAN but outside of the DHCP address range to avoid collisions
 
 ### Validate with LoadBalancer
 
