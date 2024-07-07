@@ -33,6 +33,8 @@ params:
       url: https://github.com/atmask
     - name: LinkedIn
       url: https://www.linkedin.com/in/ben-mask-936b49185/
+    - name: email
+      url: mailto:benjaminajm@gmail.com
   ShowCodeCopyButtons: true
   ShowBreadCrumbs: true
   ShowReadingTime: true
