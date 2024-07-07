@@ -42,11 +42,13 @@ Lastly, I want my services acessible via DNS records when a user is connected vi
 
 # Architecture
 
-The
+The following diagram lays out my planned network topology for this build. I aim to have a `10.100.0.0/24` CIDR allocated to my cluster network. I will have a dedicated router that manages this subnet. The router and nodes will all share a wired ethernet connection through an L2 Gigabit PoE network switch. Within that cluster network I will configure the DHCP server to assign IPs to the network devices from a subset of the network IPs available. This will allow me, later on, to use another non-overlapping IP range within the cluster CIDR for MetalLB. Kubernetes does not provide a default implementation for allocating IPs to LoadBalancer services. MetalLB is one solution to this problem that I will explore in more depth later on. From the perspective of my cluster network, the home network will be the WAN. All internet-bound traffic will traverse the cluster router gateway and then my home router.
+
+Another detail of this design is the SMB share. I have a 1TB SSD physcially mounted to one of my RPi nodes. This RPi exposes the 1TB drives as an SMB share that can be mounted by other devices on the network. There is a Kubernetes SMB Container Stroage Interface (CSI) driver that supports mounting SMB shares via PVCs. This is how I will implement my poor-man's persistent storage.
 
 > **Note:** This is not intended to be a HA cluster. I only have single master node. The numbers aren't ideal for concensus. In this build I just want to learn the basics.
 
-![network diagram](images/network.png)
+![network diagram](images/network3.png)
 
 
 
