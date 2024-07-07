@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Buidling a Bare Metal Kubernetes Cluster on Raspberry Pis | Ben Mask</title>
 <meta name="keywords" content="kubernetes, raspberry pi, k3s, clusters, homelab, ansible, tailscale, networking, pi-hole, cloud">
-<meta name="description" content="Big Idea From the start of my career I have been fascinated by Kubernetes. I love distributed systems and the rich history of how we have arrived where we are today with distributed system. We are living in the active evolution of our understanding of a vision for cloud computing. In the early years the vision was to present a homogenous Unix-like interface for managing an underlying collection of servers such as BOINC.">
+<meta name="description" content="Big Idea From the start of my career I have been fascinated by Kubernetes. I love distributed systems and the rich history of how we have arrived where we are today with distributed computing. We are living in the ongoing evolution of our communal vision for cloud computing. In the early years the vision was to present a homogenous Unix-like interface for managing an underlying collection of servers such as BOINC.">
 <meta name="author" content="">
 <link rel="canonical" href="http://localhost:1313/posts/02-bare-metal-k3s-on-rpi/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.fc220c15db4aef0318bbf30adc45d33d4d7c88deff3238b23eb255afdc472ca6.css" integrity="sha256-/CIMFdtK7wMYu/MK3EXTPU18iN7/MjiyPrJVr9xHLKY=" rel="preload stylesheet" as="style">
@@ -124,7 +124,7 @@
     <h1 class="post-title entry-hint-parent">
       Buidling a Bare Metal Kubernetes Cluster on Raspberry Pis
     </h1>
-    <div class="post-meta"><span title='2024-07-05 20:01:16 -0400 EDT'>July 5, 2024</span>&nbsp;·&nbsp;4 min
+    <div class="post-meta"><span title='2024-07-05 20:01:16 -0400 EDT'>July 5, 2024</span>&nbsp;·&nbsp;6 min
 
 </div>
   </header> <div class="toc">
@@ -137,7 +137,7 @@
                 <li>
                     <a href="#big-idea" aria-label="Big Idea">Big Idea</a></li>
                 <li>
-                    <a href="#architecture-and-requirements" aria-label="Architecture and Requirements">Architecture and Requirements</a><ul>
+                    <a href="#goals--requirements" aria-label="Goals &amp; Requirements">Goals &amp; Requirements</a><ul>
                         <ul>
                         
                 <li>
@@ -153,6 +153,8 @@
                     </ul>
                 </li>
                 <li>
+                    <a href="#architecture" aria-label="Architecture">Architecture</a></li>
+                <li>
                     <a href="#build-list" aria-label="Build List">Build List</a></li>
                 <li>
                     <a href="#configuring-networking" aria-label="Configuring Networking">Configuring Networking</a><ul>
@@ -161,11 +163,11 @@
                 <li>
                     <a href="#creating-the-subnet" aria-label="Creating the Subnet">Creating the Subnet</a></li>
                 <li>
-                    <a href="#static-node-ips" aria-label="Static Node IPs">Static Node IPs</a></li>
-                <li>
                     <a href="#dhcp-settings" aria-label="DHCP Settings">DHCP Settings</a></li>
                 <li>
-                    <a href="#validate-tailscale-connectivity" aria-label="Validate TailScale Connectivity">Validate TailScale Connectivity</a></li></ul>
+                    <a href="#static-node-ips" aria-label="Static Node IPs">Static Node IPs</a></li>
+                <li>
+                    <a href="#adding-a-tailscale-subnet-router" aria-label="Adding a TailScale Subnet Router">Adding a TailScale Subnet Router</a></li></ul>
                     </ul>
                 </li>
                 <li>
@@ -193,11 +195,12 @@
                 <li>
                     <a href="#setting-up-the-smb-csi-driver" aria-label="Setting up the SMB CSI Driver">Setting up the SMB CSI Driver</a></li>
                 <li>
-                    <a href="#creating-a-pvc" aria-label="Creating a PVC">Creating a PVC</a>
+                    <a href="#creating-a-pvc" aria-label="Creating a PVC">Creating a PVC</a></li></ul>
+                    </ul>
                 </li>
-            </ul>
-            </ul>
-            </li>
+                <li>
+                    <a href="#backups-with-rsync-and-backblaze" aria-label="Backups with rsync and Backblaze">Backups with rsync and Backblaze</a>
+                </li>
             </ul>
         </div>
     </details>
@@ -206,8 +209,8 @@
   <div class="post-content"><h1 id="big-idea">Big Idea<a hidden class="anchor" aria-hidden="true" href="#big-idea">#</a></h1>
 <p><img loading="lazy" src="images/cluster.png" alt="cluster"  />
 </p>
-<p>From the start of my career I have been fascinated by Kubernetes. I love distributed systems and the rich history of how we have arrived where we are today with distributed system. We are living in the active evolution of our understanding of a vision for cloud computing. In the early years the vision was to present a homogenous Unix-like interface for managing an underlying collection of servers such as BOINC. Now we live in the world of many small virtualized unix environments distributed across servers, sharing compute.</p>
-<p>One of the main drivers for our current state has been the advent of containerization and container orchestration. The goal of this blog is to go over the considerations and design of my baremetal Raspberry Pi Kubernetes cluster. This project was my adventure in going beyond being a user of Kubernetes services from Cloud Provider to understanding the physical magic behind the scenes.</p>
+<p>From the start of my career I have been fascinated by Kubernetes. I love distributed systems and the rich history of how we have arrived where we are today with distributed computing. We are living in the ongoing evolution of our communal vision for cloud computing. In the early years the vision was to present a homogenous Unix-like interface for managing an underlying collection of servers such as BOINC. Now we live in the world of many small virtualized unix environments distributed across servers and sharing compute.</p>
+<p>One of the main drivers of our current state has been the advent of containerization and container orchestration. The goal of this blog is to go over the considerations and design of my baremetal Raspberry Pi Kubernetes cluster. This project was my adventure in going beyond being a user of Kubernetes services from Cloud Provider to understanding the physical magic behind the scenes.</p>
 <blockquote>
 <p><strong>Full disclaimer:</strong> This project is largely based-off Anthony Simon&rsquo;s own project for a similar build. I found his blog post lacked a lot of details though so I want to capture those missing parts here and go into more detail about my setup. You can find his great post <a href="https://anthonynsimon.com/blog/kubernetes-cluster-raspberry-pi/">here</a>!</p>
 </blockquote>
@@ -216,7 +219,7 @@
 <li><a href="https://github.com/atmask/helm-charts">Helm Charts</a></li>
 <li><a href="https://github.com/atmask/homelab-ansible">Ansible Scripts</a></li>
 </ul>
-<h1 id="architecture-and-requirements">Architecture and Requirements<a hidden class="anchor" aria-hidden="true" href="#architecture-and-requirements">#</a></h1>
+<h1 id="goals--requirements">Goals &amp; Requirements<a hidden class="anchor" aria-hidden="true" href="#goals--requirements">#</a></h1>
 <p>Before diving into the build list, architecture, and design for my build I want to review what, for me, were goals and requirements for setting up this project.</p>
 <h3 id="portability">Portability<a hidden class="anchor" aria-hidden="true" href="#portability">#</a></h3>
 <p>First, portability. I am in a season of live that is nomadic. I&rsquo;m in different apartments for a year or two  at a time. I want a build that I can easily unplug, bring somewhere else, and plug-in without needing any extra steps for set up.</p>
@@ -228,10 +231,17 @@
 <p>My fourth requirement is that all of my services should be available over an HTTPs connection. Sure, the VPN is encrpyted, however, I want TLS termination at the cluster and not the only the VPN. Further, I don&rsquo;t want browsers complaining that the site I am visiting is not secure. That is a bother for me and red flag for any firends or family who connect to my services.</p>
 <h3 id="dns">DNS<a hidden class="anchor" aria-hidden="true" href="#dns">#</a></h3>
 <p>Lastly, I want my services acessible via DNS records when a user is connected via VPN. I want the DNS server to sit on the LAN network and become the primary DNS server for users when they connect to the network. This keeps my A records off of public DNS servers.</p>
+<h1 id="architecture">Architecture<a hidden class="anchor" aria-hidden="true" href="#architecture">#</a></h1>
+<p>The</p>
+<blockquote>
+<p><strong>Note:</strong> This is not intended to be a HA cluster. I only have single master node. The numbers aren&rsquo;t ideal for concensus. In this build I just want to learn the basics.</p>
+</blockquote>
+<p><img loading="lazy" src="images/network.png" alt="network diagram"  />
+</p>
 <h1 id="build-list">Build List<a hidden class="anchor" aria-hidden="true" href="#build-list">#</a></h1>
 <p>The following is my build list for the project:</p>
 <ul>
-<li><a href="https://www.amazon.ca/UCTRONICS-Upgraded-Enclosure-Raspberry-Compatible/dp/B09S11Q684/ref=sr_1_4?crid=JEX54GWP1JOC&amp;dib=eyJ2IjoiMSJ9.C3MConprGuDjhcyor3xqbHFZTaOYZQ-UMXrywALspdi5SDWO1Y-sxxMRB3z7amREyELAPupHf69L9M0_G6tXn6-eTOy3oFlSRUIhCTcblHSS83Ybn9AOklxMtFUxUUjyEIzgQ55EoAzs2k4aBAdiq3LjLorJwixpeA2lcnQ0ASsZKZmKcsLxN71W4tF8eZyrDuyV2rqy1jPP1ULJoX2kTgTKjnDKSb7gomFYg37cI1r8BPEU_08oIDUHYRJb40ZIqjnUrh8zC9kDpdL0HTpd5veHNOy4vwbqCbKoVQa9xxY.TuM3a7L5F5Lg9ZPACoqnV1JD-cb_h72fsiNueHpHLek&amp;dib_tag=se&amp;keywords=raspberry+pi+cluster+case&amp;qid=1720281735&amp;sprefix=raspberry+pi+cluster+cas%2Caps%2C300&amp;sr=8-4">UCTronics RPi CLuster Case</a> x1</li>
+<li><a href="https://www.amazon.ca/UCTRONICS-Upgraded-Enclosure-Raspberry-Compatible/dp/B09S11Q684/ref=sr_1_4?crid=JEX54GWP1JOC&amp;dib=eyJ2IjoiMSJ9.C3MConprGuDjhcyor3xqbHFZTaOYZQ-UMXrywALspdi5SDWO1Y-sxxMRB3z7amREyELAPupHf69L9M0_G6tXn6-eTOy3oFlSRUIhCTcblHSS83Ybn9AOklxMtFUxUUjyEIzgQ55EoAzs2k4aBAdiq3LjLorJwixpeA2lcnQ0ASsZKZmKcsLxN71W4tF8eZyrDuyV2rqy1jPP1ULJoX2kTgTKjnDKSb7gomFYg37cI1r8BPEU_08oIDUHYRJb40ZIqjnUrh8zC9kDpdL0HTpd5veHNOy4vwbqCbKoVQa9xxY.TuM3a7L5F5Lg9ZPACoqnV1JD-cb_h72fsiNueHpHLek&amp;dib_tag=se&amp;keywords=raspberry+pi+cluster+case&amp;qid=1720281735&amp;sprefix=raspberry+pi+cluster+cas%2Caps%2C300&amp;sr=8-4">UCTronics RPi Cluster Case</a> x1</li>
 <li><a href="https://www.raspberrypi.com/products/raspberry-pi-4-model-b/">Raspberry Pi 4b 8Gb</a> x1</li>
 <li><a href="https://www.raspberrypi.com/products/raspberry-pi-4-model-b/">Rapsberry Pi 4b 2Gb</a> x3</li>
 <li><a href="https://www.amazon.ca/dp/B07LG1QZR8?psc=1&amp;ref=ppx_yo2ov_dt_b_product_details">1 TB SSD</a> x1</li>
@@ -245,16 +255,25 @@
 <p><strong>Note:</strong> I do not receive any commission when you purchase via the above the links. These are just what worked for my build and are what I recommend.</p>
 </blockquote>
 <h1 id="configuring-networking">Configuring Networking<a hidden class="anchor" aria-hidden="true" href="#configuring-networking">#</a></h1>
-<p>With a project like this you need to start small and work up. Realistically, this means breaking up your end goal into small problems that you can manageably troubleshoot and solve as you go. Trying to take on too much with so many variables and unknowns in one swing will be fatal for a project of this kind. I have broken down this section into the incremental steps I took accomplish my vision for the networking.</p>
+<p>With a project like this you need to start small and work up. Realistically, this means breaking up your end goal into small problems that you can manageably troubleshoot and solve as you go. Trying to take on too much with so many variables and unknowns in one swing will be fatal for a project of this kind. I have broken down this section into the incremental steps I took accomplish my vision for the networking. These steps were goals I wanted to achieve before approaching the problem of setting up Kubernetes.</p>
 <h3 id="creating-the-subnet">Creating the Subnet<a hidden class="anchor" aria-hidden="true" href="#creating-the-subnet">#</a></h3>
-<p>TP-Link in WISP mode.</p>
-<h3 id="static-node-ips">Static Node IPs<a hidden class="anchor" aria-hidden="true" href="#static-node-ips">#</a></h3>
-<p>Assign static IPs to the nodes</p>
+<p>When setting up the TP-Link Router the goal is to create subnet. The TP-Link router will be a gateway to my home network LAN and from there traffic will be routed to the internet via my home network route. To do this, I configured the TP-Link Router in WISP mode. In WISP mode, the router adopts the home network as the WAN network and then broadcasts it&rsquo;s own LAN network to which wired/wireless devices can connect. This results in two isolated networks.</p>
+<p><strong>WAN Settings</strong>:
+In this configuration, your TP-Link cluster router will be assigned and IP on your home network. The gateway for the cluster router will be the IP of your home network router.</p>
+<p><strong>LAN Settings</strong>:
+In the TP-Link router&rsquo;s LAN settings you&rsquo;ll need to configure the LAN. This is where you can specify the subnet that your cluster nodes will run on. I chose to use the <code>10.100.0.0/24</code> CIDR for my cluster network. This will assign a gateway IP to your TP-Link router on this network.</p>
 <h3 id="dhcp-settings">DHCP Settings<a hidden class="anchor" aria-hidden="true" href="#dhcp-settings">#</a></h3>
+<p>In the TP-Link router DHCP settings you&rsquo;ll want to configure the IP range (within your LAN subnet) that the DHCP server can pull from when assigning IPs to devices joining the cluster network. A DHCP server is a Dynamic Host Configuration Protocol server. When new devices join a network they send out a discovery call to the DHCP server. The DHCP server then returns an offer containing an IP for the devices to use in the network and other configurations such as the DNS server to use.</p>
 <p>Later on we&rsquo;ll come back here and configure the DNS</p>
-<h3 id="validate-tailscale-connectivity">Validate TailScale Connectivity<a hidden class="anchor" aria-hidden="true" href="#validate-tailscale-connectivity">#</a></h3>
+<h3 id="static-node-ips">Static Node IPs<a hidden class="anchor" aria-hidden="true" href="#static-node-ips">#</a></h3>
+<p>For this build, I did not want to bother with IPs changing for the nodes in my cluster. For this reason I assigned each node linked to the network a static IP.</p>
+<h3 id="adding-a-tailscale-subnet-router">Adding a TailScale Subnet Router<a hidden class="anchor" aria-hidden="true" href="#adding-a-tailscale-subnet-router">#</a></h3>
+<p>Out of my four Raspberry Pis, I have comitted three to the cluster and one to running a TailScale SubnetRouter and Pi-Hole.</p>
+<p>Advertise the routes to the cluster subnet CIDR.</p>
+<p>Validate ssh connectivity to the cluster nodes</p>
 <h1 id="load-balancing-ingress-and-ssltls-management">Load-Balancing, Ingress, and SSL/TLS Management<a hidden class="anchor" aria-hidden="true" href="#load-balancing-ingress-and-ssltls-management">#</a></h1>
 <h3 id="configuring-metallb">Configuring MetalLB<a hidden class="anchor" aria-hidden="true" href="#configuring-metallb">#</a></h3>
+<p>Ensure it is in the LAN but outside of the DHCP address range to avoid collisions</p>
 <h3 id="validate-with-loadbalancer">Validate with LoadBalancer<a hidden class="anchor" aria-hidden="true" href="#validate-with-loadbalancer">#</a></h3>
 <h3 id="configuring-nginx-ingress">Configuring Nginx-Ingress<a hidden class="anchor" aria-hidden="true" href="#configuring-nginx-ingress">#</a></h3>
 <h3 id="configureing-cert-manager">Configureing Cert-Manager<a hidden class="anchor" aria-hidden="true" href="#configureing-cert-manager">#</a></h3>
@@ -263,6 +282,7 @@
 <h3 id="creating-the-smb-share">Creating the SMB share<a hidden class="anchor" aria-hidden="true" href="#creating-the-smb-share">#</a></h3>
 <h3 id="setting-up-the-smb-csi-driver">Setting up the SMB CSI Driver<a hidden class="anchor" aria-hidden="true" href="#setting-up-the-smb-csi-driver">#</a></h3>
 <h3 id="creating-a-pvc">Creating a PVC<a hidden class="anchor" aria-hidden="true" href="#creating-a-pvc">#</a></h3>
+<h1 id="backups-with-rsync-and-backblaze">Backups with rsync and Backblaze<a hidden class="anchor" aria-hidden="true" href="#backups-with-rsync-and-backblaze">#</a></h1>
 
 
   </div>
@@ -284,7 +304,7 @@
   <a class="next" href="http://localhost:1313/posts/01-getting-started-w-hugo/">
     <span class="title">Next »</span>
     <br>
-    <span>Getting Started with Hugo &amp; Github Pages</span>
+    <span>Getting Started with Hugo &amp; GitHub Pages</span>
   </a>
 </nav>
 

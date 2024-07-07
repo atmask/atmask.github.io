@@ -13,15 +13,15 @@
       <link>http://localhost:1313/posts/02-bare-metal-k3s-on-rpi/</link>
       <pubDate>Fri, 05 Jul 2024 20:01:16 -0400</pubDate>
       <guid>http://localhost:1313/posts/02-bare-metal-k3s-on-rpi/</guid>
-      <description>Big Idea From the start of my career I have been fascinated by Kubernetes. I love distributed systems and the rich history of how we have arrived where we are today with distributed system. We are living in the active evolution of our understanding of a vision for cloud computing. In the early years the vision was to present a homogenous Unix-like interface for managing an underlying collection of servers such as BOINC.</description>
+      <description>Big Idea From the start of my career I have been fascinated by Kubernetes. I love distributed systems and the rich history of how we have arrived where we are today with distributed computing. We are living in the ongoing evolution of our communal vision for cloud computing. In the early years the vision was to present a homogenous Unix-like interface for managing an underlying collection of servers such as BOINC.</description>
     </item>
     <item>
-      <title>Getting Started with Hugo &amp; Github Pages</title>
+      <title>Getting Started with Hugo &amp; GitHub Pages</title>
       <link>http://localhost:1313/posts/01-getting-started-w-hugo/</link>
       <pubDate>Fri, 05 Jul 2024 17:54:14 -0400</pubDate>
       <guid>http://localhost:1313/posts/01-getting-started-w-hugo/</guid>
-      <description>Big Idea The goal of this post is to capture the steps required to get started with Hugo and Github Pages. Hugo is a Go based static site generation tool. Github Pages is a feature of Github that allows anyone with a GitHub account host a static site.
-Part 1: Setting up GitHub Pages In order to server your site you will need to somewhere to host it. Github offers a free service called Github Pages that we will use for this purpose.</description>
+      <description>Big Idea The goal of this post is to capture the steps required to get started with Hugo and GitHub Pages. Hugo is a Go-based static site generation tool. GitHub Pages is a feature of GitHub that allows anyone with a GitHub account to host a static site.
+Part 1: Setting up GitHub Pages In order to serve your site, you will need somewhere to host it. GitHub offers a free service called GitHub Pages that we will use for this purpose.</description>
     </item>
   </channel>
 </rss>
