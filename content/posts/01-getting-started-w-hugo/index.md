@@ -26,7 +26,7 @@ the repository's main page and click on **Settings**:
 ![GH Settings Button](images/gh-settings.png)
 
 From the Settings page navigate to the **Pages** under **Code and Automation** on the side menu:
-![GH Pages Button](images/gh-Pages.png)
+![GH Pages Button](images/gh-pages.png)
 
 From here you will want to change your **Build and deployment** configuration to GitHub Actions. This will be required later when we want to specify a GitHub Actions workflow to build our static site content with Hugo.
 
