@@ -79,7 +79,7 @@ When setting up the TP-Link Router the goal is to create a subnet. The TP-Link r
 In this configuration, your TP-Link cluster router will be assigned an IP on your home network. The gateway for the cluster router will be the IP of your home network router.
 
 #### LAN Settings
-In the TP-Link router's LAN settings, you'll need to configure the LAN. This is where you can specify the subnet that your cluster nodes will run on. I chose to use the `10.100.0.0/24` CIDR for my cluster network. This will assign a gateway IP to your TP-Link router on this network.
+In the TP-Link router's LAN settings, you'll need to configure the LAN. This is where you can specify the subnet that your cluster nodes will run on. I chose to use the `10.100.0.0/24` CIDR for my cluster network. This gives me 254 IPv4 addresses to work with with (256 minus the broadcast ip and network address) which is more than enough for my little cluster.
 
 #### DHCP Settings
 In the TP-Link router DHCP settings you'll want to configure the IP range (within your LAN subnet) that the DHCP server can pull from when assigning IPs to devices joining the cluster network. A DHCP server is a Dynamic Host Configuration Protocol server. When new devices join a network they send out a discovery call to the DHCP server. The DHCP server then returns an offer containing an IP for the devices to use in the network and other configurations such as the DNS server to use.
@@ -87,7 +87,7 @@ In the TP-Link router DHCP settings you'll want to configure the IP range (withi
 Later on, we'll come back here and configure the DNS.
 
 #### Static Node IPs
-For this build, I did not want to bother with IPs changing for the nodes in my cluster. For this reason, I assigned each node linked to the network a static IP.
+For this build, I did not want to bother with IPs changing for the nodes in my cluster. For this reason, I assigned each node linked to the network a static IP. You can do this in the DHCP configuration settings of the router so that when the nodes get a new DHCP lease they always get the same IP
 
 ### Adding a TailScale Subnet Router
 Out of my four Raspberry Pis, I have committed three to the cluster and one to running a TailScale SubnetRouter and Pi-Hole. The stoneward node is the Pi that I have chosen to use for hosting my TailScale subnet router and Pi-Hole DNS server. TailScale is a VPN service that builds on top of simplifies Wireguard by delegating the management of peer certificates among new peers to the TailScale control plane. Using TailScale you can run a node as a Subnet Router to route traffic from other users of the VPN network to IP space behind the subnet router. I will take advantage of this functionality by converting the stoneward node into a subnet router that handles routes to my cluster network's CIDR range. This means, that when connected to the VPN, I can reach all of my nodes and services without exposing them to the public internet.
