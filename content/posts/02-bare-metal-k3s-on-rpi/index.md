@@ -94,11 +94,16 @@ Out of my four Raspberry Pis, I have committed three to the cluster and one to r
 
 The install scripts for TailScale can be found in my Ansible repository. After installing TailScale and advertising my cluster subnet range (note: you have to also approve this node advertising that range in the TailScale Admin console) I then validated that my personal dev laptop could ssh into each of the other nodes linked to my subnet via the PoE network switch.
 
-# k3s
+# K3s
+
+For this project I chose to run K3s. K3s is a lightweight Kubernetes binary that runs with significantly smaller memory requirements. I wanted to find a lightweight solution that didn't feel like a compromise and so I was satisfied to run k3s as it is fully Kubernetes compliant, included some functionality out of the box like coredns, and could use an etcd data store.
 
 
 ### Installation
 
+For my K3s installation, I chose to override some of the default tools in favour of tools with which I had more experience. In particular, I replaced the default Flannel CNI with Calico, the Traefik Ingress controller with Nginx Ingress, and ServiceLB with MetalLB. To see all of the installation scripts check out my ansible automation linked at the start of this article. The configurations for my custom tools were installed via Helm and all of the configurations can be found in the Helm Chart repo also linked alongside my Ansible repo.
+
+One thing to note about my installation of K3s. K3s supports two types of nodes: `k3s-servers` and `k3s-agents`. The `k3s-server` nodes are responsible for the control plane and datastore components. The `k3s-agents` do not have any of those responsibilities and just run the kubelet, CRI, and CNI. I chose my 8Gb Raspberry Pi as the single `k3s-server` node for this cluster. The reasoning for this was two-fold, First I wanted to use etcd since I haven't before. Second, I only had a single SSD for this project and did not want any datastore components running on nodes that only had an unreliable SD card.
 
 
 # Load-Balancing, Ingress, and SSL/TLS Management
