@@ -1,10 +1,13 @@
 ---
-title: 'Part 1: Buidling a Bare-metal Kubernetes Cluster on Raspberry Pis'
+title: 'Part 2: Buidling a Bare-metal Kubernetes Cluster on Raspberry Pis'
 tags: ["kubernetes", "raspberry pi", "k3s", "clusters", "homelab", "ansible", "tailscale", "networking", "pi-hole", "cloud"]
 ShowToc: true
 date: '2024-07-10T20:30:55-04:00'
 draft: true
 ---
+# Big Idea
+
+In part 1 of this post ...
 
 # Load-Balancing, Ingress, and SSL/TLS Management
 

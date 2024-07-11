@@ -6,8 +6,16 @@
     <description>Recent content in Clusters on Ben Mask</description>
     <generator>Hugo -- 0.128.2</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 10 Jul 2024 20:29:01 -0400</lastBuildDate>
+    <lastBuildDate>Wed, 10 Jul 2024 20:30:55 -0400</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/clusters/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Part 1: Buidling a Bare-metal Kubernetes Cluster on Raspberry Pis</title>
+      <link>http://localhost:1313/posts/02-bare-metal-k3s-on-rpi-part-2/</link>
+      <pubDate>Wed, 10 Jul 2024 20:30:55 -0400</pubDate>
+      <guid>http://localhost:1313/posts/02-bare-metal-k3s-on-rpi-part-2/</guid>
+      <description>Load-Balancing, Ingress, and SSL/TLS Management Now that, I had my cluster up and running with a CNI installed (I&amp;rsquo;ll do more posts about Calico CNI in the future) I wanted to get the networking setup to access services on my cluster. To achieve this, I added three different installations to my cluster: MetalLB, Nginx Ingress, and Cert-Manager.
+Kubernetes has a resource type called Services. Services function as load balancers by providing a single IP for balancing traffic among a backing set of ephemeral pods running a service.</description>
+    </item>
     <item>
       <title>Part 1: Buidling a Bare-metal Kubernetes Cluster on Raspberry Pis</title>
       <link>http://localhost:1313/posts/02-bare-metal-k3s-on-rpi-part-1/</link>

@@ -124,7 +124,7 @@
     <h1 class="post-title entry-hint-parent">
       Part 1: Buidling a Bare-metal Kubernetes Cluster on Raspberry Pis
     </h1>
-    <div class="post-meta"><span title='2024-07-10 20:29:01 -0400 EDT'>July 10, 2024</span>&nbsp;·&nbsp;12 min
+    <div class="post-meta"><span title='2024-07-10 20:29:01 -0400 EDT'>July 10, 2024</span>&nbsp;·&nbsp;10 min
 
 </div>
   </header> <div class="toc">
@@ -185,37 +185,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="#conclusion" aria-label="Conclusion">Conclusion</a></li>
-                <li>
-                    <a href="#load-balancing-ingress-and-ssltls-management" aria-label="Load-Balancing, Ingress, and SSL/TLS Management">Load-Balancing, Ingress, and SSL/TLS Management</a><ul>
-                        <ul>
-                        
-                <li>
-                    <a href="#configuring-metallb" aria-label="Configuring MetalLB">Configuring MetalLB</a></li>
-                <li>
-                    <a href="#validate-with-loadbalancer" aria-label="Validate with LoadBalancer">Validate with LoadBalancer</a></li>
-                <li>
-                    <a href="#configuring-nginx-ingress" aria-label="Configuring Nginx-Ingress">Configuring Nginx-Ingress</a></li>
-                <li>
-                    <a href="#configureing-cert-manager" aria-label="Configureing Cert-Manager">Configureing Cert-Manager</a></li>
-                <li>
-                    <a href="#local-dns-management-with-pi-hole" aria-label="Local DNS Management with Pi-Hole">Local DNS Management with Pi-Hole</a></li></ul>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#persistent-storage" aria-label="Persistent Storage">Persistent Storage</a><ul>
-                        <ul>
-                        
-                <li>
-                    <a href="#creating-the-smb-share" aria-label="Creating the SMB share">Creating the SMB share</a></li>
-                <li>
-                    <a href="#setting-up-the-smb-csi-driver" aria-label="Setting up the SMB CSI Driver">Setting up the SMB CSI Driver</a></li>
-                <li>
-                    <a href="#creating-a-pvc" aria-label="Creating a PVC">Creating a PVC</a></li></ul>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#backups-with-rsync-and-backblaze" aria-label="Backups with rsync and Backblaze">Backups with rsync and Backblaze</a>
+                    <a href="#conclusion" aria-label="Conclusion">Conclusion</a>
                 </li>
             </ul>
         </div>
@@ -295,23 +265,7 @@
 <p>For my K3s installation, I chose to override some of the default tools in favour of tools with which I had more experience. In particular, I replaced the default Flannel CNI with Calico, the Traefik Ingress controller with Nginx Ingress, and ServiceLB with MetalLB. To see all of the installation scripts check out my ansible automation linked at the start of this article. The configurations for my custom tools were installed via Helm and all of the configurations can be found in the Helm Chart repo also linked alongside my Ansible repo.</p>
 <p>One thing to note about my installation of K3s. K3s supports two types of nodes: <code>k3s-servers</code> and <code>k3s-agents</code>. The <code>k3s-server</code> nodes are responsible for the control plane and datastore components. The <code>k3s-agents</code> do not have any of those responsibilities and just run the kubelet, CRI, and CNI. I chose my 8Gb Raspberry Pi as the single <code>k3s-server</code> node for this cluster. The reasoning for this was two-fold, First I wanted to use etcd since I haven&rsquo;t before. Second, I only had a single SSD for this project and did not want any datastore components running on nodes that only had an unreliable SD card.</p>
 <h1 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h1>
-<p>At this point in time, I had the cluster networking set up and K3s installed on each node. Two of the Raspberry Pis, lightweaver and windrunner, were configured as <code>k3s-agent</code> nodes and Bondsmith, my 8Gb Pi was running as the single <code>k3s-server</code>. With that I will bring this post to a close. In part 2, I will go over my configuration of Nginx, MetalLB and, and Cert-Manager for managing ingress traffic to my cluster services. Part 2 will also conver how I configured my 1 TB SSD drive as an SMB share to provide dynamic provision persistent volumes to my workloads.</p>
-<h1 id="load-balancing-ingress-and-ssltls-management">Load-Balancing, Ingress, and SSL/TLS Management<a hidden class="anchor" aria-hidden="true" href="#load-balancing-ingress-and-ssltls-management">#</a></h1>
-<p>Now that, I had my cluster up and running with a CNI installed (I&rsquo;ll do more posts about Calico CNI in the future) I wanted to get the networking setup to access services on my cluster. To achieve this, I added three different installations to my cluster: MetalLB, Nginx Ingress, and Cert-Manager.</p>
-<p>Kubernetes has a resource type called Services. Services function as load balancers by providing a single IP for balancing traffic among a backing set of ephemeral pods running a service. Services have a few kinds, namely, ClusterIP, NodePort, and LoadBalancer. There are default implementations for the first two service types in Kubernetes but none for LoadBalancer-type services. Most major cloud providers you use will have their own implementation with a Kubernetes offering that will assign a public IP to an LB for ingress traffic to your services. MetalLB is a solution for those running their own Kubernetes clusters to support services of type LoadBalancer.</p>
-<p>Nginx-Ingress is an Nginx-based solution for managing network traffic entering the cluster. To use the nginx ingress controller, you expose it behind a LoadBalancer. All incoming traffic can then be routed based on various routing rules such as the path to other services in the cluster. This has the advantage of having single point for managing TLS termination and in cloud environments can save you the cost additional LBs would incur if you exposed each service via an LB.</p>
-<p>Finally, Cert-Manager. Cert-Manager is an X.509 certificate management service for Kubernetes. It integrates nicely with Let&rsquo;s Encrypt for automatically generating and rotating SSL/TLS certs on domains that you own. It also (with some configuration) integrates with Nginx Ingress for automatically provisioning and managing certificates for new domains and subdomains.</p>
-<h3 id="configuring-metallb">Configuring MetalLB<a hidden class="anchor" aria-hidden="true" href="#configuring-metallb">#</a></h3>
-<p>Ensure it is in the LAN but outside of the DHCP address range to avoid collisions</p>
-<h3 id="validate-with-loadbalancer">Validate with LoadBalancer<a hidden class="anchor" aria-hidden="true" href="#validate-with-loadbalancer">#</a></h3>
-<h3 id="configuring-nginx-ingress">Configuring Nginx-Ingress<a hidden class="anchor" aria-hidden="true" href="#configuring-nginx-ingress">#</a></h3>
-<h3 id="configureing-cert-manager">Configureing Cert-Manager<a hidden class="anchor" aria-hidden="true" href="#configureing-cert-manager">#</a></h3>
-<h3 id="local-dns-management-with-pi-hole">Local DNS Management with Pi-Hole<a hidden class="anchor" aria-hidden="true" href="#local-dns-management-with-pi-hole">#</a></h3>
-<h1 id="persistent-storage">Persistent Storage<a hidden class="anchor" aria-hidden="true" href="#persistent-storage">#</a></h1>
-<h3 id="creating-the-smb-share">Creating the SMB share<a hidden class="anchor" aria-hidden="true" href="#creating-the-smb-share">#</a></h3>
-<h3 id="setting-up-the-smb-csi-driver">Setting up the SMB CSI Driver<a hidden class="anchor" aria-hidden="true" href="#setting-up-the-smb-csi-driver">#</a></h3>
-<h3 id="creating-a-pvc">Creating a PVC<a hidden class="anchor" aria-hidden="true" href="#creating-a-pvc">#</a></h3>
-<h1 id="backups-with-rsync-and-backblaze">Backups with rsync and Backblaze<a hidden class="anchor" aria-hidden="true" href="#backups-with-rsync-and-backblaze">#</a></h1>
+<p>At this point in time, I had the cluster networking set up and K3s installed on each node. Two of the Raspberry Pis, lightweaver and windrunner, were configured as <code>k3s-agent</code> nodes and Bondsmith, my 8Gb Pi was running as the single <code>k3s-server</code>. With that, I will bring this post to a close. In part 2, I will review my configuration of Nginx Ingress, MetalLB and, and Cert-Manager for managing incoming traffic to my cluster services. Part 2 will also cover how I configured my 1 TB SSD drive as an SMB share to dynamically provision persistent volumes for my workloads.</p>
 
 
   </div>
@@ -330,6 +284,11 @@
       <li><a href="http://localhost:1313/tags/cloud/">Cloud</a></li>
     </ul>
 <nav class="paginav">
+  <a class="prev" href="http://localhost:1313/posts/02-bare-metal-k3s-on-rpi-part-2/">
+    <span class="title">« Prev</span>
+    <br>
+    <span>Part 1: Buidling a Bare-metal Kubernetes Cluster on Raspberry Pis</span>
+  </a>
   <a class="next" href="http://localhost:1313/posts/01-getting-started-w-hugo/">
     <span class="title">Next »</span>
     <br>
