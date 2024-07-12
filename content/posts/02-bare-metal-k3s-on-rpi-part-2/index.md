@@ -26,7 +26,7 @@ Nginx-Ingress is an Nginx-based solution for managing network traffic entering t
 Finally, Cert-Manager. Cert-Manager is an X.509 certificate management service for Kubernetes. It integrates nicely with Let's Encrypt for automatically generating and rotating SSL/TLS certs on domains that you own. It also (with some configuration) integrates with Nginx Ingress for automatically provisioning and managing certificates for new domains and subdomains. 
 
 
-### MetalLB Concepts
+## MetalLB Concepts
 
 #### IPPools
 MetalLB is not able to give you IP addresses out of thin air. This means that you will need to tell it which IP addresses it can alloacte to LoadBalancer services by defining IPPools for your MetalLB installation to use. This IPPool should not overlap with the IP range that the DHCP is configured to assign IPs from. This is where it may be helpful to share the network topolgy again:
@@ -114,7 +114,7 @@ spec:
 and apply with `kubectl apply -f lb-svc.yaml`. Then use `kubectl get svc` to verify that an external-ip has been assigned to the service named "my-service".
 
 
-### Deploying Nginx-Ingress
+## Deploying Nginx-Ingress
 
 Now that we can provision IPs for an implementation of LoadBalancer-type services we can move on to our installation of Nginx Ingress. Yes, technically, NodePort could have been used instead of setting up MetalLB but this is about leraning new things! The Nginx Ingresss controller will act as a single point of entry for all traffic to workloads running in my cluster. Nginx Ingress supports host and path-based routing and I will make use of this when setting DNS records for my apps later on. A large benefit of using Nginx Ingress as a single point of entry for all incoming traffic is that I can integrat Nginx Ingress with Cert-Manager so that it is also the single point for managing all TLS termination of incoming traffic. This reduces the management overhead for me.
 
@@ -139,7 +139,7 @@ helm install -n nginx-ingress nginx-ingress ingress-nginx/ingress-nginx -f nginx
 Hura-ah! The Nginx Ingress controller should now be installed. It will watch of the creation `ingress` resources in the cluster. `ingress` resources are typically deployed with your application and configure how the Nginx Ingress Controller should route traffic to that application.
 
 
-### Configuring Cert-Manager
+## Configuring Cert-Manager
 
 As of right now, with MetalLB and the Nginx Ingress controller set up, I would be ready to access my applications. The problem is, any web browser will give me a page saying that the page I am trying to access is insecure and I would have to click through to access my applications. This is an annoyance and so I have setup Cert-Manager to solve this problem. 
 
@@ -150,7 +150,7 @@ An important thing to know before setting up Cert-Manager is that SSL/TLS certif
 #### Installing Cert-Manager
 
 
-### Local DNS Management with Pi-Hole
+## Local DNS Management with Pi-Hole
 
 
 
