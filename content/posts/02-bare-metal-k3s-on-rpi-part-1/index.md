@@ -29,7 +29,7 @@ Before diving into the build list, architecture, and design for my build I want 
 First, portability. I am in a season of life that is nomadic. I am in different apartments for a year or two at a time. I want a build that I can easily unplug, bring somewhere else, and plug in without needing any extra steps for setup. 
 
 ### Isolation & Security
-Second, and closely related, is isolation. I want the network that my cluster runs on to be on a subnet isolated from the LAN network to which it connects. I want all IPs to be in their own non-overlapping address space. I also don't want my services publicly available or available to anyone connected to the LAN of my home network. They should only be accessible via a VPN connection to the cluster network or wireless/wired connection to the cluster LAN.
+Second, and closely related, is isolation. I want the network that my cluster runs on to be on a subnet isolated from the LAN network to which it connects. I want all IPs to be in their own non-overlapping address space. I also don't want my services available publicly or to anyone connected to the LAN of my home network. They should only be accessible via a VPN connection to the cluster network or wireless/wired connection to the cluster LAN.
 
 ### Persistent Storage & Back-ups
 Third, I wanted my cluster to support some implementation PVs and PVCs for data persistence. I wanted this to be affordable and to be reliable. This ruled out buying SSD storage for each node and using a distributed file store like Rook/Ceph or Longhorn. It also ruled out using hostPath storage on SD cards. (Spoiler) My final result uses a single Terabyte SSD that is running as an SMB share which can be mounted via the SMB csi.
