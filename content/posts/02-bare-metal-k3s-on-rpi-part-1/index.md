@@ -38,7 +38,7 @@ Third, I wanted my cluster to support some implementation PVs and PVCs for data 
 My fourth requirement is that all of my services should be available over an HTTPs connection. Sure, the VPN is encrypted, however, I want TLS termination at the cluster and not only the VPN. Further, I don't want browsers complaining that the site I am visiting is not secure. That is a bother for me and a red flag for any friends or family who connect to my services.
 
 ### DNS
-Lastly, I want my services accessible via DNS records when a user is connected via VPN. I want the DNS server to sit on the LAN network and become the primary DNS server for users when they connect to the network. This keeps my A records off of public DNS servers.
+Lastly, I want my services accessible via DNS records when a user is connected via VPN. I want the DNS server to sit on the clsuter LAN network and become the primary DNS server for users when they connect to the network. This keeps my A records off of public DNS servers.
 
 # Architecture
 
