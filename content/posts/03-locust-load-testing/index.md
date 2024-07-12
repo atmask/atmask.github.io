@@ -72,3 +72,10 @@ locust-tests
 ## Writing a Simple Locust Test
 
 
+
+## Managing Different Types of Application Use Cases
+
+
+
+## Managing Authentication and Secrets
+
