@@ -6,25 +6,17 @@
     <description>Recent content in Cloud on Ben Mask</description>
     <generator>Hugo -- 0.128.2</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 10 Jul 2024 21:22:31 -0400</lastBuildDate>
+    <lastBuildDate>Wed, 10 Jul 2024 20:30:55 -0400</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/cloud/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Load Testing Applications with Locust</title>
-      <link>http://localhost:1313/posts/03-locust-load-testing/</link>
-      <pubDate>Wed, 10 Jul 2024 21:22:31 -0400</pubDate>
-      <guid>http://localhost:1313/posts/03-locust-load-testing/</guid>
-      <description>Big Idea I was recently tasked with configuring automated load tests to validate the health of a service under load and to identify bottlenecks and limits at which the service became overloaded. Up until this point, I had not worked first-hand with any load testing frameworks. Although there are many great load testing tools out there like JMeter, K6s, and Locust, I decided to get started with Locust as it is a framework I had heard of before and is a pure Python framework (Python is the language I think in right now).</description>
-    </item>
-    <item>
-      <title>Part 1: Buidling a Bare-metal Kubernetes Cluster on Raspberry Pis</title>
+      <title>Part 2: Building a Bare-metal Kubernetes Cluster on Raspberry Pis</title>
       <link>http://localhost:1313/posts/02-bare-metal-k3s-on-rpi-part-2/</link>
       <pubDate>Wed, 10 Jul 2024 20:30:55 -0400</pubDate>
       <guid>http://localhost:1313/posts/02-bare-metal-k3s-on-rpi-part-2/</guid>
-      <description>Load-Balancing, Ingress, and SSL/TLS Management Now that, I had my cluster up and running with a CNI installed (I&amp;rsquo;ll do more posts about Calico CNI in the future) I wanted to get the networking setup to access services on my cluster. To achieve this, I added three different installations to my cluster: MetalLB, Nginx Ingress, and Cert-Manager.
-Kubernetes has a resource type called Services. Services function as load balancers by providing a single IP for balancing traffic among a backing set of ephemeral pods running a service.</description>
+      <description>Big Idea In part 1 of this post, I covered the basics of getting started building my Kubernetes cluster on Raspberry Pis. In particular, I laid out my goals and requirements, the build list, the network topology and setup, and the installation of K3s on each of the nodes. I recommend going back and checking out that post first if you haven&amp;rsquo;t already (Part 1: Building a Bare-metal Kubernetes Cluster on Raspberry Pis).</description>
     </item>
     <item>
-      <title>Part 1: Buidling a Bare-metal Kubernetes Cluster on Raspberry Pis</title>
+      <title>Part 1: Building a Bare-metal Kubernetes Cluster on Raspberry Pis</title>
       <link>http://localhost:1313/posts/02-bare-metal-k3s-on-rpi-part-1/</link>
       <pubDate>Wed, 10 Jul 2024 20:29:01 -0400</pubDate>
       <guid>http://localhost:1313/posts/02-bare-metal-k3s-on-rpi-part-1/</guid>

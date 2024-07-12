@@ -5,11 +5,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="noindex, nofollow">
-<title>Part 2: Buidling a Bare-metal Kubernetes Cluster on Raspberry Pis | Ben Mask</title>
+<title>Part 2: Building a Bare-metal Kubernetes Cluster on Raspberry Pis | Ben Mask</title>
 <meta name="keywords" content="kubernetes, raspberry pi, k3s, clusters, homelab, ansible, tailscale, networking, pi-hole, cloud">
-<meta name="description" content="Big Idea In part 1 of this post &hellip;
-Load-Balancing, Ingress, and SSL/TLS Management Now that, I had my cluster up and running with a CNI installed (I&rsquo;ll do more posts about Calico CNI in the future) I wanted to get the networking setup to access services on my cluster. To achieve this, I added three different installations to my cluster: MetalLB, Nginx Ingress, and Cert-Manager.
-Kubernetes has a resource type called Services.">
+<meta name="description" content="Big Idea In part 1 of this post, I covered the basics of getting started building my Kubernetes cluster on Raspberry Pis. In particular, I laid out my goals and requirements, the build list, the network topology and setup, and the installation of K3s on each of the nodes. I recommend going back and checking out that post first if you haven&rsquo;t already (Part 1: Building a Bare-metal Kubernetes Cluster on Raspberry Pis).">
 <meta name="author" content="">
 <link rel="canonical" href="http://localhost:1313/posts/02-bare-metal-k3s-on-rpi-part-2/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.fc220c15db4aef0318bbf30adc45d33d4d7c88deff3238b23eb255afdc472ca6.css" integrity="sha256-/CIMFdtK7wMYu/MK3EXTPU18iN7/MjiyPrJVr9xHLKY=" rel="preload stylesheet" as="style">
@@ -124,9 +122,9 @@ Kubernetes has a resource type called Services.">
   <header class="post-header">
     <div class="breadcrumbs"><a href="http://localhost:1313/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/posts/">Posts</a></div>
     <h1 class="post-title entry-hint-parent">
-      Part 2: Buidling a Bare-metal Kubernetes Cluster on Raspberry Pis
+      Part 2: Building a Bare-metal Kubernetes Cluster on Raspberry Pis
     </h1>
-    <div class="post-meta"><span title='2024-07-10 20:30:55 -0400 EDT'>July 10, 2024</span>&nbsp;·&nbsp;2 min
+    <div class="post-meta"><span title='2024-07-10 20:30:55 -0400 EDT'>July 10, 2024</span>&nbsp;·&nbsp;9 min
 
 </div>
   </header> <div class="toc">
@@ -143,13 +141,25 @@ Kubernetes has a resource type called Services.">
                         <ul>
                         
                 <li>
-                    <a href="#configuring-metallb" aria-label="Configuring MetalLB">Configuring MetalLB</a></li>
+                    <a href="#metallb-concepts" aria-label="MetalLB Concepts">MetalLB Concepts</a><ul>
+                        
                 <li>
-                    <a href="#validate-with-loadbalancer" aria-label="Validate with LoadBalancer">Validate with LoadBalancer</a></li>
+                    <a href="#ippools" aria-label="IPPools">IPPools</a></li>
                 <li>
-                    <a href="#configuring-nginx-ingress" aria-label="Configuring Nginx-Ingress">Configuring Nginx-Ingress</a></li>
+                    <a href="#external-announcements-and-layer-2-routing" aria-label="External Announcements and Layer 2 Routing">External Announcements and Layer 2 Routing</a></li>
                 <li>
-                    <a href="#configureing-cert-manager" aria-label="Configureing Cert-Manager">Configureing Cert-Manager</a></li>
+                    <a href="#deploying-metallb" aria-label="Deploying MetalLB">Deploying MetalLB</a></li>
+                <li>
+                    <a href="#validate-with-loadbalancer" aria-label="Validate with LoadBalancer">Validate with LoadBalancer</a></li></ul>
+                </li>
+                <li>
+                    <a href="#deploying-nginx-ingress" aria-label="Deploying Nginx-Ingress">Deploying Nginx-Ingress</a></li>
+                <li>
+                    <a href="#configuring-cert-manager" aria-label="Configuring Cert-Manager">Configuring Cert-Manager</a><ul>
+                        
+                <li>
+                    <a href="#installing-cert-manager" aria-label="Installing Cert-Manager">Installing Cert-Manager</a></li></ul>
+                </li>
                 <li>
                     <a href="#local-dns-management-with-pi-hole" aria-label="Local DNS Management with Pi-Hole">Local DNS Management with Pi-Hole</a></li></ul>
                     </ul>
@@ -175,17 +185,100 @@ Kubernetes has a resource type called Services.">
 </div>
 
   <div class="post-content"><h1 id="big-idea">Big Idea<a hidden class="anchor" aria-hidden="true" href="#big-idea">#</a></h1>
-<p>In part 1 of this post &hellip;</p>
+<p>In part 1 of this post, I covered the basics of getting started building my Kubernetes cluster on Raspberry Pis. In particular, I laid out my goals and requirements, the build list, the network topology and setup, and the installation of K3s on each of the nodes. I recommend going back and checking out that post first if you haven&rsquo;t already (<a href="https://blog.fallow.app/posts/02-bare-metal-k3s-on-rpi-part-1/">Part 1: Building a Bare-metal Kubernetes Cluster on Raspberry Pis</a>).</p>
+<p>A summary from that post is that I created the subnet <code>10.100.0.0/24</code> on my home network for the cluster network. Using DHCP I reserved a small address space of IPs for my nodes and statically assigned the node IPs from within that range. Of my four RPis, three wil be part of the cluster. The fourth node will not run as part of the cluster but will instead run a TailScale subnet router and Pi-Hole for DNS resolution on the cluster network.</p>
+<p>In this post, I will review how I configured the Nginx Ingress controller and Cert-Manager for managing HTTPs traffic to my cluster. I will also cover my persistent storage solution that implements PV&rsquo;s in Kubernetes using an SMB share. Finally, I will briefly show my backup strategy that leverages rclone and Backblaze B2 storage.</p>
+<p>As usual, all of my configurations for deploying charts can be found on my GitHub: <a href="https://github.com/atmask/helm-charts/tree/main">https://github.com/atmask/helm-charts/tree/main</a></p>
 <h1 id="load-balancing-ingress-and-ssltls-management">Load-Balancing, Ingress, and SSL/TLS Management<a hidden class="anchor" aria-hidden="true" href="#load-balancing-ingress-and-ssltls-management">#</a></h1>
 <p>Now that, I had my cluster up and running with a CNI installed (I&rsquo;ll do more posts about Calico CNI in the future) I wanted to get the networking setup to access services on my cluster. To achieve this, I added three different installations to my cluster: MetalLB, Nginx Ingress, and Cert-Manager.</p>
-<p>Kubernetes has a resource type called Services. Services function as load balancers by providing a single IP for balancing traffic among a backing set of ephemeral pods running a service. Services have a few kinds, namely, ClusterIP, NodePort, and LoadBalancer. There are default implementations for the first two service types in Kubernetes but none for LoadBalancer-type services. Most major cloud providers you use will have their own implementation with a Kubernetes offering that will assign a public IP to an LB for ingress traffic to your services. MetalLB is a solution for those running their own Kubernetes clusters to support services of type LoadBalancer.</p>
+<p>Kubernetes has a resource type called Services. Services function as load balancers by providing a single IP for balancing traffic among a backing set of ephemeral pods running a workload. Kubernetes services resources have a few kinds, namely, ClusterIP, NodePort, and LoadBalancer. There are default implementations for the first two service types in Kubernetes but none for LoadBalancer-type services. Most major cloud providers you use will have their own implementation with their Kubernetes offerings that will configure a Load Balancer with a public IP from their platform to manage the incoming traffic to your service. MetalLB is a solution for those running their own Kubernetes clusters to support services of type LoadBalancer.</p>
 <p>Nginx-Ingress is an Nginx-based solution for managing network traffic entering the cluster. To use the nginx ingress controller, you expose it behind a LoadBalancer. All incoming traffic can then be routed based on various routing rules such as the path to other services in the cluster. This has the advantage of having single point for managing TLS termination and in cloud environments can save you the cost additional LBs would incur if you exposed each service via an LB.</p>
 <p>Finally, Cert-Manager. Cert-Manager is an X.509 certificate management service for Kubernetes. It integrates nicely with Let&rsquo;s Encrypt for automatically generating and rotating SSL/TLS certs on domains that you own. It also (with some configuration) integrates with Nginx Ingress for automatically provisioning and managing certificates for new domains and subdomains.</p>
-<h3 id="configuring-metallb">Configuring MetalLB<a hidden class="anchor" aria-hidden="true" href="#configuring-metallb">#</a></h3>
-<p>Ensure it is in the LAN but outside of the DHCP address range to avoid collisions</p>
-<h3 id="validate-with-loadbalancer">Validate with LoadBalancer<a hidden class="anchor" aria-hidden="true" href="#validate-with-loadbalancer">#</a></h3>
-<h3 id="configuring-nginx-ingress">Configuring Nginx-Ingress<a hidden class="anchor" aria-hidden="true" href="#configuring-nginx-ingress">#</a></h3>
-<h3 id="configureing-cert-manager">Configureing Cert-Manager<a hidden class="anchor" aria-hidden="true" href="#configureing-cert-manager">#</a></h3>
+<h3 id="metallb-concepts">MetalLB Concepts<a hidden class="anchor" aria-hidden="true" href="#metallb-concepts">#</a></h3>
+<h4 id="ippools">IPPools<a hidden class="anchor" aria-hidden="true" href="#ippools">#</a></h4>
+<p>MetalLB is not able to give you IP addresses out of thin air. This means that you will need to tell it which IP addresses it can alloacte to LoadBalancer services by defining IPPools for your MetalLB installation to use. This IPPool should not overlap with the IP range that the DHCP is configured to assign IPs from. This is where it may be helpful to share the network topolgy again:
+<img loading="lazy" src="images/network4.png" alt="network diagram"  />
+</p>
+<h4 id="external-announcements-and-layer-2-routing">External Announcements and Layer 2 Routing<a hidden class="anchor" aria-hidden="true" href="#external-announcements-and-layer-2-routing">#</a></h4>
+<p>MetalLB can assign an IP to your LoadBalancer Kubernetes service, however, it also need to make the network outside of your cluster pod-traffic aware of these IPs and to make them routable. MetalLB has two different modes for achieving this goal: BGP and Layer 2. I will focus on Layer 2 mode as that is what I am running and familiar with.</p>
+<p>MetalLB in Layer 2 mode works by taking an available IP from the IPPool that you previous allocated and assigning that IP to a node in your cluster. From an outside perspective, it look as if the node has multiple IPs on the network. This is called Layer 2 mode because of how it makes use of ARP (address resolution protocol). ARP is a protocol that takes place in layer 2 of the OSI networking model. In short, ARP works by the source machine sending out a broadcast message for the destination IP of the packet it is trying to route. If a machine has that IP leased then it responds to the original ARP request by returning its mac address. The mac adress is then used in layer 2 networking to send the packet on to the node in the cluster.</p>
+<p><img loading="lazy" src="images/arp.png" alt="arp diagram"  />
+</p>
+<p>Once the packet is routed to the a node in the cluster then <code>kube-proxy</code> takes over and routes the packet to one of the services. <code>kubey-proxy</code> is an agent that manages iptables in the cluster to support the routing of packaets from the virtual ips of services to the ips of pods assigned via the CNI. This may be the subject of another post in the future but for now I&rsquo;d refer you to this article: <a href="https://medium.com/@amroessameldin/kube-proxy-what-is-it-and-how-it-works-6def85d9bc8f">Kube-Proxy: Waht is it and How it Works</a></p>
+<h4 id="deploying-metallb">Deploying MetalLB<a hidden class="anchor" aria-hidden="true" href="#deploying-metallb">#</a></h4>
+<p>Now, to the fun part! MetalLB can be deployed via Helm charts to you cluster. The Helm chart can be found on Artifact Hub. The first install of the MetalLB chaty aditionally installs custom CRDs to the cluster. CRDs are &ldquo;Custom Resource Definitions&rdquo; and allow for the creation custom resources like pods or deployments but more relevant to a speicifc application. In the case of MetalLB we care about the <code>IPAddressPool</code> and <code>L2Advertisement</code> CRDs. After the initial install of the chart we will want to deploy and <code>IPAddressPool</code> resource to to tell MetalLB what IP range we have set aside in our subnet for LoadBalancer IPs. We will also deploy an <code>L2Advertisement</code> resource that tells Metallb to advertise ips in that pool via Layer 2 networking.</p>
+<p>I prefer to use Helm&rsquo;s subcharting functionality to keep all of my chart configurations and version in VCS over time but, in general, the installation process would look like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>helm install -n metallb metallb oci://registry-1.docker.io/bitnamicharts/metallb --create-namespace
+</span></span></code></pre></div><p>Then create the <code>IPAddressPool</code> in <code>ippool.yaml</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e"># The address-pools lists the IP addresses that MetalLB is</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># allowed to allocate. You can have as many</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># address pools as you want.</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">metallb.io/v1beta1</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">kind</span>: <span style="color:#ae81ff">IPAddressPool</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># A name for the address pool. Services can request allocation</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># from a specific address pool using this name.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">lb-ip-pool</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">namespace</span>: <span style="color:#ae81ff">metallb-system</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># A list of IP address ranges over which MetalLB has</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># authority. You can list multiple ranges in a single pool, they</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># will all share the same settings. Each range can be either a</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># CIDR prefix, or an explicit start-end range of IPs.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">addresses</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">10.100.0.50-10.100.0.75</span>
+</span></span></code></pre></div><p>and the <code>L2Advertisement</code> in <code>advertisement-l2.yaml</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">metallb.io/v1beta1</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">kind</span>: <span style="color:#ae81ff">L2Advertisement</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">ip-pool-advertisement</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">namespace</span>: <span style="color:#ae81ff">metallb-system</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ipAddressPools</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">lb-ip-pool</span>
+</span></span></code></pre></div><p>then apply both files to the cluster:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubectl apply -n metallb -f ippool.yaml
+</span></span><span style="display:flex;"><span>kubectl apply -n metallb -f advertisement-l2.yaml
+</span></span></code></pre></div><blockquote>
+<p><strong>Note:</strong> This is the quick and dirty way to do this. I reccommend checking out my repo linked at the start of this article to see how subchartting can be used for maintaining the configuration of third-party charts.</p>
+</blockquote>
+<h4 id="validate-with-loadbalancer">Validate with LoadBalancer<a hidden class="anchor" aria-hidden="true" href="#validate-with-loadbalancer">#</a></h4>
+<p>If you don&rsquo;t have any applications deployed and want to validate that the metallb installation is wokring you can apply the following LoadBalancer Service to you cluster and verify that an IP from your <code>IPPool</code> is attached to the service and an <code>external-ip</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e">### lb-svc.yaml</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">v1</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Service</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">my-service</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">namespace</span>: <span style="color:#ae81ff">default</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">selector</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">app</span>: <span style="color:#ae81ff">my-app</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ports</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">protocol</span>: <span style="color:#ae81ff">TCP</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">port</span>: <span style="color:#ae81ff">80</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">targetPort</span>: <span style="color:#ae81ff">8080</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">type</span>: <span style="color:#ae81ff">LoadBalancer</span>
+</span></span></code></pre></div><p>and apply with <code>kubectl apply -f lb-svc.yaml</code>. Then use <code>kubectl get svc</code> to verify that an external-ip has been assigned to the service named &ldquo;my-service&rdquo;.</p>
+<h3 id="deploying-nginx-ingress">Deploying Nginx-Ingress<a hidden class="anchor" aria-hidden="true" href="#deploying-nginx-ingress">#</a></h3>
+<p>Now that we can provision IPs for an implementation of LoadBalancer-type services we can move on to our installation of Nginx Ingress. Yes, technically, NodePort could have been used instead of setting up MetalLB but this is about leraning new things! The Nginx Ingresss controller will act as a single point of entry for all traffic to workloads running in my cluster. Nginx Ingress supports host and path-based routing and I will make use of this when setting DNS records for my apps later on. A large benefit of using Nginx Ingress as a single point of entry for all incoming traffic is that I can integrat Nginx Ingress with Cert-Manager so that it is also the single point for managing all TLS termination of incoming traffic. This reduces the management overhead for me.</p>
+<p>As with MetalLB, my configuration of the Nginx Ingress controller chart can be found in my charts repo linked at the top of this post. There is a lot less configuration to do for this deployment. I will provide a quick and dirty installation here as well though. All that you need to configure via the values file is the service resource that will act as the load balancer to the ingress controller.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e">### nginx-ingress-values.yaml</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">controller</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">service</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">enabled</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">type</span>: <span style="color:#e6db74">&#34;LoadBalancer&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">annotations</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">metallb.universe.tf/address-pool</span>: <span style="color:#ae81ff">lb-ip-pool</span> <span style="color:#75715e"># Add the annotation so that metallb will use the previously configured ippool</span>
+</span></span></code></pre></div><p>and then install:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+</span></span><span style="display:flex;"><span>helm repo update
+</span></span><span style="display:flex;"><span>helm install -n nginx-ingress nginx-ingress ingress-nginx/ingress-nginx -f nginx-ingress-values.yaml --create-namespace
+</span></span></code></pre></div><p>Hura-ah! The Nginx Ingress controller should now be installed. It will watch of the creation <code>ingress</code> resources in the cluster. <code>ingress</code> resources are typically deployed with your application and configure how the Nginx Ingress Controller should route traffic to that application.</p>
+<h3 id="configuring-cert-manager">Configuring Cert-Manager<a hidden class="anchor" aria-hidden="true" href="#configuring-cert-manager">#</a></h3>
+<p>As of right now, with MetalLB and the Nginx Ingress controller set up, I would be ready to access my applications. The problem is, any web browser will give me a page saying that the page I am trying to access is insecure and I would have to click through to access my applications. This is an annoyance and so I have setup Cert-Manager to solve this problem.</p>
+<p>Cert-Manager is a tool that can be integrated Nginx Ingress to automatically provision and rotate SSL/TLS certs for your domains. The SSL/TLS certs are used to encrypt the HTTP traffic between your servers and clients. This is what give us HTTPs.</p>
+<p>An important thing to know before setting up Cert-Manager is that SSL/TLS certificates can <em>only be issued for domains that you own</em>. When Cert-Manager goes to provision or rotate a cert for your service it must pass one of two tests known as ACME challenges (DNS-01 or HTTP-01) to verify that you are the owner of the domain for which you are provisioning a certificate.</p>
+<h4 id="installing-cert-manager">Installing Cert-Manager<a hidden class="anchor" aria-hidden="true" href="#installing-cert-manager">#</a></h4>
 <h3 id="local-dns-management-with-pi-hole">Local DNS Management with Pi-Hole<a hidden class="anchor" aria-hidden="true" href="#local-dns-management-with-pi-hole">#</a></h3>
 <h1 id="persistent-storage">Persistent Storage<a hidden class="anchor" aria-hidden="true" href="#persistent-storage">#</a></h1>
 <h3 id="creating-the-smb-share">Creating the SMB share<a hidden class="anchor" aria-hidden="true" href="#creating-the-smb-share">#</a></h3>
@@ -210,15 +303,10 @@ Kubernetes has a resource type called Services.">
       <li><a href="http://localhost:1313/tags/cloud/">Cloud</a></li>
     </ul>
 <nav class="paginav">
-  <a class="prev" href="http://localhost:1313/posts/03-locust-load-testing/">
-    <span class="title">« Prev</span>
-    <br>
-    <span>Load Testing Applications with Locust</span>
-  </a>
   <a class="next" href="http://localhost:1313/posts/02-bare-metal-k3s-on-rpi-part-1/">
     <span class="title">Next »</span>
     <br>
-    <span>Part 1: Buidling a Bare-metal Kubernetes Cluster on Raspberry Pis</span>
+    <span>Part 1: Building a Bare-metal Kubernetes Cluster on Raspberry Pis</span>
   </a>
 </nav>
 
