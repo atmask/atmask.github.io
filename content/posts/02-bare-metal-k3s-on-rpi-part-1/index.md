@@ -107,5 +107,5 @@ One thing to note about my installation of K3s. K3s supports two types of nodes:
 
 # Conclusion
 
-At this point in time, I had the cluster networking set up and K3s installed on each node. Two of the Raspberry Pis, lightweaver and windrunner, were configured as `k3s-agent` nodes and Bondsmith, my 8Gb Pi was running as the single `k3s-server`. With that, I will bring this post to a close. In part 2, I will review my configuration of Nginx Ingress, MetalLB and, and Cert-Manager for managing incoming traffic to my cluster services. Part 2 will also cover how I configured my 1 TB SSD drive as an SMB share to dynamically provision persistent volumes for my workloads.  
+At this point in time, I had the cluster networking set up and K3s installed on each node. Two of the Raspberry Pis, lightweaver and windrunner, were configured as `k3s-agent` nodes and Bondsmith, my 8Gb Pi, was running as the single `k3s-server`. With that, I will bring this post to a close. In part 2, I will review my configuration of Nginx Ingress, MetalLB and, and Cert-Manager for managing incoming traffic to my cluster services. Part 2 will also cover how I configured my 1 TB SSD drive as an SMB share to dynamically provision persistent volumes for my workloads.  
 
