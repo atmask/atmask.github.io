@@ -3,7 +3,7 @@ title: 'Part 2: Building a Bare-metal Kubernetes Cluster on Raspberry Pis'
 tags: ["kubernetes", "raspberry pi", "k3s", "clusters", "homelab", "ansible", "tailscale", "networking", "pi-hole", "cloud"]
 ShowToc: true
 date: '2024-07-10T20:30:55-04:00'
-draft: true 
+draft: true
 ---
 # Big Idea
 
@@ -145,12 +145,64 @@ As of right now, with MetalLB and the Nginx Ingress controller set up, I would b
 
 Cert-Manager is a tool that can be integrated Nginx Ingress to automatically provision and rotate SSL/TLS certs for your domains. The SSL/TLS certs are used to encrypt the HTTP traffic between your servers and clients. This is what give us HTTPs.
 
-An important thing to know before setting up Cert-Manager is that SSL/TLS certificates can _only be issued for domains that you own_. When Cert-Manager goes to provision or rotate a cert for your service it must pass one of two tests known as ACME challenges (DNS-01 or HTTP-01) to verify that you are the owner of the domain for which you are provisioning a certificate.
+An important thing to know before setting up Cert-Manager is that SSL/TLS certificates can _only be issued for domains that you own_. When Cert-Manager goes to provision or rotate a cert for your service it must pass one of two tests known as ACME challenges (`DNS-01` or `HTTP-01`) to verify that you are the owner of the domain for which you are provisioning a certificate.
 
 #### Installing Cert-Manager
 
+Cert-Manager, like MetalLB, has a set of CRDs that are needed for configuring the installation. This means that I had to to do the initial Helm install to get the CRDs and then a subsuquent Helm upgrade to add configurations. There is one additional CRD needed when setting up Cert-Manager. The required CRD, for my use case and setup at least, is the `ClusterIssuer`. The `ClusterIssuer` configures which Certificate Authority (CA) Cert-Manager will use to generate the SSL/TLS certificates. In my installation I have used Let's Encrypt as my CA. Let's Encrypt provides free certificates and has a generous quota on their production service.
+
+The initial Cert-Manager installation can be added as follows:
+```bash
+helm repo add jetstack https://charts.jetstack.io --force-update
+helm install cert-manager -n cert-manager --version v1.15.1 jetstack/cert-manager --set installCRDs=true --create-namespace
+```
+
+After the initial installation, I deployed the `ClusterIssuer`. As I mentioned earlier, certificates can only be issued for domains that you own. This means that the 
+CA you choose will attempt to execute a `DNS-01` or `HTTP-01` challenge successfully before provisioning your cert. `DNS-01` is more secure so I cover that here. With `DNS-01`
+you must configure your `ClusterIssuer` with an API key for the registrar where you manage your domain. In my case, this is Cloudflare. The `DNS-01` challenge works by the CA requesting that you configure a `TXT` record on your domain with specific values that the CA provides under the sudomain `_acme-challenge.<YOUR_DOMAIN>`. If the CA validates that this has been done, then your ownership of the domain is verified and the certificate is issued. Using my provided API key, Cert-Manager will do this all on my behalf.
+
+```yaml
+## cluster-issuer.yaml
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt
+spec:
+  acme:
+    # You must replace this email address with your own.
+    # Let's Encrypt will use this to contact you about expiring
+    # certificates, and issues related to your account.
+    email: <your email>
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      # Secret resource that will be used to store the account's private key.
+      name: <arbitrary secret name where your acme account key will be stored once generated>
+    # Add a single challenge solver
+    solvers:
+      - dns01:
+          cloudflare:
+            apiTokenSecretRef:
+              name: registrar-api-key
+              key: api-token
+```
+
+```yaml
+## secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: registrar-api-key
+type: Opaque
+stringData:
+  api-token: {{ .Values.cloudflareApiToken }}
+```
+
+> **Note:** If you are setting this up for the first time it is reccommended to use the let's encrypt staging servers so as to not waste your quota. This is done by replacing `acme-v02` with `acme-staging-v02` in the `server` configuration.
+
 
 ## Local DNS Management with Pi-Hole
+
+
 
 
 

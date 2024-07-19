@@ -29,7 +29,7 @@ Before diving into the build list, architecture, and design for my build I want 
 First, portability. I am in a season of life that is nomadic. I am in different apartments for a year or two at a time. I want a build that I can easily unplug, bring somewhere else, and plug in without needing any extra steps for setup. 
 
 ### Isolation & Security
-Second, and closely related, is isolation. I want the network that my cluster runs on to be on a subnet isolated from the LAN network to which it connects. I want all IPs to be in their own non-overlapping address space. I also don't want my service publicly available or available to anyone connected to the LAN of my home network. They should only be accessible via a VPN connection to the cluster network or wireless/wired connection to the cluster LAN.
+Second, and closely related, is isolation. I want the network that my cluster runs on to be on a subnet isolated from the LAN network to which it connects. I want all IPs to be in their own non-overlapping address space. I also don't want my services available publicly or to anyone connected to the LAN of my home network. They should only be accessible via a VPN connection to the cluster network or wireless/wired connection to the cluster LAN.
 
 ### Persistent Storage & Back-ups
 Third, I wanted my cluster to support some implementation PVs and PVCs for data persistence. I wanted this to be affordable and to be reliable. This ruled out buying SSD storage for each node and using a distributed file store like Rook/Ceph or Longhorn. It also ruled out using hostPath storage on SD cards. (Spoiler) My final result uses a single Terabyte SSD that is running as an SMB share which can be mounted via the SMB csi.
@@ -38,7 +38,7 @@ Third, I wanted my cluster to support some implementation PVs and PVCs for data 
 My fourth requirement is that all of my services should be available over an HTTPs connection. Sure, the VPN is encrypted, however, I want TLS termination at the cluster and not only the VPN. Further, I don't want browsers complaining that the site I am visiting is not secure. That is a bother for me and a red flag for any friends or family who connect to my services.
 
 ### DNS
-Lastly, I want my services accessible via DNS records when a user is connected via VPN. I want the DNS server to sit on the LAN network and become the primary DNS server for users when they connect to the network. This keeps my A records off of public DNS servers.
+Lastly, I want my services accessible via DNS records when a user is connected via VPN. I want the DNS server to sit on the cluster LAN network and become the primary DNS server for users when they connect to the network. This keeps my `A records` off of public DNS servers.
 
 # Architecture
 
@@ -90,7 +90,7 @@ Later on, we'll come back here and configure the DNS.
 For this build, I did not want to bother with IPs changing for the nodes in my cluster. For this reason, I assigned each node linked to the network a static IP. You can do this in the DHCP configuration settings of the router so that when the nodes get a new DHCP lease they always get the same IP
 
 ### Adding a TailScale Subnet Router
-Out of my four Raspberry Pis, I have committed three to the cluster and one to running a TailScale SubnetRouter and Pi-Hole. The stoneward node is the Pi that I have chosen to use for hosting my TailScale subnet router and Pi-Hole DNS server. TailScale is a VPN service that builds on top of simplifies Wireguard by delegating the management of peer certificates among new peers to the TailScale control plane. Using TailScale you can run a node as a Subnet Router to route traffic from other users of the VPN network to IP space behind the subnet router. I will take advantage of this functionality by converting the stoneward node into a subnet router that handles routes to my cluster network's CIDR range. This means, that when connected to the VPN, I can reach all of my nodes and services without exposing them to the public internet.
+Out of my four Raspberry Pis, I have committed three to the cluster and one to running a TailScale subnet router and Pi-Hole. The stoneward node is the Pi that I have chosen to use for hosting my TailScale subnet router and Pi-Hole DNS server. TailScale is a VPN service that builds on top of simplifies Wireguard by delegating the management of peer certificates among new peers to the TailScale control plane. Using TailScale you can run a node as a Subnet Router to route traffic from other users of the VPN network to IP space behind the subnet router. I will take advantage of this functionality by converting the stoneward node into a subnet router that handles routes to my cluster network's CIDR range. This means, that when connected to the VPN, I can reach all of my nodes and services without exposing them to the public internet.
 
 The install scripts for TailScale can be found in my Ansible repository. After installing TailScale and advertising my cluster subnet range (note: you have to also approve this node advertising that range in the TailScale Admin console) I then validated that my personal dev laptop could ssh into each of the other nodes linked to my subnet via the PoE network switch.
 
@@ -107,5 +107,5 @@ One thing to note about my installation of K3s. K3s supports two types of nodes:
 
 # Conclusion
 
-At this point in time, I had the cluster networking set up and K3s installed on each node. Two of the Raspberry Pis, lightweaver and windrunner, were configured as `k3s-agent` nodes and Bondsmith, my 8Gb Pi was running as the single `k3s-server`. With that, I will bring this post to a close. In part 2, I will review my configuration of Nginx Ingress, MetalLB and, and Cert-Manager for managing incoming traffic to my cluster services. Part 2 will also cover how I configured my 1 TB SSD drive as an SMB share to dynamically provision persistent volumes for my workloads.  
+At this point in time, I had the cluster networking set up and K3s installed on each node. Two of the Raspberry Pis, lightweaver and windrunner, were configured as `k3s-agent` nodes and Bondsmith, my 8Gb Pi, was running as the single `k3s-server`. With that, I will bring this post to a close. In part 2, I will review my configuration of Nginx Ingress, MetalLB and, and Cert-Manager for managing incoming traffic to my cluster services. Part 2 will also cover how I configured my 1 TB SSD drive as an SMB share to dynamically provision persistent volumes for my workloads.  
 
