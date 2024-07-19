@@ -124,7 +124,7 @@
     <h1 class="post-title entry-hint-parent">
       Part 2: Building a Bare-metal Kubernetes Cluster on Raspberry Pis
     </h1>
-    <div class="post-meta"><span title='2024-07-10 20:30:55 -0400 EDT'>July 10, 2024</span>&nbsp;·&nbsp;11 min
+    <div class="post-meta"><span title='2024-07-10 20:30:55 -0400 EDT'>July 10, 2024</span>&nbsp;·&nbsp;12 min
 
 </div>
   </header> <div class="toc">
@@ -321,7 +321,11 @@ you must configure your <code>ClusterIssuer</code> with an API key for the regis
 </span></span></code></pre></div><blockquote>
 <p><strong>Note:</strong> If you are setting this up for the first time it is reccommended to use the let&rsquo;s encrypt staging servers so as to not waste your quota. This is done by replacing <code>acme-v02</code> with <code>acme-staging-v02</code> in the <code>server</code> configuration.</p>
 </blockquote>
+<p>With Cert-Manager and a <code>ClusterIssuer</code> installed, I was now able to create new <code>ingress</code> resources that containing routing rules and integrate with Cert-Manager via annotations for the automatic provisioning of SSL/TLS certs. Using the API token for Cloudflare, Cert-Manager completes the <code>DNS-01</code> ACME challenge on my behalf.</p>
 <h2 id="local-dns-management-with-pi-hole">Local DNS Management with Pi-Hole<a hidden class="anchor" aria-hidden="true" href="#local-dns-management-with-pi-hole">#</a></h2>
+<p>On more small detail about my cluster pertains to DNS <code>A records</code>. I did not want all of the DNS records for my services available on the public internet. Although the services running on my local network would be unreachable to anyone on the public internet, storing the DNS records with the private IPs for my hosted services in Cloudflare or any other public DNS provider would have meant that anyone could discover the private IPs at which I host services. For me, this was not ideal. This was the motivation for setting up Pi-Hole as a DNS server on my home network. Pi-Hole will act like an Azure Private DNS Zone or Private Hosted Zones in  AWS Route53.</p>
+<p>The first step to achieving this goal was installing Pi-Hole on one of my Pis. I chose to do the installation on <code>stoneward</code> (refer to the network diagram for the naming of my nodes). This is the same Pi that runs TailScale and does not serve any role in the K3s cluster. After completing the Pi-Hole installation you can navigate to <strong>Local DNS &gt; DNS Records</strong> in the admin web ui and configure DNS records for reaching the ngin-ingress controller and other commons IPs such as the cluster node IPs.</p>
+<p>The second and final setup</p>
 <h1 id="persistent-storage">Persistent Storage<a hidden class="anchor" aria-hidden="true" href="#persistent-storage">#</a></h1>
 <h3 id="creating-the-smb-share">Creating the SMB share<a hidden class="anchor" aria-hidden="true" href="#creating-the-smb-share">#</a></h3>
 <h3 id="setting-up-the-smb-csi-driver">Setting up the SMB CSI Driver<a hidden class="anchor" aria-hidden="true" href="#setting-up-the-smb-csi-driver">#</a></h3>

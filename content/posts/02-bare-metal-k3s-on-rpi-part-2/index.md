@@ -199,11 +199,17 @@ stringData:
 
 > **Note:** If you are setting this up for the first time it is reccommended to use the let's encrypt staging servers so as to not waste your quota. This is done by replacing `acme-v02` with `acme-staging-v02` in the `server` configuration.
 
+With Cert-Manager and a `ClusterIssuer` installed, I was now able to create new `ingress` resources that containing routing rules and integrate with Cert-Manager via annotations for the automatic provisioning of SSL/TLS certs. Using the API token for Cloudflare, Cert-Manager completes the `DNS-01` ACME challenge on my behalf.
 
 ## Local DNS Management with Pi-Hole
 
+On more small detail about my cluster pertains to DNS `A records`. I did not want all of the DNS records for my services available on the public internet. Although the services running on my local network would be unreachable to anyone on the public internet, storing the DNS records with the private IPs for my hosted services in Cloudflare or any other public DNS provider would have meant that anyone could discover the private IPs at which I host services. For me, this was not ideal. This was the motivation for setting up Pi-Hole as a DNS server on my home network. Pi-Hole will act like an Azure Private DNS Zone or Private Hosted Zones in  AWS Route53.
 
+The first step to achieving this goal was installing Pi-Hole on one of my Pis. I chose to do the installation on `stoneward` (refer to the network diagram for the naming of my nodes). This is the same Pi that runs TailScale and does not serve any role in the K3s cluster. After completing the Pi-Hole installation you can navigate to **Local DNS > DNS Records** in the admin web ui and configure DNS records for reaching the ngin-ingress controller and other commons IPs such as the cluster node IPs.
 
+> Note: Add comments about hte origin
+
+The second and final step for setp for setting up the private DNS requires configuring TailScale. The TailScale admin portal allows you to configure the DNS nameserver to use for anyone connecting to yout Tailnet. This mus t be updated with the IP of `stoneward` and the override local dns setting set to true. When this is configured. All DNS requests for user's connected to your Tailnet will be routed via the Subnet Router's advertised CIDR range to the DNS running at home. This will allow only user's connected to my local network to resolve the DNS records for services running in my homelab.
 
 
 # Persistent Storage
