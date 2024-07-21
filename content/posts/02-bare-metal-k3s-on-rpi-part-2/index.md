@@ -214,24 +214,24 @@ The second and final step for setting up the private DNS requires configuring Ta
 
 # Persistent Storage
 
-The final part of my cluster configuration that I will cover in this post is my implementation of persistent storage. I wanted to be able to have a reliable persistent storage solution as I intend to store data that matters to me on my services. However, I also wanted a soluton the required a small amount of effort and minimal cost. This ruled out using Kubernetes `hostPath` since the micro SD cards that act as my primary storage on the RPis in not very reliable. The `hostPath` solution also has the issue that data would be tied to a specific node meaning that pods could not be scheduled interchangeably on any node. Exploring a distirbuted file storage solution such as Rook Ceph or Longhorn was intersting to me but not something I really had the bandwidth to explore and seemed overkill for my use case.
+The final part of my cluster configuration that I will cover in this post is my implementation of persistent storage. I wanted to be able to have a reliable persistent storage solution as I intend to store data that matters to me on my services. However, I also wanted a solution that required a small amount of effort and minimal cost. This ruled out using Kubernetes `hostPath` since the micro SD cards that act as my primary storage on the RPis in not very reliable. The `hostPath` solution also has the issue that data would be tied to a specific node meaning that pods could not be scheduled interchangeably on any node. Exploring a distributed file storage solution such as Rook Ceph or Longhorn was interesting to me but not something I really had the bandwidth to explore and seemed overkill for my use case.
 
-In order to de-couple my storage solution from the nodes I chose to set up a 1TB SSD as an SMB share that could be mounted by any node in the cluster via the [SBM CSI driver](https://github.com/kubernetes-csi/csi-driver-smb). The SMB CSI drivers is a Kubernetes CSI implementation that enables pods to access an SMB share via Persistent Volumes and Persistent Volume Claims. 
+In order to de-couple my storage solution from the nodes I chose to set up a 1TB SSD as an SMB share that could be mounted by any node in the cluster via the [SBM CSI driver](https://github.com/kubernetes-csi/csi-driver-smb). The SMB CSI driver is a Kubernetes CSI implementation that enables pods to access an SMB share via Persistent Volumes and Persistent Volume Claims. 
 
 
 ### Creating the SMB share
 
 When I set up my cluster, I only had one node that had a significant amount of RAM. This was my k3s master node, `bondsmith`, which had 8Gb of memory. As a result, I decided to expose the 1TB SSD from this node
 
-I connected my 1 TB SSD to the Pi through a SATA to USB converter cable. The cluster case I used also had a convient place to mount the drive on the same ejectable rack that the Pi was connected to. After powering on the PI with the PoE connection I connected the Tb drive and configured the SMB share.
+I connected my 1 TB SSD to the Pi through a SATA to USB converter cable. The cluster case I used also had a convenient place to mount the drive on the same ejectable rack that the Pi was connected to. After powering on the PI with the PoE connection I connected the Tb drive and configured the SMB share.
 
-The first part of settin up the SMB share was installing Samba to the `bondsmith` node. After installation I mounted the TB drive to the `/nas` dir at the root of my machine. Using the `lsblk` coomand I was able to find my drive on the system and then use the `mount` command to mount the drive to the `/nas` dir. 
+The first part of setting up the SMB share was installing Samba to the `bondsmith` node. After installation I mounted the TB drive to the `/nas` dir at the root of my machine. Using the `lsblk` command I was able to find my drive on the system and then use the `mount` command to mount the drive to the `/nas` dir. 
 ```bash
 ## Mount the drive
 sudo mount /dev/sda2 /nas
 ```
 
-> Note: It's a good idea to create a new user and group for access to the SMB share on the system. I created a user and group for SMB user's and changed the access permissions and ownership of the mounted drive to that user
+> Note: It's a good idea to create a new user and group for access to the SMB share on the system. I created a user and group for SMB users and changed the access permissions and ownership of the mounted drive to that user
 
 Once the drive is mounted you can configure Samba to share the drive to the network. This can be done by configuring and `smb.conf` file and restarting the smb service.
 
@@ -249,7 +249,7 @@ The last step is adding the newly created smb user to Samba using `smbpasswd`.
 
 ### Setting up the SMB CSI Driver
 
-The SMB CSI driver was easily installed into the cluster via the Helm chart. In order to to enable the use of PVCs/PVs it was necessary to configure a StorageClass resource along with the Helm chart. The storage class specifies the connection details for mounting the SMB share. The storage class is then used in PVCs to automaticlaly connect to the network drive and access data. 
+The SMB CSI driver was easily installed into the cluster via the Helm chart. In order to enable the use of PVCs/PVs it was necessary to configure a StorageClass resource along with the Helm chart. The storage class specifies the connection details for mounting the SMB share. The storage class is then used in PVCs to automatically connect to the network drive and access data. 
 
 ```yaml
 ## storageclass.yaml
@@ -334,9 +334,9 @@ spec:
 
 # Backups with rclone and Backblaze
 
-I wanted to make sure that I keep backups of all my data somewhere cheap in case I need to some disaster recovery. I chose to use Backblaze since it has an S3 compatible API and is cheap. There are many guides for authenticating to Backblaze with rclone and k3s so I will just add the commands here in case I need to reference them in the future.
+I wanted to make sure that I keep backups of all my data somewhere cheap in case I need to do some disaster recovery. I chose to use Backblaze since it has an S3 compatible API and is cheap. There are many guides for authenticating to Backblaze with rclone and k3s so I will just add the commands here in case I need to reference them in the future.
 
-> Note: I did not use and in-cluster back-tool like Velero and Rustic because they require snapshot capabilities from the CSI driver and the SMB CSI driver does not support this.
+> Note: I did not use an in-cluster back-up tool like Velero and Rustic because they require snapshot capabilities from the CSI driver and the SMB CSI driver does not support this.
 
 
 ### Backing up the SMB drive
