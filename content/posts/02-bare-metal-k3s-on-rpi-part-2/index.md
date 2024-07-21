@@ -221,11 +221,117 @@ In order to de-couple my storage solution from the nodes I chose to set up a 1TB
 
 ### Creating the SMB share
 
-When I set up my cluster, I only had one node that had a significant amount of RAM. This was my k3s master node: `bondsmith`. As a result, I decided to expose the 1TB SSD from this node
+When I set up my cluster, I only had one node that had a significant amount of RAM. This was my k3s master node, `bondsmith`, which had 8Gb of memory. As a result, I decided to expose the 1TB SSD from this node
+
+I connected my 1 TB SSD to the Pi through a SATA to USB converter cable. The cluster case I used also had a convient place to mount the drive on the same ejectable rack that the Pi was connected to. After powering on the PI with the PoE connection I connected the Tb drive and configured the SMB share.
+
+The first part of settin up the SMB share was installing Samba to the `bondsmith` node. After installation I mounted the TB drive to the `/nas` dir at the root of my machine. Using the `lsblk` coomand I was able to find my drive on the system and then use the `mount` command to mount the drive to the `/nas` dir. 
+```bash
+## Mount the drive
+sudo mount /dev/sda2 /nas
+```
+
+> Note: It's a good idea to create a new user and group for access to the SMB share on the system. I created a user and group for SMB user's and changed the access permissions and ownership of the mounted drive to that user
+
+Once the drive is mounted you can configure Samba to share the drive to the network. This can be done by configuring and `smb.conf` file and restarting the smb service.
+
+``` toml
+## /etc/samba/smb.conf
+[nas]
+path=/nas
+writeable=Yes
+create mask=0777
+directory mask=0777
+public=no
+```
+
+The last step is adding the newly created smb user to Samba using `smbpasswd`.
 
 ### Setting up the SMB CSI Driver
 
-### Creating a PVC
+The SMB CSI driver was easily installed into the cluster via the Helm chart. In order to to enable the use of PVCs/PVs it was necessary to configure a StorageClass resource along with the Helm chart. The storage class specifies the connection details for mounting the SMB share. The storage class is then used in PVCs to automaticlaly connect to the network drive and access data. 
+
+```yaml
+## storageclass.yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: smb
+provisioner: smb.csi.k8s.io
+parameters:
+  source: //<ip of the node>/<path to the smb share>
+  # if csi.storage.k8s.io/provisioner-secret is provided, will create a sub directory
+  # with PV name under source
+  csi.storage.k8s.io/provisioner-secret-name: smbcreds 
+  csi.storage.k8s.io/provisioner-secret-namespace: default
+  csi.storage.k8s.io/node-stage-secret-name: smbcreds
+  csi.storage.k8s.io/node-stage-secret-namespace: default
+reclaimPolicy: Delete  # available values: Delete, Retain
+volumeBindingMode: Immediate
+mountOptions:
+  - dir_mode=0777
+  - file_mode=0777
+  - uid=1001
+  - gid=1001
+  - nobrl 
+  # details on using nobrl:
+  ## https://learn.microsoft.com/en-us/troubleshoot/azure/azure-kubernetes/storage/mountoptions-settings-azure-files#other-useful-settings
+  ## https://github.com/dani-garcia/vaultwarden/issues/846
+```
+
+You will also need to create a secret containing the username and password for connecting to the SMB drive:
+```bash
+kubectl create secret generic smbcreds --from-literal username=<USERNAME> --from-literal password=<PASSWORD>
+```
+
+### Testing PVC/PV Creation
+After the above is installed and set up, I was able to validate that storage was provisioned when specifying the persistent volume claim. 
+
+```yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ss-smb
+  labels:
+    app: busybox
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: busybox
+    spec:
+      containers:
+        - name: ss-smb
+          image: alpine:latest
+          command:
+            - sleep
+            - infinity
+          volumeMounts:
+            - name: smb
+              mountPath: "/sc/smb"
+      tolerations:
+        - key: "node.kubernetes.io/os"
+          operator: "Exists"
+          effect: "NoSchedule"
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: busybox
+  volumeClaimTemplates:
+    - metadata:
+        name: smb
+        annotations:
+          volume.beta.kubernetes.io/storage-class: smb
+      spec:
+        accessModes: ["ReadWriteMany"]
+        resources:
+          requests:
+            storage: 10Gi
+```
+
+
 
 
 # Backups with rsync and Backblaze
