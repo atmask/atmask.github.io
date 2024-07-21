@@ -40,7 +40,7 @@ MetalLB in Layer 2 mode works by taking an available IP from the IPPool that you
 
 ![arp diagram](images/arp.png)
 
-Once the packet is routed to the node in the cluster then `kube-proxy` takes over and routes the packet to one of the services. `kubey-proxy` is an agent that manages iptables in the cluster to support the routing of packets from the virtual IPs of services to the IPs of pods assigned via the CNI. This may be the subject of another post in the future but for now, I'd refer you to this article: [Kube-Proxy: Waht is it and How it Works](https://medium.com/@amroessameldin/kube-proxy-what-is-it-and-how-it-works-6def85d9bc8f)
+Once the packet is routed to the node in the cluster then `kube-proxy` takes over and routes the packet to one of the services. `kubey-proxy` is an agent that manages iptables in the cluster to support the routing of packets from the virtual IPs of services to the IPs of pods assigned via the CNI. This may be the subject of another post in the future but for now, I'd refer you to this article: [Kube-Proxy: What is it and How it Works](https://medium.com/@amroessameldin/kube-proxy-what-is-it-and-how-it-works-6def85d9bc8f)
 
 
 #### Deploying MetalLB

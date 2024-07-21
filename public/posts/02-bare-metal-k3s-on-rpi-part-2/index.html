@@ -124,7 +124,7 @@
     <h1 class="post-title entry-hint-parent">
       Part 2: Building a Bare-metal Kubernetes Cluster on Raspberry Pis
     </h1>
-    <div class="post-meta"><span title='2024-07-10 20:30:55 -0400 EDT'>July 10, 2024</span>&nbsp;·&nbsp;16 min
+    <div class="post-meta"><span title='2024-07-10 20:30:55 -0400 EDT'>July 10, 2024</span>&nbsp;·&nbsp;17 min
 
 </div>
   </header> <div class="toc">
@@ -179,8 +179,17 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="#backups-with-rsync-and-backblaze" aria-label="Backups with rsync and Backblaze">Backups with rsync and Backblaze</a>
+                    <a href="#backups-with-rclone-and-backblaze" aria-label="Backups with rclone and Backblaze">Backups with rclone and Backblaze</a><ul>
+                        <ul>
+                        
+                <li>
+                    <a href="#backing-up-the-smb-drive" aria-label="Backing up the SMB drive">Backing up the SMB drive</a></li>
+                <li>
+                    <a href="#backing-up-etcd" aria-label="Backing up etcd">Backing up etcd</a>
                 </li>
+            </ul>
+            </ul>
+            </li>
             </ul>
         </div>
     </details>
@@ -206,7 +215,7 @@
 <p>MetalLB in Layer 2 mode works by taking an available IP from the IPPool that you previously allocated and assigning that IP to a node in your cluster. From an outside perspective, it looks as if the node has multiple IPs on the network. This is called Layer 2 mode because of how it makes use of ARP (address resolution protocol). ARP is a protocol that takes place in layer 2 of the OSI networking model. In short, ARP works by the source machine sending out a broadcast message for the destination IP of the packet it is trying to route. If a machine has that IP leased then it responds to the original ARP request by returning its MAC address. The MAC address is then used in layer 2 networking to send the packet on to the node in the cluster.</p>
 <p><img loading="lazy" src="images/arp.png" alt="arp diagram"  />
 </p>
-<p>Once the packet is routed to the node in the cluster then <code>kube-proxy</code> takes over and routes the packet to one of the services. <code>kubey-proxy</code> is an agent that manages iptables in the cluster to support the routing of packets from the virtual IPs of services to the IPs of pods assigned via the CNI. This may be the subject of another post in the future but for now, I&rsquo;d refer you to this article: <a href="https://medium.com/@amroessameldin/kube-proxy-what-is-it-and-how-it-works-6def85d9bc8f">Kube-Proxy: Waht is it and How it Works</a></p>
+<p>Once the packet is routed to the node in the cluster then <code>kube-proxy</code> takes over and routes the packet to one of the services. <code>kubey-proxy</code> is an agent that manages iptables in the cluster to support the routing of packets from the virtual IPs of services to the IPs of pods assigned via the CNI. This may be the subject of another post in the future but for now, I&rsquo;d refer you to this article: <a href="https://medium.com/@amroessameldin/kube-proxy-what-is-it-and-how-it-works-6def85d9bc8f">Kube-Proxy: What is it and How it Works</a></p>
 <h4 id="deploying-metallb">Deploying MetalLB<a hidden class="anchor" aria-hidden="true" href="#deploying-metallb">#</a></h4>
 <p>Now, to the fun part! MetalLB can be deployed via Helm charts to your cluster. The Helm chart can be found on Artifact Hub. The first install of the MetalLB chart additionally installs custom CRDs to the cluster. CRDs are &ldquo;Custom Resource Definitions&rdquo; and allow for the creation of custom resources (like pods or deployments) but more relevant to a specific application. In the case of MetalLB, we care about the <code>IPAddressPool</code> and <code>L2Advertisement</code> CRDs. After the initial install of the chart, we will want to deploy an <code>IPAddressPool</code> resource to to tell MetalLB what IP range we have set aside in our subnet for LoadBalancer IPs. We will also deploy an <code>L2Advertisement</code> resource that tells Metallb to advertise IPs in that pool via Layer 2 networking.</p>
 <p>I prefer to use Helm&rsquo;s subcharting functionality to keep all of my chart configurations and versions in VCS over time but, in general, the installation process would look like this:</p>
@@ -422,8 +431,16 @@ you must configure your <code>ClusterIssuer</code> with an API key for the regis
 </span></span><span style="display:flex;"><span>        <span style="color:#f92672">resources</span>:
 </span></span><span style="display:flex;"><span>          <span style="color:#f92672">requests</span>:
 </span></span><span style="display:flex;"><span>            <span style="color:#f92672">storage</span>: <span style="color:#ae81ff">10Gi</span>
-</span></span></code></pre></div><h1 id="backups-with-rsync-and-backblaze">Backups with rsync and Backblaze<a hidden class="anchor" aria-hidden="true" href="#backups-with-rsync-and-backblaze">#</a></h1>
-
+</span></span></code></pre></div><h1 id="backups-with-rclone-and-backblaze">Backups with rclone and Backblaze<a hidden class="anchor" aria-hidden="true" href="#backups-with-rclone-and-backblaze">#</a></h1>
+<p>I wanted to make sure that I keep backups of all my data somewhere cheap in case I need to some disaster recovery. I chose to use Backblaze since it has an S3 compatible API and is cheap. There are many guides for authenticating to Backblaze with rclone and k3s so I will just add the commands here in case I need to reference them in the future.</p>
+<blockquote>
+<p>Note: I did not use and in-cluster back-tool like Velero and Rustic because they require snapshot capabilities from the CSI driver and the SMB CSI driver does not support this.</p>
+</blockquote>
+<h3 id="backing-up-the-smb-drive">Backing up the SMB drive<a hidden class="anchor" aria-hidden="true" href="#backing-up-the-smb-drive">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>rclone sync -P /nas/ b2:&lt;bucket name&gt;
+</span></span></code></pre></div><h3 id="backing-up-etcd">Backing up etcd<a hidden class="anchor" aria-hidden="true" href="#backing-up-etcd">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>k3s etcd-snapshot save --s3 --s3-endpoint &lt;backblaze endpoint&gt; --s3-bucket &lt;backblaze bucket&gt; --s3-access-key &lt;bb access key&gt; --s3-secret-key &lt;bb secret key&gt;
+</span></span></code></pre></div>
 
   </div>
 
