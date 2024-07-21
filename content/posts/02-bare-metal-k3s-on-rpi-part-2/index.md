@@ -332,6 +332,20 @@ spec:
 ```
 
 
+# Backups with rclone and Backblaze
+
+I wanted to make sure that I keep backups of all my data somewhere cheap in case I need to some disaster recovery. I chose to use Backblaze since it has an S3 compatible API and is cheap. There are many guides for authenticating to Backblaze with rclone and k3s so I will just add the commands here in case I need to reference them in the future.
+
+> Note: I did not use and in-cluster back-tool like Velero and Rustic because they require snapshot capabilities from the CSI driver and the SMB CSI driver does not support this.
 
 
-# Backups with rsync and Backblaze
+### Backing up the SMB drive
+```bash
+rclone sync -P /nas/ b2:<bucket name>
+```
+
+### Backing up etcd
+
+```bash
+k3s etcd-snapshot save --s3 --s3-endpoint <backblaze endpoint> --s3-bucket <backblaze bucket> --s3-access-key <bb access key> --s3-secret-key <bb secret key>
+```
