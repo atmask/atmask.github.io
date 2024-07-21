@@ -3,7 +3,7 @@ title: 'Part 2: Building a Bare-metal Kubernetes Cluster on Raspberry Pis'
 tags: ["kubernetes", "raspberry pi", "k3s", "clusters", "homelab", "ansible", "tailscale", "networking", "pi-hole", "cloud"]
 ShowToc: true
 date: '2024-07-10T20:30:55-04:00'
-draft: true
+draft: false
 ---
 # Big Idea
 
@@ -17,7 +17,7 @@ As usual, all of my configurations for deploying charts can be found on my GitHu
 
 # Load-Balancing, Ingress, and SSL/TLS Management
 
-Now that, I had my cluster up and running with a CNI installed (I'll do more posts about Calico CNI in the future) I wanted to get the networking setup to access services on my cluster. To achieve this, I added three different installations to my cluster: MetalLB, Nginx Ingress, and Cert-Manager. 
+Now that I had my cluster up and running with a CNI installed (I'll do more posts about Calico CNI in the future) I wanted to get the networking setup to access services on my cluster. To achieve this, I added three different installations to my cluster: MetalLB, Nginx Ingress, and Cert-Manager. 
 
 Kubernetes has a resource type called Services. Services function as load balancers by providing a single IP for balancing traffic among a backing set of ephemeral pods running a workload. Kubernetes services resources have a few kinds, namely, ClusterIP, NodePort, and LoadBalancer. There are default implementations for the first two service types in Kubernetes but none for LoadBalancer-type services. Most major cloud providers you use will have their own implementation with their Kubernetes offerings that will configure a Load Balancer with a public IP from their platform to manage the incoming traffic to your service. MetalLB is a solution for those running their own Kubernetes clusters to support services of type LoadBalancer. 
 
@@ -214,10 +214,14 @@ The second and final step for setting up the private DNS requires configuring Ta
 
 # Persistent Storage
 
-The final part of my cluster configuration that I will cover in this post is my implementation of persistent storage. 
+The final part of my cluster configuration that I will cover in this post is my implementation of persistent storage. I wanted to be able to have a reliable persistent storage solution as I intend to store data that matters to me on my services. However, I also wanted a soluton the required a small amount of effort and minimal cost. This ruled out using Kubernetes `hostPath` since the micro SD cards that act as my primary storage on the RPis in not very reliable. The `hostPath` solution also has the issue that data would be tied to a specific node meaning that pods could not be scheduled interchangeably on any node. Exploring a distirbuted file storage solution such as Rook Ceph or Longhorn was intersting to me but not something I really had the bandwidth to explore and seemed overkill for my use case.
+
+In order to de-couple my storage solution from the nodes I chose to set up a 1TB SSD as an SMB share that could be mounted by any node in the cluster via the [SBM CSI driver](https://github.com/kubernetes-csi/csi-driver-smb). The SMB CSI drivers is a Kubernetes CSI implementation that enables pods to access an SMB share via Persistent Volumes and Persistent Volume Claims. 
 
 
 ### Creating the SMB share
+
+When I set up my cluster, I only had one node that had a significant amount of RAM. This was my k3s master node: `bondsmith`. As a result, I decided to expose the 1TB SSD from this node
 
 ### Setting up the SMB CSI Driver
 

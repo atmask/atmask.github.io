@@ -6,15 +6,8 @@
     <description>Recent content in Tailscale on Ben Mask</description>
     <generator>Hugo -- 0.128.2</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 10 Jul 2024 20:30:55 -0400</lastBuildDate>
+    <lastBuildDate>Wed, 10 Jul 2024 20:29:01 -0400</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/tailscale/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Part 2: Building a Bare-metal Kubernetes Cluster on Raspberry Pis</title>
-      <link>http://localhost:1313/posts/02-bare-metal-k3s-on-rpi-part-2/</link>
-      <pubDate>Wed, 10 Jul 2024 20:30:55 -0400</pubDate>
-      <guid>http://localhost:1313/posts/02-bare-metal-k3s-on-rpi-part-2/</guid>
-      <description>Big Idea In part 1 of this post, I covered the basics of getting started building my Kubernetes cluster on Raspberry Pis. In particular, I laid out my goals and requirements, the build list, the network topology and setup, and the installation of K3s on each of the nodes. I recommend going back and checking out that post first if you haven&amp;rsquo;t already (Part 1: Building a Bare-metal Kubernetes Cluster on Raspberry Pis).</description>
-    </item>
     <item>
       <title>Part 1: Building a Bare-metal Kubernetes Cluster on Raspberry Pis</title>
       <link>http://localhost:1313/posts/02-bare-metal-k3s-on-rpi-part-1/</link>
