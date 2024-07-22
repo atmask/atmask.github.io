@@ -109,8 +109,11 @@ You should be able to navigate to the above url in your browser and see the Locu
 ![Locust Dashboard](images/locust-dashboard.png) 
 
 
-
 ## Managing Different Types of Application Use Cases
+
+In reality, you'll want to add more complex behaviours to your load tests. You likely also want to group the behaviours/task that you are automating to run against your server into different groups of user classes. This will let you define the behaviours of users in different scenarios such as an unathenticated user vs an authenticated user.
+
+I will provide a project structure that seems scalable and maintable to me from a code perspective for expanding to this next part of developing a Locust project.
 
 
 
