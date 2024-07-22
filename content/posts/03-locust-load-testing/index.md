@@ -31,7 +31,7 @@ locust-tests
 
 I won't go into detail about the installation and general usage of `poetry` here, but will provide the steps to get the project up and running. 
 
-> 🛠️ **Note:** If you don't care to use `poetry` you can also just add a venv using `python -m venv .venv` and set up the following `requirements.txt` file for something quick and easy:
+> 🛠️ **Note:** If you don't care to use `poetry`, you can also just add a venv using `python -m venv .venv` and set up the following `requirements.txt` file for something quick and easy:
 >  ```bash
 >  # requirements.txt file
 >  locust
@@ -70,6 +70,43 @@ locust-tests
 ```
 
 ## Writing a Simple Locust Test
+
+To get started let's write a simple test that visits the main page for a website. To do this we have to write a class that represents  some type of "user" of the system. We will hive this user behaviours by writing functions and decorating those functions with `@task` decorator. When Locust runs, it will, by default, find all of the defined User classes in `locutfile.py` and randomly execute the `@task` decorated functions.
+
+Here is an example for a first test. This example User class extends Locust's base HttpUser class and defines a behvaiour/task for visiting the root page of a site.
+
+```python
+# locustfile.py
+from locust import HttpUser, task
+
+class WebUser(HttpUser):
+    @task
+    def visit_main_page(self):
+        '''Visit the main page of the domain'''
+        self.client.get("/")
+```
+
+You may notice that the `GET` request does not sepcify a domain or scheme. This is because the Locust UI allows you ton configure domain you will run requests against interactively. Locust then builds and `Environment` object that gets passed ot the `HttpUser` class (and any class that extends it) in the constructor. The `client` then automatically uses the configured the domain as the base url for the requests.
+
+You can now launch the Locust server run this first Locust test!
+```bash
+
+## If you are using poetry
+poetry shell
+
+## If you are using a venv
+. .venv/bin/activate
+
+## Enter the project containing the locustfile.py and run the locust server
+cd LoadTests/
+locust
+
+## Expected output
+>>> Starting web interface at http://0.0.0.0:8089
+```
+
+You should be able to navigate to the above url in your browser and see the Locust UI.
+![Locust Dashboard](images/locust-dashboard.png) 
 
 
 
