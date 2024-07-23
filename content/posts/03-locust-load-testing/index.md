@@ -191,7 +191,7 @@ class AuthenticatedUser(HttpUser):
         self.client.get('/profile')
 ```
 
-This is great! But what if your application supports different authentication mechanisms? And what if multiple different user's all need authentication? This is where we can improve the above example by adding some additional structuring to the project to keep things DRY and consistent. This will be done by creating an interface that must be implemented by all authenticated user classes and a couple of authentication base classes to implement the interface with different auth mechanisms.
+This is great! But what if your application supports different authentication mechanisms? And what if multiple different user's all need authentication? This is where we can improve the above example by adding some additional structuring to the project to keep things DRY and consistent. This will be done by creating an interface that must be implemented by all authenticated user classes and adding a couple of authentication base classes to implement the interface with different auth mechanisms.
 
 Let's look at the new project structure with the changes that will be introduced:
 
