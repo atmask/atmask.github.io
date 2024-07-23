@@ -2,38 +2,38 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Cloud on Ben Mask</title>
-    <link>http://localhost:64661/tags/cloud/</link>
+    <link>http://localhost:64882/tags/cloud/</link>
     <description>Recent content in Cloud on Ben Mask</description>
     <generator>Hugo -- 0.128.2</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 22 Jul 2024 21:22:31 -0400</lastBuildDate>
-    <atom:link href="http://localhost:64661/tags/cloud/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:64882/tags/cloud/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Load Testing Applications with Locust</title>
-      <link>http://localhost:64661/posts/03-locust-load-testing/</link>
+      <link>http://localhost:64882/posts/03-locust-load-testing/</link>
       <pubDate>Mon, 22 Jul 2024 21:22:31 -0400</pubDate>
-      <guid>http://localhost:64661/posts/03-locust-load-testing/</guid>
+      <guid>http://localhost:64882/posts/03-locust-load-testing/</guid>
       <description>Big Idea I was recently tasked with configuring automated load tests to validate the health of a service under load and to identify bottlenecks and limits at which the service became overloaded. Up until this point, I had not worked first-hand with any load-testing frameworks. Although there are many great load testing tools out there like JMeter, K6s, and Locust, I decided to get started with Locust as it is a framework I had heard of before and is a pure Python framework (Python is the language I think in right now).</description>
     </item>
     <item>
       <title>Part 2: Building a Bare-metal Kubernetes Cluster on Raspberry Pis</title>
-      <link>http://localhost:64661/posts/02-bare-metal-k3s-on-rpi-part-2/</link>
+      <link>http://localhost:64882/posts/02-bare-metal-k3s-on-rpi-part-2/</link>
       <pubDate>Sun, 21 Jul 2024 20:30:55 -0400</pubDate>
-      <guid>http://localhost:64661/posts/02-bare-metal-k3s-on-rpi-part-2/</guid>
+      <guid>http://localhost:64882/posts/02-bare-metal-k3s-on-rpi-part-2/</guid>
       <description>Big Idea In part 1 of this post, I covered the basics of getting started building my Kubernetes cluster on Raspberry Pis. In particular, I laid out my goals and requirements, the build list, the network topology and setup, and the installation of K3s on each of the nodes. I recommend going back and checking out that post first if you haven&amp;rsquo;t already (Part 1: Building a Bare-metal Kubernetes Cluster on Raspberry Pis).</description>
     </item>
     <item>
       <title>Part 1: Building a Bare-metal Kubernetes Cluster on Raspberry Pis</title>
-      <link>http://localhost:64661/posts/02-bare-metal-k3s-on-rpi-part-1/</link>
+      <link>http://localhost:64882/posts/02-bare-metal-k3s-on-rpi-part-1/</link>
       <pubDate>Wed, 10 Jul 2024 20:29:01 -0400</pubDate>
-      <guid>http://localhost:64661/posts/02-bare-metal-k3s-on-rpi-part-1/</guid>
+      <guid>http://localhost:64882/posts/02-bare-metal-k3s-on-rpi-part-1/</guid>
       <description>Big Idea From the start of my career, I have been fascinated by Kubernetes. I love distributed systems and the rich history of how we have arrived where we are today with distributed computing. We live in the ongoing evolution of our communal vision for cloud computing. In the early years, the vision was to present a homogenous Unix-like interface for managing an underlying collection of servers such as BOINC. Now, we live in the world of many small virtualized unix environments distributed across servers and sharing compute.</description>
     </item>
     <item>
       <title>Understanding CIDR Block and IPv4 Addressing </title>
-      <link>http://localhost:64661/posts/03-understanding-ipv4-addressing/</link>
+      <link>http://localhost:64882/posts/03-understanding-ipv4-addressing/</link>
       <pubDate>Sat, 06 Jul 2024 20:01:16 -0400</pubDate>
-      <guid>http://localhost:64661/posts/03-understanding-ipv4-addressing/</guid>
+      <guid>http://localhost:64882/posts/03-understanding-ipv4-addressing/</guid>
       <description></description>
     </item>
   </channel>
