@@ -2,8 +2,8 @@
 title: 'Understanding CIDR Block and IPv4 Addressing'
 tags: ["networking", "explainer", "cloud", "IP"]
 ShowToc: true
-date: '2024-07-22T20:01:16-04:00'
-draft: true
+date: '2024-07-29T20:01:16-04:00'
+draft: false
 ---
 # Big Idea
 
@@ -51,7 +51,7 @@ In this example the host portion allows 16,777,216 hosts. It is very likely that
 
 ### CIDR Notation
 
-When it scomes to dividing an IP into the network portion and the host portion, the network portion is always represented by a some leading number of bits. How many leading bits are fixed is often up to you, the developer to decide. This means that we need a standard way to tell others how many leading bits are fixed and represent the network portion of the address. To solve this problem we will introduce CIDR notation. CIDR notation, stands for Classless Inter-domain Routing, and is a standard way to tell others how many leading bits make up the network portion of an address. The name, classless inter-domain routing is a nod to an earlier and antiquated method of partitioning IP addresses known as class based routing. 
+When it comes to dividing an IP into the network portion and the host portion, the network portion is always represented by a some leading number of bits. How many leading bits are fixed is often up to you, the developer to decide. This means that we need a standard way to tell others how many leading bits are fixed and represent the network portion of the address. To solve this problem we will introduce CIDR notation. CIDR notation, stands for Classless Inter-domain Routing, and is a standard way to tell others how many leading bits make up the network portion of an address. The name, classless inter-domain routing is a nod to an earlier and antiquated method of partitioning IP addresses known as class-based routing. 
 
 Using CIDR notation you will append an `/x` to the end of your network IP. The value of `x` dictates how many leading bits dictate the network portion of the address. In the example above we would represent our address range of `10.0.0.0` to `10.255.255.255` as `10.0.0.0/8`.
 
