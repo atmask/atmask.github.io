@@ -20,7 +20,7 @@ Engineers at the time that RCF 791 was published did not realize the magnitude o
 
 # Anatomy of IPv4
 
-An IPv4 address that you see may look like the following: `192.168.0.2`. This address represents 32 bits in a base 10 format. Those 32 bits are divided into 4 groups known as octets. Each octet contains 8 bits. The four octets correspond to the four '.' separated parts of the IP address in our example. When working with IPv4, it is often easier to convert the base 10 represenation of the IP address into binary. This means that we could represent the above IP as follows:
+An IPv4 address that you see may look like the following: `192.168.0.2`. This address represents 32 bits in a base 10 format. Those 32 bits are divided into 4 groups known as **octets**. Each octet contains 8 bits. The four octets correspond to the four '.' separated parts of the IP address in our example. When working with IPv4, it is often easier to convert the base 10 represenation of the IP address into binary. This means that we could represent the above IP as follows:
 
 <div style="text-align: center;" markdown="1">
 
