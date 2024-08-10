@@ -2,7 +2,7 @@
 title: 'Intro to K8s Autoscaling'
 tags: ["explainer", "cloud", "kubernetes", "autoscaling"]
 ShowToc: true
-date: '2024-08-08T19:57:08-04:00'
+date: '2024-08-09T19:57:08-04:00'
 draft: true
 ---
 # Big Idea
@@ -28,7 +28,7 @@ The goal that many of these early systems tried to achieve was distributing an a
 
 Over more time than I care to write about here, the paradigm evolved. There was a shift away from trying to distribute processes across machine and towards distributing computation that was embarassingly parallel across machines.
 
-> embarrassingly parallel tasks are tasks that it takes relativlely little to no work to split the problem in parallel execution environments to run computation. If needed, results produced by tasks executed in parallel can be aggregated afterwards.
+> 📖 **Embarrassingly parallel tasks** are tasks that it takes relativlely little to no work to split the problem in parallel execution environments to run computation. If needed, results produced by tasks executed in parallel can be aggregated afterwards.
 
 A perfect example for a computation unit to run in parallel across many machines is the modern container. Applications run across a fleet of machines and stateless HTTP requests can get handled by an application in any container or applications can consume from a central queue and process large numbers of jobs in parallel.
 
@@ -38,16 +38,16 @@ With a better understanding of containers and distributed computing it may be ea
 
 # Autoscaling
 
-Cloud providers have a signifcant amount of computational resources at their disposal. As result, these providers, give user's a benefit known as elatisity. Elastisity is the ability to provision or de-allocated resources on demand and based on need. This is a unique feature of cloud environments that contrasts the often slow acquisition time and upfront captial that needs to beinvested to procure on-prem equipment.
+Cloud providers have a signifcant amount of computational resources at their disposal. As result, these providers, give user's a benefit known as elatisity. **Elastisity** is the ability to provision or de-allocated resources on demand and based on need. This is a unique feature of cloud environments that contrasts the often slow acquisition time and upfront captial that needs to beinvested to procure on-prem equipment.
 
-Autoscaling is data-driven approach to provisioning and de-provisioning resources based on active load on a system at a given point in time. The two forms of autoscaling that we will look at further on is horizontal pod autocaling and cluster autoscaling. These are both forms of autoscaling in Kubernetes that would be descrbed as forms of horizontal scaling. Horizontal scaling, sometimes known as scaling out, refers to the addition of more discrete computation units (i.e. add more nodes or pods). In contrast, vertical scaling, also known as scaling up, means increasing the available hardware capabilites of the existing machines (add more cpu, memory).
+Autoscaling is data-driven approach to provisioning and de-provisioning resources based on active load on a system at a given point in time. The two forms of autoscaling that we will look at further on are horizontal pod autocaling and cluster autoscaling. These are both forms of autoscaling in Kubernetes that would be descrbed as forms of horizontal scaling. **Horizontal scaling**, sometimes known as scaling out, refers to the addition of more discrete computation units (i.e. add more nodes or pods). In contrast, **vertical scaling**, also known as scaling up, means increasing the available hardware capabilites of the existing machines (add more cpu, memory).
 
 ### Horizontal Pod Autoscaling (HPA)
 
 #### Scaling Based on Resource Metrics
 In order to scale a pod based on resource metrics (cpu/memory). You need to specify resources requests on a pod. These resource requests are used by the Cluster Scheduler to determine whether there are any nodes with sufficient resources for this pod. The scalable resource metrics available by default in Kubernetes are the ratio between the container's actual resource usage and requested usage.
 
-> **Important**: It is a common misperception when seeing a pod's cpu % usage or memory % usage to assume that the ratio is with respect to the resources available on the underlying node. In reality, more often that not this value is with respect to the resources requests specified on the pod spec.
+> 💡 **Important**: It is a common misperception when seeing a pod's % cpu usage or % memory usage to assume that the ratio is with respect to the resources available on the underlying node. In reality, more often that not this value is with respect to the resources requests specified on the pod spec.
 
 
 ### Cluster Autoscaling
