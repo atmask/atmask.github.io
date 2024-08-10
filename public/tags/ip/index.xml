@@ -6,14 +6,15 @@
     <description>Recent content in IP on Ben Mask</description>
     <generator>Hugo -- 0.128.2</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 29 Jul 2024 20:01:16 -0400</lastBuildDate>
+    <lastBuildDate>Fri, 09 Aug 2024 20:01:16 -0400</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/ip/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Understanding CIDR Block and IPv4 Addressing</title>
+      <title>Understanding CIDR Blocks and IPv4 Addressing</title>
       <link>http://localhost:1313/posts/04-understanding-ipv4-addressing/</link>
-      <pubDate>Mon, 29 Jul 2024 20:01:16 -0400</pubDate>
+      <pubDate>Fri, 09 Aug 2024 20:01:16 -0400</pubDate>
       <guid>http://localhost:1313/posts/04-understanding-ipv4-addressing/</guid>
-      <description>Big Idea The goal of this post will be to give an overview of how IPv4 addresses. My goal is to incrementally cover three main topics so that you can better understand IPv4 networking. First, I will go over the parts of an IPv4 address, Second I will review how to convert between base 10 and binary representations and IPv4 addressed, Third, I will delve into how CIDR blocks and subnet masks are used for subnetting network.</description>
+      <description>Big Idea The goal of this post will be to give an overview of IPv4 addresses. My aim is to do this incrementally by first covering the anatomy of an IPv4 address in its base 10 and binary representations. Second, I will look at CIDR block subnetting and subnet masks. Thirdly, I will append some helpful formulas for working with IP addresses.
+Background &amp;amp; History Before diving into the anatomy of IPv4 let&amp;rsquo;s turn back the page.</description>
     </item>
   </channel>
 </rss>
