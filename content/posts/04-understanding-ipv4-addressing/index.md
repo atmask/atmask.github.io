@@ -11,7 +11,7 @@ The goal of this post will be to give an overview of IPv4 addresses. My aim is t
 
 # Background & History
 
-Before diving into the anatomy of IPv4 let's turn back the page. In 1981, RFC 791 was published. This document outlined the `Internet Protocol` and the IPv4 addressing scheme that would be used to uniquely identify and locate machines on the Internet.
+Before diving into the anatomy of IPv4 let's turn back the page. In 1981, RFC 791 was published. This document outlined the _Internet Protocol_ and the IPv4 addressing scheme that would be used to uniquely identify and locate machines on the Internet.
 
 The ability to uniquely identify devices on a network is incredibly important. This ability is how we route packages from one machine to another across a network. On a network, a given IP must be uniquely assigned to a single device for seamless communication. The concept of the IP address that we will explore today is one part of a larger layered model (known as the OSI model) that facilitates the transfer of data over a network.
 

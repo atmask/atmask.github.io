@@ -47,7 +47,7 @@ Autoscaling is data-driven approach to provisioning and de-provisioning resource
 #### Scaling Based on Resource Metrics
 In order to scale a pod based on resource metrics (cpu/memory). You need to specify resources requests on a pod. These resource requests are used by the Cluster Scheduler to determine whether there are any nodes with sufficient resources for this pod. The scalable resource metrics available by default in Kubernetes are the ratio between the container's actual resource usage and requested usage.
 
-> **Important**: It is a common mis-perception when seeing a pod's cpu % usage or memory % usage to assume that the ratio is with respect to the resources available on the underlying node. In reality, more often that not this value is with respect to the resources requests specified on the pod spec.
+> **Important**: It is a common misperception when seeing a pod's cpu % usage or memory % usage to assume that the ratio is with respect to the resources available on the underlying node. In reality, more often that not this value is with respect to the resources requests specified on the pod spec.
 
 
 ### Cluster Autoscaling
