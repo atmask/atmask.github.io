@@ -2,7 +2,7 @@
 title: 'Intro to K8s Autoscaling'
 tags: ["explainer", "cloud", "kubernetes", "autoscaling"]
 ShowToc: true
-date: '2024-08-09T19:57:08-04:00'
+date: '2024-08-10T19:57:08-04:00'
 draft: true
 ---
 # Big Idea
@@ -44,10 +44,50 @@ Autoscaling is data-driven approach to provisioning and de-provisioning resource
 
 ### Horizontal Pod Autoscaling (HPA)
 
-#### Scaling Based on Resource Metrics
-In order to scale a pod based on resource metrics (cpu/memory). You need to specify resources requests on a pod. These resource requests are used by the Cluster Scheduler to determine whether there are any nodes with sufficient resources for this pod. The scalable resource metrics available by default in Kubernetes are the ratio between the container's actual resource usage and requested usage.
+By default, any Kubernetes workload  you deploy that creates pods such as a deployment or statefulset is not going to autoscale. Usually in a basic configuration the number of desired pods will be statically set by defining the `replicas` field on the controller. However, the Kubernetes API supports a Horizontal Pod Autoscaler (HPA) resource. Rather than generating a fixed number of pods, the HPA will increase or decrease the number of pods for the workload (remember, horizontal scaling) based on the observed resource utilization of the pods in that workload.
 
-> 💡 **Important**: It is a common misperception when seeing a pod's % cpu usage or % memory usage to assume that the ratio is with respect to the resources available on the underlying node. In reality, more often that not this value is with respect to the resources requests specified on the pod spec.
+More specifically, the horizontal pod autoscaler is a controller shipped as part of the Kubernetes controller manager, a daemon that embeds the default controllers shipped with Kubernetes. The HPA resources that we create via the Kubernetes API will specify configuration for this controller to manager our workloads.
+
+When we talk about a controller in Kubernetes, we are talking about a control loop process that continuosuly evaluates the current state of the system, compares it to some desired state, and makes changes as required. In the case of the HPA, an metric is observed, compared to a threshold, and pods are scaled up or down (or not at all).
+
+![hpa-control-loop](./images/hpa-control-loop.png)
+
+#### Scaling Based on Resource Usage
+
+In order to scale a pod based on observed resource usage you need to specify resource requests on a pod. Resources requests are a field that can be optionally defined as part of your pod template. The resource requests specify the amount of cpu and/or memory that the pod needs to run. Defining resource requests is considered best practice because they enable the Cluster Scheduler to determine whether there are any nodes with sufficient resources when placing a pod. 
+
+Defining the resource requests for a pod is necessary for enabling HPA because the only resource metrics that the HPA can scale based on (without the more involved process of setting up custom pod or object metrics) are the observed usage of the requested cpu and memory resources. Here is an example HPA that scales based on the % utilization of CPU:
+
+```yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: nginx
+spec:
+  ## Defined the workload we want to scale
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: nginx
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+    name: cpu
+    target:
+        type: Utilization
+        averageUtilization: 60
+```
+
+what you see above is an HPA that scales in a new pof for Deployment workload named nginx whenever the average cpu utilization is above 60%. An alternative to the `target.type: Utilization` is the `target.type: AverageValue`. Using the latter you can specify an exact value for resource usage, such as the number of milicores, or Gb of memory.
+
+> 💡 **Important**: It is a common misperception when seeing a pod's % cpu usage or % memory usage to assume that the ratio is with respect to the resources available on the underlying node. In reality, more often that not this value is with respect to the resources requests specified on the pod spec. Further, the average utilization measured and compared to the threshold defined in the HPA is the resource usages of all the pods added and averaged. This means a situation can result where one pod's utilization is above the threshold but no new pods is scaled in since the average across all pods in the workload are below the threshold.
+
+#### Scaling with Multiple Metrics
+
+Scaling is not limited to one metric. You can specify multiple metric thresholds for scaling. When multiple metrics are defined, the HPA will evaluate each metric, select the metric that results in the gratest number of running pods, and scale if needed. If any metric cannot be calculated then scaling is skipped for that round of calulations.
+
 
 
 ### Cluster Autoscaling

@@ -130,7 +130,7 @@
         </svg>
       </span>
     </h1>
-    <div class="post-meta"><span title='2024-08-09 19:57:08 -0400 EDT'>August 9, 2024</span>&nbsp;·&nbsp;6 min
+    <div class="post-meta"><span title='2024-08-10 19:57:08 -0400 EDT'>August 10, 2024</span>&nbsp;·&nbsp;8 min
 
 </div>
   </header> <div class="toc">
@@ -162,7 +162,9 @@
                     <a href="#horizontal-pod-autoscaling-hpa" aria-label="Horizontal Pod Autoscaling (HPA)">Horizontal Pod Autoscaling (HPA)</a><ul>
                         
                 <li>
-                    <a href="#scaling-based-on-resource-metrics" aria-label="Scaling Based on Resource Metrics">Scaling Based on Resource Metrics</a></li></ul>
+                    <a href="#scaling-based-on-resource-usage" aria-label="Scaling Based on Resource Usage">Scaling Based on Resource Usage</a></li>
+                <li>
+                    <a href="#scaling-with-multiple-metrics" aria-label="Scaling with Multiple Metrics">Scaling with Multiple Metrics</a></li></ul>
                 </li>
                 <li>
                     <a href="#cluster-autoscaling" aria-label="Cluster Autoscaling">Cluster Autoscaling</a><ul>
@@ -206,11 +208,39 @@
 <p>Cloud providers have a signifcant amount of computational resources at their disposal. As result, these providers, give user&rsquo;s a benefit known as elatisity. <strong>Elastisity</strong> is the ability to provision or de-allocated resources on demand and based on need. This is a unique feature of cloud environments that contrasts the often slow acquisition time and upfront captial that needs to beinvested to procure on-prem equipment.</p>
 <p>Autoscaling is data-driven approach to provisioning and de-provisioning resources based on active load on a system at a given point in time. The two forms of autoscaling that we will look at further on are horizontal pod autocaling and cluster autoscaling. These are both forms of autoscaling in Kubernetes that would be descrbed as forms of horizontal scaling. <strong>Horizontal scaling</strong>, sometimes known as scaling out, refers to the addition of more discrete computation units (i.e. add more nodes or pods). In contrast, <strong>vertical scaling</strong>, also known as scaling up, means increasing the available hardware capabilites of the existing machines (add more cpu, memory).</p>
 <h3 id="horizontal-pod-autoscaling-hpa">Horizontal Pod Autoscaling (HPA)<a hidden class="anchor" aria-hidden="true" href="#horizontal-pod-autoscaling-hpa">#</a></h3>
-<h4 id="scaling-based-on-resource-metrics">Scaling Based on Resource Metrics<a hidden class="anchor" aria-hidden="true" href="#scaling-based-on-resource-metrics">#</a></h4>
-<p>In order to scale a pod based on resource metrics (cpu/memory). You need to specify resources requests on a pod. These resource requests are used by the Cluster Scheduler to determine whether there are any nodes with sufficient resources for this pod. The scalable resource metrics available by default in Kubernetes are the ratio between the container&rsquo;s actual resource usage and requested usage.</p>
+<p>By default, any Kubernetes workload  you deploy that creates pods such as a deployment or statefulset is not going to autoscale. Usually in a basic configuration the number of desired pods will be statically set by defining the <code>replicas</code> field on the controller. However, the Kubernetes API supports a Horizontal Pod Autoscaler (HPA) resource. Rather than generating a fixed number of pods, the HPA will increase or decrease the number of pods for the workload (remember, horizontal scaling) based on the observed resource utilization of the pods in that workload.</p>
+<p>More specifically, the horizontal pod autoscaler is a controller shipped as part of the Kubernetes controller manager, a daemon that embeds the default controllers shipped with Kubernetes. The HPA resources that we create via the Kubernetes API will specify configuration for this controller to manager our workloads.</p>
+<p>When we talk about a controller in Kubernetes, we are talking about a control loop process that continuosuly evaluates the current state of the system, compares it to some desired state, and makes changes as required. In the case of the HPA, an metric is observed, compared to a threshold, and pods are scaled up or down (or not at all).</p>
+<p><img loading="lazy" src="./images/hpa-control-loop.png" alt="hpa-control-loop"  />
+</p>
+<h4 id="scaling-based-on-resource-usage">Scaling Based on Resource Usage<a hidden class="anchor" aria-hidden="true" href="#scaling-based-on-resource-usage">#</a></h4>
+<p>In order to scale a pod based on observed resource usage you need to specify resource requests on a pod. Resources requests are a field that can be optionally defined as part of your pod template. The resource requests specify the amount of cpu and/or memory that the pod needs to run. Defining resource requests is considered best practice because they enable the Cluster Scheduler to determine whether there are any nodes with sufficient resources when placing a pod.</p>
+<p>Defining the resource requests for a pod is necessary for enabling HPA because the only resource metrics that the HPA can scale based on (without the more involved process of setting up custom pod or object metrics) are the observed usage of the requested cpu and memory resources. Here is an example HPA that scales based on the % utilization of CPU:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">autoscaling/v2</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">kind</span>: <span style="color:#ae81ff">HorizontalPodAutoscaler</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">nginx</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">## Defined the workload we want to scale</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">scaleTargetRef</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">apps/v1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Deployment</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">nginx</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">minReplicas</span>: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">maxReplicas</span>: <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">metrics</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">type</span>: <span style="color:#ae81ff">Resource</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">resource</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">cpu</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">target</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">type</span>: <span style="color:#ae81ff">Utilization</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">averageUtilization</span>: <span style="color:#ae81ff">60</span>
+</span></span></code></pre></div><p>what you see above is an HPA that scales in a new pof for Deployment workload named nginx whenever the average cpu utilization is above 60%. An alternative to the <code>target.type: Utilization</code> is the <code>target.type: AverageValue</code>. Using the latter you can specify an exact value for resource usage, such as the number of milicores, or Gb of memory.</p>
 <blockquote>
-<p>💡 <strong>Important</strong>: It is a common misperception when seeing a pod&rsquo;s % cpu usage or % memory usage to assume that the ratio is with respect to the resources available on the underlying node. In reality, more often that not this value is with respect to the resources requests specified on the pod spec.</p>
+<p>💡 <strong>Important</strong>: It is a common misperception when seeing a pod&rsquo;s % cpu usage or % memory usage to assume that the ratio is with respect to the resources available on the underlying node. In reality, more often that not this value is with respect to the resources requests specified on the pod spec. Further, the average utilization measured and compared to the threshold defined in the HPA is the resource usages of all the pods added and averaged. This means a situation can result where one pod&rsquo;s utilization is above the threshold but no new pods is scaled in since the average across all pods in the workload are below the threshold.</p>
 </blockquote>
+<h4 id="scaling-with-multiple-metrics">Scaling with Multiple Metrics<a hidden class="anchor" aria-hidden="true" href="#scaling-with-multiple-metrics">#</a></h4>
+<p>Scaling is not limited to one metric. You can specify multiple metric thresholds for scaling. When multiple metrics are defined, the HPA will evaluate each metric, select the metric that results in the gratest number of running pods, and scale if needed. If any metric cannot be calculated then scaling is skipped for that round of calulations.</p>
 <h3 id="cluster-autoscaling">Cluster Autoscaling<a hidden class="anchor" aria-hidden="true" href="#cluster-autoscaling">#</a></h3>
 <p>By default, you can manually configure the number of nodes running in your Kubernetes cluster. What cloud providers also support is the functionality of cluster autoscaling.</p>
 <h4 id="provisiong-new-nodes">Provisiong New Nodes<a hidden class="anchor" aria-hidden="true" href="#provisiong-new-nodes">#</a></h4>
@@ -238,15 +268,10 @@
       <li><a href="http://localhost:1313/tags/autoscaling/">Autoscaling</a></li>
     </ul>
 <nav class="paginav">
-  <a class="prev" href="http://localhost:1313/posts/04-understanding-ipv4-addressing/">
-    <span class="title">« Prev</span>
-    <br>
-    <span>Understanding CIDR Blocks and IPv4 Addressing</span>
-  </a>
-  <a class="next" href="http://localhost:1313/posts/03-locust-load-testing/">
+  <a class="next" href="http://localhost:1313/posts/04-understanding-ipv4-addressing/">
     <span class="title">Next »</span>
     <br>
-    <span>Load Testing Applications with Locust</span>
+    <span>Understanding CIDR Blocks and IPv4 Addressing</span>
   </a>
 </nav>
 
