@@ -2,14 +2,29 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>http://localhost:1313/tags/autoscaling/</loc>
+    <lastmod>2024-08-10T19:57:08-04:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/</loc>
-    <lastmod>2024-08-09T20:01:16-04:00</lastmod>
+    <lastmod>2024-08-10T19:57:08-04:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/cloud/</loc>
-    <lastmod>2024-08-09T20:01:16-04:00</lastmod>
+    <lastmod>2024-08-10T19:57:08-04:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/explainer/</loc>
-    <lastmod>2024-08-09T20:01:16-04:00</lastmod>
+    <lastmod>2024-08-10T19:57:08-04:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/05-intro-to-k8s-autoscaling/</loc>
+    <lastmod>2024-08-10T19:57:08-04:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/kubernetes/</loc>
+    <lastmod>2024-08-10T19:57:08-04:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/</loc>
+    <lastmod>2024-08-10T19:57:08-04:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/</loc>
+    <lastmod>2024-08-10T19:57:08-04:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/ip/</loc>
     <lastmod>2024-08-09T20:01:16-04:00</lastmod>
@@ -17,23 +32,8 @@
     <loc>http://localhost:1313/tags/networking/</loc>
     <lastmod>2024-08-09T20:01:16-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/</loc>
-    <lastmod>2024-08-09T20:01:16-04:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/</loc>
-    <lastmod>2024-08-09T20:01:16-04:00</lastmod>
-  </url><url>
     <loc>http://localhost:1313/posts/04-understanding-ipv4-addressing/</loc>
     <lastmod>2024-08-09T20:01:16-04:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/autoscaling/</loc>
-    <lastmod>2024-08-09T19:57:08-04:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/posts/05-intro-to-k8s-autoscaling/</loc>
-    <lastmod>2024-08-09T19:57:08-04:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/kubernetes/</loc>
-    <lastmod>2024-08-09T19:57:08-04:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/load-testing/</loc>
     <lastmod>2024-07-22T21:22:31-04:00</lastmod>
