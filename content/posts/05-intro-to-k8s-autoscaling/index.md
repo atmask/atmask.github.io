@@ -131,27 +131,55 @@ The metrics registry is an extension to the Kubernetes API that serves metrics t
 
 Scaling pods horizontally is great but its benefits are limited by the availability of the resources needed to actually run those pods. If your cluster consists of 5 nodes, then in all likely-hood, you can't support scaling up to tens or hundreds of a resource intensive pods for a resource intensive workload. There is where cluster autoscaling — the obverse of horizontal pod autoscaling — comes in to support a fully elastic workload. Cluster autoscaling is the ability have your cluster dynamically add or remove nodes from your cluster based on demand. In a cloud-based environment, vendors generally have a cluster autoscaling solution that integrates with their Virtual Machine solutions to automatically provision or de-provision nodes.
 
-### Provisiong New Nodes
+### Provisioning New Nodes
 
 As I said above, cluster autoscaling is the ability have your cluster dynamically add or remove nodes from your cluster based on demand. However, we need to take a look at how *demand* is evaluated in the case of the cluster autoscaler. Unlike horizontal pod autoscaling, which scales the pods for a workload based on observed resource usage, the cluster autoscaler does not operate based on the observed resource usage of nodes. Instead the cluster autoscaler **operates based on the ability to schedule a new pod with the current available resources**.
 
 When the cluster shceduler attemps to schedule a pod, it will look at the resource requests of that pod, filter out nodes from consideration based on any node taint/tolerations, and then check if any node has sufficient resources to host the pod. If there are no nodes with sufficient resources available to satisfy those requests, then the autoscaler will be triggered to add an aditional node.
 
+#### Finding a Schedulable Node
 
-### De-provisioning Nodes
+Finding a scheduleable node is a two part process that consists of:
+- **Filtering:** The Scheduler filters out nodes that the pod cannot be scheduled to based on node selectors, taints, and resources
+- **Scoring:** The feasible nodes are passed through a series of scoring functions for determing which node should be used for placement 
+
+For this post we'll focus on the resource filtering aspect of pod scheduling. 
+
+After the scheduler filters out nodes based on taints and node selectors, the scheduler will compute the available capacity of each node. To calculate the available capacity of a node, you subtract the the resources allocated for the system (kubelet, OS processes) and the resources requests by currently running pods on that node. It is important to note that no real-time observed usage metrics are used for this process. If the node is determined to have available capacity for the requests of the pod then it is considered viable for scheduling and will be scored in the next phase.
+
+The above description makes sense in a perfect world where requests are set on all of our workloads but that is not always the case. Given this fact, there are some nuances around pods without resource requests to understand.
+
+Pods that do not have requests specified are considered to have a **BestEffort Quality of Service (QoS)**. The resource usage of pods with a BestEffort QoS running on a node are not considered as part of the calculation used by the scheduler to determine the available capacity of a node. However, if a node is under pressure for resources, BestEffort QoS pods are the first to be evicted from the node. If the scheduler is trying to schedule a pod with a BestEffort QoS, the pod will be placed on any node that has available capacity. While the scheduler does not look at metrics, the kubelet on each node does. If a node is under pressure for resource, the kubelet will begin to mark pods for eviction beginning with BestEffot QoS pods.
+
+Let's take a look at an visual example of this:
+
+![Node Scheduling 1](./images/node-scheduling-02.png)
 
 
-### Expanders
+We can observe a few key things here:
+1. Node 1 is elimated due to having a taint that the new pod does not tolerate
+2. The BestEffort QoS pod on node 2 does not decrease the computed available capacity of that node which can lead to over scheduling
+3. Node 2 and Node 3 are feasible for scheduling the pod
 
-Often times you will have multiple node pools available in your cluster. These node pools could contain different sizes of node or nodes with differnet capabilities and hardware specifications. In this case the questions of how the Cluster Autoscaler selects which node pool to scale arises.
+But what happens if the pod couldn't be scheduled? In that case, the cluster autoscaler will be responsible for adding a new node into the cluster. If there is only one node type/size that can be scaled then scaling is trivial and a new node is provisioned. If there are multiple node pools available to this cluster with different types or sizes of node that could be added then the cluster autoscaler must select one of the available node pools to scale. How this selection is performed is the next topic that will be covered.
+
+#### Expanders
+
+If a pod cannot be scheduled and a new node must be provisioned for a cluster with multiple node pools then a decision needs to made about what type of node to add to the cluster. Often times you will have multiple node pools available in your cluster. These node pools could contain different sizes of node or nodes with differnet capabilities and hardware specifications. In this case, the question of how the Cluster Autoscaler selects which node pool to scale arises. This is the problem that expanders solve. **Expanders are strategies configured on the autoscaler profile that determine which node type to select when scaling up**.
+
+> **Note:** If you only have one pool of node types available for scaling up then scaling in a new node is trivial and expanders do not apply.
 
 Cluster Autoscaler implementations in the various cloud providers support a configuration for expanders. Expanders are strategies for solving this problem. Often there will be expanders for scaling based on the following:
 - `price`: scale the node pool with the cheapest node type available.
 - `priority`: scale node pools based on user assigned priority 
 - `random`
-- `least-waste`: Scalse the node pool that would have the least idle CPU after all the pending pods are scheduled
+- `least-waste`: Scales the node pool that would have the least idle CPU after all the pending pods are scheduled
 
 For a full overview of expanders read up [here](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/FAQ.md#what-are-expanders)
+
+### De-provisioning Nodes
+
+
 
 
 
