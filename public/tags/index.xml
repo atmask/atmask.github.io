@@ -6,20 +6,62 @@
     <description>Recent content in Tags on Ben Mask</description>
     <generator>Hugo -- 0.134.1</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 09 Aug 2024 20:01:16 -0400</lastBuildDate>
+    <lastBuildDate>Sat, 07 Sep 2024 19:57:08 -0400</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Clean Architecture</title>
+      <link>http://localhost:1313/tags/clean-architecture/</link>
+      <pubDate>Sat, 07 Sep 2024 19:57:08 -0400</pubDate>
+      <guid>http://localhost:1313/tags/clean-architecture/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Dependency Injection</title>
+      <link>http://localhost:1313/tags/dependency-injection/</link>
+      <pubDate>Sat, 07 Sep 2024 19:57:08 -0400</pubDate>
+      <guid>http://localhost:1313/tags/dependency-injection/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Go</title>
+      <link>http://localhost:1313/tags/go/</link>
+      <pubDate>Sat, 07 Sep 2024 19:57:08 -0400</pubDate>
+      <guid>http://localhost:1313/tags/go/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>SOLID</title>
+      <link>http://localhost:1313/tags/solid/</link>
+      <pubDate>Sat, 07 Sep 2024 19:57:08 -0400</pubDate>
+      <guid>http://localhost:1313/tags/solid/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Autoscaling</title>
+      <link>http://localhost:1313/tags/autoscaling/</link>
+      <pubDate>Fri, 06 Sep 2024 19:57:08 -0400</pubDate>
+      <guid>http://localhost:1313/tags/autoscaling/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Cloud</title>
       <link>http://localhost:1313/tags/cloud/</link>
-      <pubDate>Fri, 09 Aug 2024 20:01:16 -0400</pubDate>
+      <pubDate>Fri, 06 Sep 2024 19:57:08 -0400</pubDate>
       <guid>http://localhost:1313/tags/cloud/</guid>
       <description></description>
     </item>
     <item>
       <title>Explainer</title>
       <link>http://localhost:1313/tags/explainer/</link>
-      <pubDate>Fri, 09 Aug 2024 20:01:16 -0400</pubDate>
+      <pubDate>Fri, 06 Sep 2024 19:57:08 -0400</pubDate>
       <guid>http://localhost:1313/tags/explainer/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Kubernetes</title>
+      <link>http://localhost:1313/tags/kubernetes/</link>
+      <pubDate>Fri, 06 Sep 2024 19:57:08 -0400</pubDate>
+      <guid>http://localhost:1313/tags/kubernetes/</guid>
       <description></description>
     </item>
     <item>
@@ -100,13 +142,6 @@
       <description></description>
     </item>
     <item>
-      <title>Kubernetes</title>
-      <link>http://localhost:1313/tags/kubernetes/</link>
-      <pubDate>Sun, 21 Jul 2024 20:30:55 -0400</pubDate>
-      <guid>http://localhost:1313/tags/kubernetes/</guid>
-      <description></description>
-    </item>
-    <item>
       <title>Pi-Hole</title>
       <link>http://localhost:1313/tags/pi-hole/</link>
       <pubDate>Sun, 21 Jul 2024 20:30:55 -0400</pubDate>
@@ -125,41 +160,6 @@
       <link>http://localhost:1313/tags/tailscale/</link>
       <pubDate>Sun, 21 Jul 2024 20:30:55 -0400</pubDate>
       <guid>http://localhost:1313/tags/tailscale/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Clean Architecture</title>
-      <link>http://localhost:1313/tags/clean-architecture/</link>
-      <pubDate>Sun, 07 Jul 2024 19:57:08 -0400</pubDate>
-      <guid>http://localhost:1313/tags/clean-architecture/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Dependency Injection</title>
-      <link>http://localhost:1313/tags/dependency-injection/</link>
-      <pubDate>Sun, 07 Jul 2024 19:57:08 -0400</pubDate>
-      <guid>http://localhost:1313/tags/dependency-injection/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Go</title>
-      <link>http://localhost:1313/tags/go/</link>
-      <pubDate>Sun, 07 Jul 2024 19:57:08 -0400</pubDate>
-      <guid>http://localhost:1313/tags/go/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>SOLID</title>
-      <link>http://localhost:1313/tags/solid/</link>
-      <pubDate>Sun, 07 Jul 2024 19:57:08 -0400</pubDate>
-      <guid>http://localhost:1313/tags/solid/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Autoscaling</title>
-      <link>http://localhost:1313/tags/autoscaling/</link>
-      <pubDate>Sat, 06 Jul 2024 19:57:08 -0400</pubDate>
-      <guid>http://localhost:1313/tags/autoscaling/</guid>
       <description></description>
     </item>
     <item>

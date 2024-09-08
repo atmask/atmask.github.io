@@ -6,8 +6,16 @@
     <description>Recent content in Kubernetes on Ben Mask</description>
     <generator>Hugo -- 0.134.1</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 21 Jul 2024 20:30:55 -0400</lastBuildDate>
+    <lastBuildDate>Fri, 06 Sep 2024 19:57:08 -0400</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Intro to K8s Autoscaling</title>
+      <link>http://localhost:1313/posts/05-intro-to-k8s-autoscaling/</link>
+      <pubDate>Fri, 06 Sep 2024 19:57:08 -0400</pubDate>
+      <guid>http://localhost:1313/posts/05-intro-to-k8s-autoscaling/</guid>
+      <description>&lt;h1 id=&#34;big-idea&#34;&gt;Big Idea&lt;/h1&gt;
+&lt;p&gt;Autoscaling is a key technology that builds on the elasticity of distributed cloud computing. To understand autoscaling in the Kubernetes environment, it will be important to understand the basic enabling technologies: containerization and distributed computing. By leveraging hese two technologies, Kubernetes supports horizontal pod autoscaling (hpa) and cluster autoscaling. In this post I will dive into some brief background on Containerization and distributed computing (just enough to be dangerous) and then take a more focused look at the horizontal autoscaling functionality of Kubernetes.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Part 2: Building a Bare-metal Kubernetes Cluster on Raspberry Pis</title>
       <link>http://localhost:1313/posts/02-bare-metal-k3s-on-rpi-part-2/</link>
@@ -25,14 +33,6 @@
 &lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;images/cluster.png&#34; alt=&#34;cluster&#34;  /&gt;
 &lt;/p&gt;
 &lt;p&gt;From the start of my career, I have been fascinated by Kubernetes. I love distributed systems and the rich history of how we have arrived where we are today with distributed computing. We live in the ongoing evolution of our communal vision for cloud computing. In the early years, the vision was to present a homogenous Unix-like interface for managing an underlying collection of servers such as BOINC. Now, we live in the world of many small virtualized unix environments distributed across servers and sharing compute.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Intro to K8s Autoscaling</title>
-      <link>http://localhost:1313/posts/05-intro-to-k8s-autoscaling/</link>
-      <pubDate>Sat, 06 Jul 2024 19:57:08 -0400</pubDate>
-      <guid>http://localhost:1313/posts/05-intro-to-k8s-autoscaling/</guid>
-      <description>&lt;h1 id=&#34;big-idea&#34;&gt;Big Idea&lt;/h1&gt;
-&lt;p&gt;Autoscaling is a key technology that builds on the elasticity of distributed cloud computing. To understand autoscaling in the Kubernetes environment, it will be important to understand the basic enabling technologies: containerization and distributed computing. By leveraging hese two technologies, Kubernetes supports horizontal pod autoscaling (hpa) and cluster autoscaling. In this post I will dive into some brief background on Containerization and distributed computing (just enough to be dangerous) and then take a more focused look at the horizontal autoscaling functionality of Kubernetes.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

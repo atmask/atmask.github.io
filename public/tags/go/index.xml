@@ -6,15 +6,15 @@
     <description>Recent content in Go on Ben Mask</description>
     <generator>Hugo -- 0.134.1</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 07 Jul 2024 19:57:08 -0400</lastBuildDate>
+    <lastBuildDate>Sat, 07 Sep 2024 19:57:08 -0400</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/go/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Dependency Injection In Go</title>
       <link>http://localhost:1313/posts/06-go-dependency-injection/</link>
-      <pubDate>Sun, 07 Jul 2024 19:57:08 -0400</pubDate>
+      <pubDate>Sat, 07 Sep 2024 19:57:08 -0400</pubDate>
       <guid>http://localhost:1313/posts/06-go-dependency-injection/</guid>
       <description>&lt;h1 id=&#34;big-idea&#34;&gt;Big Idea&lt;/h1&gt;
-&lt;p&gt;Dependency Injection (the &amp;lsquo;D&amp;rsquo; in SOLID design principles) is an important practice good software architecure. When used well, it decouples a class&amp;rsquo;s dependency on an certain interface from any one partciular implementation of that dependency. This means that any class which implements the common interface of the dependency can be injected into the class at runtime for easy configuration. This is especially helpful when it comes to creating stups for mocking when writing unit tests.&lt;/p&gt;</description>
+&lt;p&gt;Dependency Injection (the &amp;lsquo;D&amp;rsquo; in SOLID design principles) is an important practice in good software architecture. When used well, it decouples a class&amp;rsquo;s dependency on a certain interface from any one particular implementation of that dependency. This means that any class which implements the common interface of the dependency can be injected into the class at runtime for easy configuration. This is especially helpful when it comes to creating stubs for mocking when writing unit tests.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

@@ -7,14 +7,14 @@ draft: false
 ---
 # Big Idea
 
-Dependency Injection (the 'D' in SOLID design principles) is an important practice good software architecure. When used well, it decouples a class's dependency on an certain interface from any one partciular implementation of that dependency. This means that any class which implements the common interface of the dependency can be injected into the class at runtime for easy configuration. This is especially helpful when it comes to creating stups for mocking when writing unit tests.
+Dependency Injection (the 'D' in SOLID design principles) is an important practice in good software architecture. When used well, it decouples a class's dependency on a certain interface from any one particular implementation of that dependency. This means that any class which implements the common interface of the dependency can be injected into the class at runtime for easy configuration. This is especially helpful when it comes to creating stubs for mocking when writing unit tests.
 
-I've recently started learning Go. A very helpful companion for that jounrey has been Alex Edward's book [Let's Go](https://lets-go.alexedwards.net). While reading the book, Edwards walks through using dependency injection for managing global application configurations, such as logging, when writing a webserver in Go. My goal in this post to capture those ideas here so in a way that is help for me to come back to later on.
+I've recently started learning Go. A very helpful companion for that journey has been Alex Edward's book [Let's Go](https://lets-go.alexedwards.net). In the book, Edwards walks through using dependency injection for managing global application configurations, such as logging, when writing a web server in Go. My goal in this post is to capture those ideas here so in a way that is helpful for me to come back to later on.
 
 
 # Go: Dependency Injection
 
-Go is not an object oriented language like Python or Java. The construct of object does not exists. However, like C, Go supports defining `structs`. A `struct` is a `Type` that is defined by a collection of fields. Here is an example:
+Go is not an object-oriented language like Python or Java. The construct of an object does not exist. However, like C, Go supports defining `structs`. A `struct` is a `Type` that is defined by a collection of fields. Here is an example:
 ```go
 package main
 
@@ -30,7 +30,7 @@ func main() {
 }
 ```
 
-Now, because Go does not have objects does not mean you can give functionality to a `struct`. In Go you can define methods on a struct. Methods are just normal functions, except for the fact that they specify a special *reciever* argument that is specified between the `func keyword and  the function name.
+Now, because Go does not have objects does not mean you can give functionality to a `struct`. In Go you can define methods on a struct. Methods are just normal functions, except for the fact that they specify a special *receiver* argument that is specified between the `func` keyword and the function name.
 
 ```go
 package main
@@ -54,11 +54,11 @@ func main() {
 }
 ```
 
-> In the above example the method is passed by value. It is more common to see the type of a receiver as a pointer so that the receiver instance can be changed. In this case the reciever would be `(v *Vertex)`
+> In the above example the method is passed by value. It is more common to see the type of a receiver as a pointer so that the receiver instance can be changed. In this case, the receiver would be `(v *Vertex)`
 
-What we can say about methods is that *they are executed in the context of a struct instance*. This means that the configuration of struct can configure the methods it used. This is super important because this is how dependency injection (DI) will be made to work in Go.
+What we can say about methods is that *they are executed in the context of a struct instance*. This means that the configuration of a particular struct can configure the methods it used. This configurability is important because this is how dependency injection (DI) works in Go.
 
-Suppose we were making a Go program that stores data from an event to some data source. That data source could be a DB but maybe we want the flexbility to change the backing data source over time from SQL to NoSQL or from MySQL to Postgres or even to send it out to another service. Let's look at an exmaple using DI to see how we could achieve this:
+Suppose we were making a Go program that stores data from an event to some data source. That data source could be a DB but maybe we want the flexibility to change the backing data source over time from SQL to NoSQL or from MySQL to Postgres or even to send it out to another service. Let's look at an example using DI to see how we could achieve this:
 
 ```go
 
@@ -81,5 +81,5 @@ func (app *Application) processEvent(s string) error {
 }
 ```
 
-In the above example you will see that we create an interface called `IRepository` that provides a set of methods that need be defined for a struct to satisfy the interface. In this case one method is defined `Store(string)`. An `Application` struct can then be initialized with any struct who's methods satisfy the `IRepository` interface. It's easy to imagine many structs that could implement the `IRepository` interface such as a MongoClient struct, PostgresClient struct or even a struct that writes data that should be stored to a File or stdout.
+In the above example, you will see that we create an interface called `IRepository` that provides a set of methods that need to be defined for a struct to satisfy the interface. In this case, one method is defined: `Store(string)`. An `Application` struct can then be initialized with any struct whose methods satisfy the `IRepository` interface. It's easy to imagine many structs that could implement the `IRepository` interface such as a MongoClient struct, PostgresClient struct or even a struct that writes data that should be stored to a file or stdout.
 

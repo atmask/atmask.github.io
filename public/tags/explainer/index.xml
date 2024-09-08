@@ -6,8 +6,16 @@
     <description>Recent content in Explainer on Ben Mask</description>
     <generator>Hugo -- 0.134.1</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 09 Aug 2024 20:01:16 -0400</lastBuildDate>
+    <lastBuildDate>Fri, 06 Sep 2024 19:57:08 -0400</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/explainer/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Intro to K8s Autoscaling</title>
+      <link>http://localhost:1313/posts/05-intro-to-k8s-autoscaling/</link>
+      <pubDate>Fri, 06 Sep 2024 19:57:08 -0400</pubDate>
+      <guid>http://localhost:1313/posts/05-intro-to-k8s-autoscaling/</guid>
+      <description>&lt;h1 id=&#34;big-idea&#34;&gt;Big Idea&lt;/h1&gt;
+&lt;p&gt;Autoscaling is a key technology that builds on the elasticity of distributed cloud computing. To understand autoscaling in the Kubernetes environment, it will be important to understand the basic enabling technologies: containerization and distributed computing. By leveraging hese two technologies, Kubernetes supports horizontal pod autoscaling (hpa) and cluster autoscaling. In this post I will dive into some brief background on Containerization and distributed computing (just enough to be dangerous) and then take a more focused look at the horizontal autoscaling functionality of Kubernetes.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Understanding CIDR Blocks and IPv4 Addressing</title>
       <link>http://localhost:1313/posts/04-understanding-ipv4-addressing/</link>
@@ -17,14 +25,6 @@
 &lt;p&gt;The goal of this post will be to give an overview of IPv4 addresses. My aim is to do this incrementally by first covering the anatomy of an IPv4 address in its base 10 and binary representations. Second, I will look at CIDR block subnetting and subnet masks. Thirdly, I will append some helpful formulas for working with IP addresses.&lt;/p&gt;
 &lt;h1 id=&#34;background--history&#34;&gt;Background &amp;amp; History&lt;/h1&gt;
 &lt;p&gt;Before diving into the anatomy of IPv4 let&amp;rsquo;s turn back the page. In 1981, RFC 791 was published. This document outlined the &lt;em&gt;Internet Protocol&lt;/em&gt; and the IPv4 addressing scheme that would be used to uniquely identify and locate machines on the Internet.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Intro to K8s Autoscaling</title>
-      <link>http://localhost:1313/posts/05-intro-to-k8s-autoscaling/</link>
-      <pubDate>Sat, 06 Jul 2024 19:57:08 -0400</pubDate>
-      <guid>http://localhost:1313/posts/05-intro-to-k8s-autoscaling/</guid>
-      <description>&lt;h1 id=&#34;big-idea&#34;&gt;Big Idea&lt;/h1&gt;
-&lt;p&gt;Autoscaling is a key technology that builds on the elasticity of distributed cloud computing. To understand autoscaling in the Kubernetes environment, it will be important to understand the basic enabling technologies: containerization and distributed computing. By leveraging hese two technologies, Kubernetes supports horizontal pod autoscaling (hpa) and cluster autoscaling. In this post I will dive into some brief background on Containerization and distributed computing (just enough to be dangerous) and then take a more focused look at the horizontal autoscaling functionality of Kubernetes.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>
