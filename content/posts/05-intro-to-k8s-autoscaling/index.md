@@ -2,8 +2,8 @@
 title: 'Intro to K8s Autoscaling'
 tags: ["explainer", "cloud", "kubernetes", "autoscaling"]
 ShowToc: true
-date: '2024-08-10T19:57:08-04:00'
-draft: true
+date: '2024-07-06T19:57:08-04:00'
+draft: false
 ---
 # Big Idea
 
