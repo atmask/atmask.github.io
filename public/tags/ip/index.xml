@@ -4,7 +4,7 @@
     <title>IP on Ben Mask</title>
     <link>http://localhost:1313/tags/ip/</link>
     <description>Recent content in IP on Ben Mask</description>
-    <generator>Hugo -- 0.128.2</generator>
+    <generator>Hugo -- 0.134.1</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 09 Aug 2024 20:01:16 -0400</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/ip/index.xml" rel="self" type="application/rss+xml" />
@@ -13,8 +13,10 @@
       <link>http://localhost:1313/posts/04-understanding-ipv4-addressing/</link>
       <pubDate>Fri, 09 Aug 2024 20:01:16 -0400</pubDate>
       <guid>http://localhost:1313/posts/04-understanding-ipv4-addressing/</guid>
-      <description>Big Idea The goal of this post will be to give an overview of IPv4 addresses. My aim is to do this incrementally by first covering the anatomy of an IPv4 address in its base 10 and binary representations. Second, I will look at CIDR block subnetting and subnet masks. Thirdly, I will append some helpful formulas for working with IP addresses.
-Background &amp;amp; History Before diving into the anatomy of IPv4 let&amp;rsquo;s turn back the page.</description>
+      <description>&lt;h1 id=&#34;big-idea&#34;&gt;Big Idea&lt;/h1&gt;
+&lt;p&gt;The goal of this post will be to give an overview of IPv4 addresses. My aim is to do this incrementally by first covering the anatomy of an IPv4 address in its base 10 and binary representations. Second, I will look at CIDR block subnetting and subnet masks. Thirdly, I will append some helpful formulas for working with IP addresses.&lt;/p&gt;
+&lt;h1 id=&#34;background--history&#34;&gt;Background &amp;amp; History&lt;/h1&gt;
+&lt;p&gt;Before diving into the anatomy of IPv4 let&amp;rsquo;s turn back the page. In 1981, RFC 791 was published. This document outlined the &lt;em&gt;Internet Protocol&lt;/em&gt; and the IPv4 addressing scheme that would be used to uniquely identify and locate machines on the Internet.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

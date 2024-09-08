@@ -2,7 +2,7 @@
 title: 'Dependency Injection In Go'
 tags: ["go", "SOLID", 'dependency injection', 'clean architecture']
 ShowToc: true
-date: '2024-07-07T19:57:08-04:00'
+date: '2024-09-07T19:57:08-04:00'
 draft: false
 ---
 # Big Idea

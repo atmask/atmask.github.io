@@ -4,7 +4,7 @@
     <title>Load Testing on Ben Mask</title>
     <link>http://localhost:1313/tags/load-testing/</link>
     <description>Recent content in Load Testing on Ben Mask</description>
-    <generator>Hugo -- 0.128.2</generator>
+    <generator>Hugo -- 0.134.1</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 22 Jul 2024 21:22:31 -0400</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/load-testing/index.xml" rel="self" type="application/rss+xml" />
@@ -13,7 +13,8 @@
       <link>http://localhost:1313/posts/03-locust-load-testing/</link>
       <pubDate>Mon, 22 Jul 2024 21:22:31 -0400</pubDate>
       <guid>http://localhost:1313/posts/03-locust-load-testing/</guid>
-      <description>Big Idea I was recently tasked with configuring automated load tests to validate the health of a service under load and to identify bottlenecks and limits at which the service became overloaded. Up until this point, I had not worked first-hand with any load-testing frameworks. Although there are many great load testing tools out there like JMeter, K6s, and Locust, I decided to get started with Locust as it is a framework I had heard of before and is a pure Python framework (Python is the language I think in right now).</description>
+      <description>&lt;h1 id=&#34;big-idea&#34;&gt;Big Idea&lt;/h1&gt;
+&lt;p&gt;I was recently tasked with configuring automated load tests to validate the health of a service under load and to identify bottlenecks and limits at which the service became overloaded. Up until this point, I had not worked first-hand with any load-testing frameworks. Although there are many great load testing tools out there like JMeter, K6s, and Locust, I decided to get started with Locust as it is a framework I had heard of before and is a pure Python framework (Python is the language I think in right now). To rewind, load testing frameworks allow engineers to programmatically produce stress on a system by simulating a large volume of incoming requests to that system. Requests can be, but are not limited to, HTTP calls. You can also load test with gRPC or IoT protocols like MQTT. Locust is an open-source Python-based load testing framework. With Locust, all user behaviour is defined in Python code and tests can be executed from a single machine or distributed across many machines.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>
