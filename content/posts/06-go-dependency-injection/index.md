@@ -1,7 +1,7 @@
 ---
 title: 'Dependency Injection In Go'
 tags: ["go", "SOLID", 'dependency injection', 'clean architecture']
-ShowToc: true
+ShowToc: false
 date: '2024-09-07T19:57:08-04:00'
 draft: false
 ---
@@ -69,12 +69,12 @@ type IRepository interface {
 
 // Allow any struct that implements the reposiory interface be injected into the Application
 type Application struct{
-    repository *IRepository
+	Repository *IRepository
 }
 
 func (app *Application) processEvent(s string) error {
     // Use the injected instance
-    if err := app.repository.Store(s); err != nil {
+    if err := app.Repository.Store(s); err != nil {
         return err
     }
     return nil
