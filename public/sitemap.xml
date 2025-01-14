@@ -2,8 +2,62 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>http://localhost:1313/tags/architecture/</loc>
+    <lastmod>2025-01-13T20:49:46-05:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/</loc>
-    <lastmod>2024-09-07T19:57:08-04:00</lastmod>
+    <lastmod>2025-01-13T20:49:46-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/</loc>
+    <lastmod>2025-01-13T20:49:46-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/systems-design/</loc>
+    <lastmod>2025-01-13T20:49:46-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/</loc>
+    <lastmod>2025-01-13T20:49:46-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/url-shortener/</loc>
+    <lastmod>2025-01-13T20:49:46-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/visual/</loc>
+    <lastmod>2025-01-13T20:49:46-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/08-url-shortener/</loc>
+    <lastmod>2025-01-13T20:49:46-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/concensus/</loc>
+    <lastmod>2025-01-12T10:58:42-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/09-raft/</loc>
+    <lastmod>2025-01-12T10:58:42-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/distributed-systems/</loc>
+    <lastmod>2025-01-12T10:58:42-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/etcd/</loc>
+    <lastmod>2025-01-12T10:58:42-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/raft/</loc>
+    <lastmod>2025-01-12T10:58:42-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/linux/</loc>
+    <lastmod>2025-01-05T21:20:26-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/nas/</loc>
+    <lastmod>2025-01-05T21:20:26-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/sre/</loc>
+    <lastmod>2025-01-05T21:20:26-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/storage/</loc>
+    <lastmod>2025-01-05T21:20:26-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/zfs/</loc>
+    <lastmod>2025-01-05T21:20:26-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/07-zfs-primer/</loc>
+    <lastmod>2025-01-05T21:20:26-05:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/clean-architecture/</loc>
     <lastmod>2024-09-07T19:57:08-04:00</lastmod>
@@ -17,13 +71,7 @@
     <loc>http://localhost:1313/tags/go/</loc>
     <lastmod>2024-09-07T19:57:08-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/</loc>
-    <lastmod>2024-09-07T19:57:08-04:00</lastmod>
-  </url><url>
     <loc>http://localhost:1313/tags/solid/</loc>
-    <lastmod>2024-09-07T19:57:08-04:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/</loc>
     <lastmod>2024-09-07T19:57:08-04:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/autoscaling/</loc>
@@ -63,9 +111,6 @@
     <lastmod>2024-07-22T21:22:31-04:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/python/</loc>
-    <lastmod>2024-07-22T21:22:31-04:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/sre/</loc>
     <lastmod>2024-07-22T21:22:31-04:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/ansible/</loc>

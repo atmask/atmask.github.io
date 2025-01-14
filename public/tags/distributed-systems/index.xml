@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Distributed Systems on Ben Mask</title>
+    <link>http://localhost:1313/tags/distributed-systems/</link>
+    <description>Recent content in Distributed Systems on Ben Mask</description>
+    <generator>Hugo -- 0.135.0</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 12 Jan 2025 10:58:42 -0500</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/distributed-systems/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Distributed Concensus: Raft</title>
+      <link>http://localhost:1313/posts/09-raft/</link>
+      <pubDate>Sun, 12 Jan 2025 10:58:42 -0500</pubDate>
+      <guid>http://localhost:1313/posts/09-raft/</guid>
+      <description>&lt;h1 id=&#34;big-idea&#34;&gt;Big Idea&lt;/h1&gt;
+&lt;p&gt;With the addition of a Proxmox server to my homelab I have been planning to scale out the control plane of my k3s cluster by virtualizing an additional two master nodes for a HA set up. I was aware that this would involve replicated state in my etcd backed control plane and that etcd itself relies on the Raft concensus algorithm. For this reason, I decided to take a deeper dive into the inner workings of Raft.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

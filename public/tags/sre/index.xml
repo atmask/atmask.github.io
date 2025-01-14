@@ -4,10 +4,19 @@
     <title>SRE on Ben Mask</title>
     <link>http://localhost:1313/tags/sre/</link>
     <description>Recent content in SRE on Ben Mask</description>
-    <generator>Hugo -- 0.134.1</generator>
+    <generator>Hugo -- 0.135.0</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 22 Jul 2024 21:22:31 -0400</lastBuildDate>
+    <lastBuildDate>Sun, 05 Jan 2025 21:20:26 -0500</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/sre/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ZFS: A Primer</title>
+      <link>http://localhost:1313/posts/07-zfs-primer/</link>
+      <pubDate>Sun, 05 Jan 2025 21:20:26 -0500</pubDate>
+      <guid>http://localhost:1313/posts/07-zfs-primer/</guid>
+      <description>&lt;h1 id=&#34;big-idea&#34;&gt;Big Idea&lt;/h1&gt;
+&lt;p&gt;Zettabit File System (ZFS) is a file system that is very popular in the Homelab community for it&amp;rsquo;s powerful capabilities as a file system and volume manager. It is designed to ensure data integrity and scalbility. While I am not an expert in ZFS, I hope to create guide here that outlines some of the fundamantal concepts of ZFS that I can return to over time.&lt;/p&gt;
+&lt;p&gt;ZFS has a few key features that I will outline here:&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Load Testing Applications with Locust</title>
       <link>http://localhost:1313/posts/03-locust-load-testing/</link>
