@@ -1,5 +1,5 @@
 ---
-title: 'Visual Systems Design: URL Shortener'
+title: 'Visual: URL Shortener'
 tags: ["systems design", "URL Shortener", "visual", "architecture"]
 ShowToc: false
 date: '2025-01-13T20:49:46-05:00'
