@@ -32,14 +32,39 @@ ZFS includes software RAID functionality. RAID (Redundant array of independent d
 
 # ZFS Storage Heirachy
 
-ZFS surfaces several abstractions for creating a storage heirachy and managin storage. This seciton will take a look at these abstraction starting from 
+ZFS surfaces several abstractions for creating a storage heirachy and managing storage. This section will take a look at these abstraction and their heirarchy:
 
-` vdevs > zpool > datasets`
+`vdevs > zpool > datasets`
+
+## vdevs
+
+The starting block of the ZFS storage heirachy are vdevs. A vdev is an abstraction around one or more physical drives. Using a vdev, you group one or more disks, regardless of the storage medium, and configure the implementation of redundancy across those disks. This means the a vdev could consist of a single disk in RAID0 (no redundancy benefit but you do still get checksumming), two disks in a Raid 1 (Mirror) configuration and so on with higher RAIDZ levels.
+
+![vdev layouts](./images/vdevs.png)
+Fig. Some examples of possible vdev layouts. Note that `vdev2` and `vdev3` show a mix of hdd and ssd drives
+
+## zpool
+
+A zpool in ZFS is a collection or vdevs. ZPools abstract away the underlying storage of the pool (vdevs) such that you continuously expand the storage of your entire system by the addition of new vdevs (I will explain this more in "datasets"). 
+
+
+## datasets
+
 
 In a traditional fs you put files systems onto volumes. This can results in lots of space free in `/usr` but no space in `/var/db`. This scenarios is helpful for understanding the abstraction of the zpool and datasets. A zpool represents, a pool of free memory (your vdevs). Datasets are one of 3 types of zfs filesystems on top of your zpool.  
 
 
+# Failure Tolerance
+
+
+
 # Expanding Storage in ZFS
 
+ZFS has some constraints around expanding your storage. In particular, it has traditionally not been possible to expand existing vdevs (although some changes may be on the horizon at the time of writing). This has meant that, while it is possible to add storage to your zpool, it must be done through the addition of a new vdev. Depending on your chosen RAID configuration this can be costly if each storage expansion requires three or more disks with equal amount of storage.
 
-> To balance redundancy and stay economical I am using a RAID 1 configuration. This will allow me to expand storage two drives at a time by purchasing them in pairs or by replacing one drive in a mirror with a larger drive (when the price is right), resilvering, and then replacing the second drive when I have the opportunity.
+To balance redundancy and stay economical I have personally opted on using a RAID 1 configuration. This will allow me to either expand my storage two drives at a time by purchasing them in pairs, or by replacing one drive in a mirror with a larger drive (when the price is right), resilvering, and then replacing the second drive when I have the opportunity.
+
+
+# References
+[ZFS Digital Guide | 45Drives](https://www.45drives.com/pdf/ZFS-Digital-Guide.pdf) \
+[ZFS Basics | Youtube](https://www.youtube.com/watch?v=IN_bTYYSXvU&t=1s&pp=ygUDemZz)
