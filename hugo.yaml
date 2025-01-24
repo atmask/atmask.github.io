@@ -29,9 +29,9 @@ params:
     favicon16x16: "/favicon-16x16.png"
     favicon32x32: "/favicon-32x32.png"
   homeInfoParams:
-    title: Hi there!
+    title: Hi there! 👋
     # subtitle: Software Engineer/DevOps/Cloud Developer
-    Content: "My name's Ben. Welcome to my blog. I'm a software engineer with a passion for understanding systems, interactions, abstractions, and architecture. I'm always looking for new opportunities to learn and grow. Feel free to reach out if you're interested in any of my work and want to chat!"
+    Content: "My name's Ben. Welcome to my blog. I'm a software engineer, SRE, homelabber, with a passion for understanding systems, interactions, abstractions, and architecture. I'm always looking for new opportunities to learn and grow. Feel free to reach out if you're interested in any of my work and want to chat!"
   socialIcons: # optional
     - name: Github
       url: https://github.com/atmask
