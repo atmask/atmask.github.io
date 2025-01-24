@@ -9,14 +9,16 @@
     <lastBuildDate>Mon, 13 Jan 2025 20:49:46 -0500</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/architecture/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Visual Systems Design: URL Shortener</title>
+      <title>Visual: URL Shortener</title>
       <link>http://localhost:1313/posts/08-url-shortener/</link>
       <pubDate>Mon, 13 Jan 2025 20:49:46 -0500</pubDate>
       <guid>http://localhost:1313/posts/08-url-shortener/</guid>
       <description>&lt;h1 id=&#34;big-idea&#34;&gt;Big Idea&lt;/h1&gt;
-&lt;p&gt;I have been studying more systems desing more intentionally lately and this is the fruit of one evening of diagramming out a URL Shortner design. This post doesn&amp;rsquo;t explain much but a picture&amp;rsquo;s worth a thousand words!&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;./images/url_shortener.svg#wide&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;./images/url_shortener.svg#wide&#34; alt=&#34;URL Shortener&#34;  /&gt;
-&lt;/a&gt;&lt;/p&gt;</description>
+&lt;p&gt;I have been studying more systems desing more intentionally lately and this is the fruit of one evening of diagramming out a URL Shortner design. This post doesn&amp;rsquo;t explain much but a picture&amp;rsquo;s worth a thousand words!
+&lt;br&gt;
+&lt;br&gt;
+&lt;img loading=&#34;lazy&#34; src=&#34;./images/url_shortener.svg#wide&#34; alt=&#34;URL Shortener&#34;  /&gt;
+&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

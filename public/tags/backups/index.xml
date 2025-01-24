@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>NAS on Ben Mask</title>
-    <link>http://localhost:1313/tags/nas/</link>
-    <description>Recent content in NAS on Ben Mask</description>
+    <title>Backups on Ben Mask</title>
+    <link>http://localhost:1313/tags/backups/</link>
+    <description>Recent content in Backups on Ben Mask</description>
     <generator>Hugo -- 0.135.0</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 23 Jan 2025 19:30:52 -0500</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/nas/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/backups/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>TrueNAS Backups with B2</title>
       <link>http://localhost:1313/posts/09-truenas-backups/</link>
@@ -17,15 +17,6 @@
 &lt;p&gt;The goal of this post will be to capture the step required for the backup and restore process of my TrueNAS server. Currenty, my TrueNAS server consists of two 4TB drives in a vdev with a RAID1 (Mirror) config. My goals is to back this up to Backblaze&amp;rsquo;s S3 compatible B2 storage and test recovery before migrating data.&lt;/p&gt;
 &lt;h1 id=&#34;creating-the-b2-bucket-and-api-key&#34;&gt;Creating the B2 Bucket and API Key&lt;/h1&gt;
 &lt;p&gt;Backblaze offers B2 as an S3-compatible storage solution. You&amp;rsquo;ll first need to create a new private storage bucket in B2 with a unique name. Encrpytion and immutability are up to your discretion.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>ZFS: A Primer</title>
-      <link>http://localhost:1313/posts/07-zfs-primer/</link>
-      <pubDate>Sun, 05 Jan 2025 21:20:26 -0500</pubDate>
-      <guid>http://localhost:1313/posts/07-zfs-primer/</guid>
-      <description>&lt;h1 id=&#34;big-idea&#34;&gt;Big Idea&lt;/h1&gt;
-&lt;p&gt;Zettabit File System (ZFS) is a file system that is very popular in the Homelab community for it&amp;rsquo;s powerful capabilities as a file system and volume manager. It is designed to ensure data integrity and scalbility. While I am not an expert in ZFS, I hope to create guide here that outlines some of the fundamantal concepts of ZFS that I can return to over time.&lt;/p&gt;
-&lt;p&gt;ZFS has a few key features that I will outline here:&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

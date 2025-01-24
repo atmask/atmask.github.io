@@ -67,4 +67,5 @@ To balance redundancy and stay economical I have personally opted on using a RAI
 
 # References
 [ZFS Digital Guide | 45Drives](https://www.45drives.com/pdf/ZFS-Digital-Guide.pdf) \
-[ZFS Basics | Youtube](https://www.youtube.com/watch?v=IN_bTYYSXvU&t=1s&pp=ygUDemZz)
+[ZFS Basics | Youtube](https://www.youtube.com/watch?v=IN_bTYYSXvU&t=1s&pp=ygUDemZz) \
+[ZFS for Newbies](https://youtu.be/3oG-1U5AI9A?si=XAtGuYzy6xuH3pzK)

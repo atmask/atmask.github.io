@@ -126,7 +126,7 @@ ZFS has a few key features that I will outline here:">
     <h1 class="post-title entry-hint-parent">
       ZFS: A Primer
     </h1>
-    <div class="post-meta"><span title='2025-01-05 21:20:26 -0500 EST'>January 5, 2025</span>&nbsp;·&nbsp;3 min
+    <div class="post-meta"><span title='2025-01-05 21:20:26 -0500 EST'>January 5, 2025</span>&nbsp;·&nbsp;5 min
 
 </div>
   </header> 
@@ -186,13 +186,25 @@ ZFS has a few key features that I will outline here:">
   </tbody>
 </table>
 <h1 id="zfs-storage-heirachy">ZFS Storage Heirachy<a hidden class="anchor" aria-hidden="true" href="#zfs-storage-heirachy">#</a></h1>
-<p>ZFS surfaces several abstractions for creating a storage heirachy and managin storage. This seciton will take a look at these abstraction starting from</p>
-<p><code> vdevs &gt; zpool &gt; datasets</code></p>
+<p>ZFS surfaces several abstractions for creating a storage heirachy and managing storage. This section will take a look at these abstraction and their heirarchy:</p>
+<p><code>vdevs &gt; zpool &gt; datasets</code></p>
+<h2 id="vdevs">vdevs<a hidden class="anchor" aria-hidden="true" href="#vdevs">#</a></h2>
+<p>The starting block of the ZFS storage heirachy are vdevs. A vdev is an abstraction around one or more physical drives. Using a vdev, you group one or more disks, regardless of the storage medium, and configure the implementation of redundancy across those disks. This means the a vdev could consist of a single disk in RAID0 (no redundancy benefit but you do still get checksumming), two disks in a Raid 1 (Mirror) configuration and so on with higher RAIDZ levels.</p>
+<p><img loading="lazy" src="./images/vdevs.png" alt="vdev layouts"  />
+
+Fig. Some examples of possible vdev layouts. Note that <code>vdev2</code> and <code>vdev3</code> show a mix of hdd and ssd drives</p>
+<h2 id="zpool">zpool<a hidden class="anchor" aria-hidden="true" href="#zpool">#</a></h2>
+<p>A zpool in ZFS is a collection or vdevs. ZPools abstract away the underlying storage of the pool (vdevs) such that you continuously expand the storage of your entire system by the addition of new vdevs (I will explain this more in &ldquo;datasets&rdquo;).</p>
+<h2 id="datasets">datasets<a hidden class="anchor" aria-hidden="true" href="#datasets">#</a></h2>
 <p>In a traditional fs you put files systems onto volumes. This can results in lots of space free in <code>/usr</code> but no space in <code>/var/db</code>. This scenarios is helpful for understanding the abstraction of the zpool and datasets. A zpool represents, a pool of free memory (your vdevs). Datasets are one of 3 types of zfs filesystems on top of your zpool.</p>
+<h1 id="failure-tolerance">Failure Tolerance<a hidden class="anchor" aria-hidden="true" href="#failure-tolerance">#</a></h1>
 <h1 id="expanding-storage-in-zfs">Expanding Storage in ZFS<a hidden class="anchor" aria-hidden="true" href="#expanding-storage-in-zfs">#</a></h1>
-<blockquote>
-<p>To balance redundancy and stay economical I am using a RAID 1 configuration. This will allow me to expand storage two drives at a time by purchasing them in pairs or by replacing one drive in a mirror with a larger drive (when the price is right), resilvering, and then replacing the second drive when I have the opportunity.</p>
-</blockquote>
+<p>ZFS has some constraints around expanding your storage. In particular, it has traditionally not been possible to expand existing vdevs (although some changes may be on the horizon at the time of writing). This has meant that, while it is possible to add storage to your zpool, it must be done through the addition of a new vdev. Depending on your chosen RAID configuration this can be costly if each storage expansion requires three or more disks with equal amount of storage.</p>
+<p>To balance redundancy and stay economical I have personally opted on using a RAID 1 configuration. This will allow me to either expand my storage two drives at a time by purchasing them in pairs, or by replacing one drive in a mirror with a larger drive (when the price is right), resilvering, and then replacing the second drive when I have the opportunity.</p>
+<h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
+<p><a href="https://www.45drives.com/pdf/ZFS-Digital-Guide.pdf">ZFS Digital Guide | 45Drives</a> <br>
+<a href="https://www.youtube.com/watch?v=IN_bTYYSXvU&amp;t=1s&amp;pp=ygUDemZz">ZFS Basics | Youtube</a> <br>
+<a href="https://youtu.be/3oG-1U5AI9A?si=XAtGuYzy6xuH3pzK">ZFS for Newbies</a></p>
 
 
   </div>
@@ -206,10 +218,10 @@ ZFS has a few key features that I will outline here:">
       <li><a href="http://localhost:1313/tags/storage/">Storage</a></li>
     </ul>
 <nav class="paginav">
-  <a class="prev" href="http://localhost:1313/posts/09-raft/">
+  <a class="prev" href="http://localhost:1313/posts/08-url-shortener/">
     <span class="title">« Prev</span>
     <br>
-    <span>Distributed Concensus: Raft</span>
+    <span>Visual: URL Shortener</span>
   </a>
   <a class="next" href="http://localhost:1313/posts/06-go-dependency-injection/">
     <span class="title">Next »</span>

@@ -6,10 +6,20 @@
     <description>Recent content on Ben Mask</description>
     <generator>Hugo -- 0.135.0</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 13 Jan 2025 20:49:46 -0500</lastBuildDate>
+    <lastBuildDate>Thu, 23 Jan 2025 19:30:52 -0500</lastBuildDate>
     <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Visual Systems Design: URL Shortener</title>
+      <title>TrueNAS Backups with B2</title>
+      <link>http://localhost:1313/posts/09-truenas-backups/</link>
+      <pubDate>Thu, 23 Jan 2025 19:30:52 -0500</pubDate>
+      <guid>http://localhost:1313/posts/09-truenas-backups/</guid>
+      <description>&lt;h1 id=&#34;big-idea&#34;&gt;Big Idea&lt;/h1&gt;
+&lt;p&gt;The goal of this post will be to capture the step required for the backup and restore process of my TrueNAS server. Currenty, my TrueNAS server consists of two 4TB drives in a vdev with a RAID1 (Mirror) config. My goals is to back this up to Backblaze&amp;rsquo;s S3 compatible B2 storage and test recovery before migrating data.&lt;/p&gt;
+&lt;h1 id=&#34;creating-the-b2-bucket-and-api-key&#34;&gt;Creating the B2 Bucket and API Key&lt;/h1&gt;
+&lt;p&gt;Backblaze offers B2 as an S3-compatible storage solution. You&amp;rsquo;ll first need to create a new private storage bucket in B2 with a unique name. Encrpytion and immutability are up to your discretion.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Visual: URL Shortener</title>
       <link>http://localhost:1313/posts/08-url-shortener/</link>
       <pubDate>Mon, 13 Jan 2025 20:49:46 -0500</pubDate>
       <guid>http://localhost:1313/posts/08-url-shortener/</guid>
@@ -19,14 +29,6 @@
 &lt;br&gt;
 &lt;img loading=&#34;lazy&#34; src=&#34;./images/url_shortener.svg#wide&#34; alt=&#34;URL Shortener&#34;  /&gt;
 &lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Distributed Concensus: Raft</title>
-      <link>http://localhost:1313/posts/09-raft/</link>
-      <pubDate>Sun, 12 Jan 2025 10:58:42 -0500</pubDate>
-      <guid>http://localhost:1313/posts/09-raft/</guid>
-      <description>&lt;h1 id=&#34;big-idea&#34;&gt;Big Idea&lt;/h1&gt;
-&lt;p&gt;With the addition of a Proxmox server to my homelab I have been planning to scale out the control plane of my k3s cluster by virtualizing an additional two master nodes for a HA set up. I was aware that this would involve replicated state in my etcd backed control plane and that etcd itself relies on the Raft concensus algorithm. For this reason, I decided to take a deeper dive into the inner workings of Raft.&lt;/p&gt;</description>
     </item>
     <item>
       <title>ZFS: A Primer</title>

@@ -5,16 +5,14 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="noindex, nofollow">
-<title>Visual: URL Shortener | Ben Mask</title>
-<meta name="keywords" content="systems design, URL Shortener, visual, architecture">
+<title>TrueNAS Backups with B2 | Ben Mask</title>
+<meta name="keywords" content="SRE, Backups, NAS, RAID">
 <meta name="description" content="Big Idea
-I have been studying more systems desing more intentionally lately and this is the fruit of one evening of diagramming out a URL Shortner design. This post doesn&rsquo;t explain much but a picture&rsquo;s worth a thousand words!
-
-
-
-">
+The goal of this post will be to capture the step required for the backup and restore process of my TrueNAS server. Currenty, my TrueNAS server consists of two 4TB drives in a vdev with a RAID1 (Mirror) config. My goals is to back this up to Backblaze&rsquo;s S3 compatible B2 storage and test recovery before migrating data.
+Creating the B2 Bucket and API Key
+Backblaze offers B2 as an S3-compatible storage solution. You&rsquo;ll first need to create a new private storage bucket in B2 with a unique name. Encrpytion and immutability are up to your discretion.">
 <meta name="author" content="">
-<link rel="canonical" href="http://localhost:1313/posts/08-url-shortener/">
+<link rel="canonical" href="http://localhost:1313/posts/09-truenas-backups/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.fc220c15db4aef0318bbf30adc45d33d4d7c88deff3238b23eb255afdc472ca6.css" integrity="sha256-/CIMFdtK7wMYu/MK3EXTPU18iN7/MjiyPrJVr9xHLKY=" rel="preload stylesheet" as="style">
 <link rel="icon" href="http://localhost:1313/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
@@ -23,7 +21,7 @@ I have been studying more systems desing more intentionally lately and this is t
 <link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/08-url-shortener/">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/09-truenas-backups/">
 <noscript>
     <style>
         #theme-toggle,
@@ -127,39 +125,75 @@ I have been studying more systems desing more intentionally lately and this is t
   <header class="post-header">
     <div class="breadcrumbs"><a href="http://localhost:1313/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/posts/">Posts</a></div>
     <h1 class="post-title entry-hint-parent">
-      Visual: URL Shortener
+      TrueNAS Backups with B2
     </h1>
-    <div class="post-meta"><span title='2025-01-13 20:49:46 -0500 EST'>January 13, 2025</span>&nbsp;·&nbsp;1 min
+    <div class="post-meta"><span title='2025-01-23 19:30:52 -0500 EST'>January 23, 2025</span>&nbsp;·&nbsp;2 min
 
 </div>
-  </header> 
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#big-idea" aria-label="Big Idea">Big Idea</a></li>
+                <li>
+                    <a href="#creating-the-b2-bucket-and-api-key" aria-label="Creating the B2 Bucket and API Key">Creating the B2 Bucket and API Key</a></li>
+                <li>
+                    <a href="#create-a-cloud-credential-in-truenas" aria-label="Create a Cloud Credential in TrueNAS">Create a Cloud Credential in TrueNAS</a></li>
+                <li>
+                    <a href="#create-a-dataset" aria-label="Create a Dataset">Create a Dataset</a></li>
+                <li>
+                    <a href="#creating-a-cloud-sync-task" aria-label="Creating a Cloud Sync Task">Creating a Cloud Sync Task</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
   <div class="post-content"><h1 id="big-idea">Big Idea<a hidden class="anchor" aria-hidden="true" href="#big-idea">#</a></h1>
-<p>I have been studying more systems desing more intentionally lately and this is the fruit of one evening of diagramming out a URL Shortner design. This post doesn&rsquo;t explain much but a picture&rsquo;s worth a thousand words!
-<br>
-<br>
-<img loading="lazy" src="./images/url_shortener.svg#wide" alt="URL Shortener"  />
+<p>The goal of this post will be to capture the step required for the backup and restore process of my TrueNAS server. Currenty, my TrueNAS server consists of two 4TB drives in a vdev with a RAID1 (Mirror) config. My goals is to back this up to Backblaze&rsquo;s S3 compatible B2 storage and test recovery before migrating data.</p>
+<h1 id="creating-the-b2-bucket-and-api-key">Creating the B2 Bucket and API Key<a hidden class="anchor" aria-hidden="true" href="#creating-the-b2-bucket-and-api-key">#</a></h1>
+<p>Backblaze offers B2 as an S3-compatible storage solution. You&rsquo;ll first need to create a new private storage bucket in B2 with a unique name. Encrpytion and immutability are up to your discretion.</p>
+<p><img loading="lazy" src="./images/b2-bucket.png" alt="B2 Bucket Creation"  />
 </p>
+<p>After you have created you bucket head over to &ldquo;Application Keys&rdquo;. You will need to create a new API Key with access to your bucket. This API Key will then be added to TrueNAS to enable access. You should allow this API Key to access your bucket with read and write permissions, and no prefixes.</p>
+<p><img loading="lazy" src="./images/b2-api-key.png" alt="B2 API Key Creation"  />
+</p>
+<p>Take note of the KeyID and application key. You will need those in the next step!</p>
+<h1 id="create-a-cloud-credential-in-truenas">Create a Cloud Credential in TrueNAS<a hidden class="anchor" aria-hidden="true" href="#create-a-cloud-credential-in-truenas">#</a></h1>
+<p>Once, you have created you API Key, you will need to create a &ldquo;Cloud Credential&rdquo; in TrueNAS. In TrueNAS, go to <code>System &gt; Cloud Credentials</code> and choose to add a new cloud credential for the B2 provider.</p>
+<p><img loading="lazy" src="./images/truenas-cred.png" alt="TrueNAS Cloud Crendetial Creation"  />
+</p>
+<h1 id="create-a-dataset">Create a Dataset<a hidden class="anchor" aria-hidden="true" href="#create-a-dataset">#</a></h1>
+<p>If you haven&rsquo;t already you will want to create a dataset on your zpool. This can be done from <code>Storage &gt; Pools &gt; Add Dataset</code>.</p>
+<p><img loading="lazy" src="./images/dataset.png" alt="Dataset creation"  />
+</p>
+<p>This dataset is what you will be able to share over the network via NFS/SMB/iscsi and is also the level at which we&rsquo;ll configure the backups. When setting up the datasets it is good to think about what data you really need backed up and the type of data in the dataset (i.e. do you need block storage? Use iscsi). I have chose to create a <code>media</code> dataset for my media library, which although upsetting to lose, is not as irreplaceable as photos and will not be backed up due to it&rsquo;s size. I will, however, also create a <code>general</code> dataset that will store most data and be backed up.</p>
+<p>Some reasonable configurations for the dataset:</p>
+<ul>
+<li>Disable de-deup (friends don&rsquo;t let their friends use de-dup)</li>
+<li>Use lz4 compression</li>
+</ul>
+<h1 id="creating-a-cloud-sync-task">Creating a Cloud Sync Task<a hidden class="anchor" aria-hidden="true" href="#creating-a-cloud-sync-task">#</a></h1>
 
 
   </div>
 
   <footer class="post-footer">
     <ul class="post-tags">
-      <li><a href="http://localhost:1313/tags/systems-design/">Systems Design</a></li>
-      <li><a href="http://localhost:1313/tags/url-shortener/">URL Shortener</a></li>
-      <li><a href="http://localhost:1313/tags/visual/">Visual</a></li>
-      <li><a href="http://localhost:1313/tags/architecture/">Architecture</a></li>
+      <li><a href="http://localhost:1313/tags/sre/">SRE</a></li>
+      <li><a href="http://localhost:1313/tags/backups/">Backups</a></li>
+      <li><a href="http://localhost:1313/tags/nas/">NAS</a></li>
+      <li><a href="http://localhost:1313/tags/raid/">RAID</a></li>
     </ul>
 <nav class="paginav">
-  <a class="prev" href="http://localhost:1313/posts/09-truenas-backups/">
-    <span class="title">« Prev</span>
-    <br>
-    <span>TrueNAS Backups with B2</span>
-  </a>
-  <a class="next" href="http://localhost:1313/posts/07-zfs-primer/">
+  <a class="next" href="http://localhost:1313/posts/08-url-shortener/">
     <span class="title">Next »</span>
     <br>
-    <span>ZFS: A Primer</span>
+    <span>Visual: URL Shortener</span>
   </a>
 </nav>
 
