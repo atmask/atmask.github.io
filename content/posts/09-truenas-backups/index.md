@@ -55,5 +55,5 @@ There are a few options for transfer mode:
 - **MOVE:** Files are transferred from the source to the destination. Files from the source are deleted after transfer.
 
 
-
-
+# References
+[TrueNAS | Cloud Sync Tasks](https://www.truenas.com/docs/core/13.0/coretutorials/tasks/creatingcloudsynctasks/)
