@@ -8,15 +8,20 @@ draft: false
 
 # Big Idea
 
-The goal of this post will be to capture the step required for the backup and restore process of my TrueNAS server. Currenty, my TrueNAS server consists of two 4TB drives in a vdev with a RAID1 (Mirror) config. My goals is to back this up to Backblaze's S3 compatible B2 storage and test recovery before migrating data.
+The goal of this post will be to capture the steps required for the backup and restore process of my TrueNAS server. Currenty, my TrueNAS server consists of two 4TB drives in a vdev with a RAID1 (Mirror) config. My goal is to back this up to Backblaze's S3-compatible B2 storage and test recovery before migrating data out of my old 1TB SSD.
+
+> Once I have these backups in places the 3-2-1 rule will be satisfied:
+> - 3 copies of my data
+> - 2 different types of storage media
+> - 1 off-site backup
 
 # Creating the B2 Bucket and API Key
 
-Backblaze offers B2 as an S3-compatible storage solution. You'll first need to create a new private storage bucket in B2 with a unique name. Encrpytion and immutability are up to your discretion.
+Backblaze offers B2 as an S3-compatible storage solution that I will use as offsite backup location. If you're following along, you'll first need to create a new private storage bucket in B2 with a unique name. Encrpytion and immutability are up to your discretion.
 
 ![B2 Bucket Creation](./images/b2-bucket.png)
 
-After you have created you bucket head over to "Application Keys". You will need to create a new API Key with access to your bucket. This API Key will then be added to TrueNAS to enable access. You should allow this API Key to access your bucket with read and write permissions, and no prefixes.
+After you have created your bucket head over to "Application Keys". You will need to create a new API Key with access to your bucket. This API Key will later added to TrueNAS to enable access. You should allow this API Key to access your bucket with read and write permissions, and no prefixes.
 
 ![B2 API Key Creation](./images/b2-api-key.png)
 
@@ -30,11 +35,11 @@ Once, you have created you API Key, you will need to create a "Cloud Credential"
 
 # Create a Dataset
 
-If you haven't already you will want to create a dataset on your zpool. This can be done from `Storage > Pools > Add Dataset`.
+If you haven't already, you will want to create a dataset on your zpool. This can be done from `Storage > Pools > Add Dataset`.
 
 ![Dataset creation](./images/dataset.png)
 
-This dataset is what you will be able to share over the network via NFS/SMB/iscsi and is also the level at which we'll configure the backups. When setting up the datasets it is good to think about what data you really need backed up and the type of data in the dataset (i.e. do you need block storage? Use iscsi). I have chose to create a `media` dataset for my media library, which although upsetting to lose, is not as irreplaceable as photos and will not be backed up due to it's size. I will, however, also create a `general` dataset that will store most data and be backed up.
+This dataset is what you will be able to share over the network via NFS/SMB/iscsi and is also the level at which we'll configure the backups. When setting up the datasets, it is good to think about what data you really need backed up and the type of data in the dataset (i.e. do you need block storage? Use iscsi). I have chosen to create a `media` dataset for my media library, which although upsetting to lose, is not as irreplaceable as photos and will not be backed up due to its size. I will, however, also create a `general` dataset that will store most data and be backed up.
 
 Some reasonable configurations for the dataset:
 - Disable de-deup (friends don't let their friends use de-dup)
