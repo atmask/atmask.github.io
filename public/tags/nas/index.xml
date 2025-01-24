@@ -14,9 +14,9 @@
       <pubDate>Thu, 23 Jan 2025 19:30:52 -0500</pubDate>
       <guid>http://localhost:1313/posts/09-truenas-backups/</guid>
       <description>&lt;h1 id=&#34;big-idea&#34;&gt;Big Idea&lt;/h1&gt;
-&lt;p&gt;The goal of this post will be to capture the step required for the backup and restore process of my TrueNAS server. Currenty, my TrueNAS server consists of two 4TB drives in a vdev with a RAID1 (Mirror) config. My goals is to back this up to Backblaze&amp;rsquo;s S3 compatible B2 storage and test recovery before migrating data.&lt;/p&gt;
-&lt;h1 id=&#34;creating-the-b2-bucket-and-api-key&#34;&gt;Creating the B2 Bucket and API Key&lt;/h1&gt;
-&lt;p&gt;Backblaze offers B2 as an S3-compatible storage solution. You&amp;rsquo;ll first need to create a new private storage bucket in B2 with a unique name. Encrpytion and immutability are up to your discretion.&lt;/p&gt;</description>
+&lt;p&gt;The goal of this post will be to capture the steps required for the backup and restore process of my TrueNAS server. Currenty, my TrueNAS server consists of two 4TB drives in a vdev with a RAID1 (Mirror) config. My goal is to back this up to Backblaze&amp;rsquo;s S3-compatible B2 storage and test recovery before migrating data out of my old 1TB SSD.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Once I have these backups in places the 3-2-1 rule will be satisfied:&lt;/p&gt;</description>
     </item>
     <item>
       <title>ZFS: A Primer</title>

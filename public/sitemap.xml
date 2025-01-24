@@ -2,6 +2,12 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>http://localhost:1313/tags/b2/</loc>
+    <lastmod>2025-01-23T19:30:52-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/backblaze/</loc>
+    <lastmod>2025-01-23T19:30:52-05:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/tags/backups/</loc>
     <lastmod>2025-01-23T19:30:52-05:00</lastmod>
   </url><url>
@@ -14,13 +20,13 @@
     <loc>http://localhost:1313/posts/</loc>
     <lastmod>2025-01-23T19:30:52-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/raid/</loc>
-    <lastmod>2025-01-23T19:30:52-05:00</lastmod>
-  </url><url>
     <loc>http://localhost:1313/tags/sre/</loc>
     <lastmod>2025-01-23T19:30:52-05:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/</loc>
+    <lastmod>2025-01-23T19:30:52-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/truenas/</loc>
     <lastmod>2025-01-23T19:30:52-05:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/posts/09-truenas-backups/</loc>

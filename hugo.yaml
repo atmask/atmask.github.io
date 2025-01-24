@@ -31,7 +31,21 @@ params:
   homeInfoParams:
     title: Hi there! 👋
     # subtitle: Software Engineer/DevOps/Cloud Developer
-    Content: "My name's Ben. Welcome to my blog. I'm a software engineer, SRE, homelabber, with a passion for understanding systems, interactions, abstractions, and architecture. I'm always looking for new opportunities to learn and grow. Feel free to reach out if you're interested in any of my work and want to chat!"
+    Content: |
+      My name's Ben. Welcome to my blog!
+      I'm a: \
+      \
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🧑‍🌾 Free-Range Human \
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;👨‍💻 Software Engineer & SRE \
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;💡 Homelabber \
+      \
+      In my free time you'll find me:\
+      \
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;☕ Making Coffee \
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🧗 Rock Climbing \
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🧐 Tinkering and Learning \
+      \
+      I have  a passion for understanding systems, interactions, abstractions, and architecture. I'm always looking for new opportunities to learn and grow. Feel free to reach out if you're interested in any of my work and want to chat!"
   socialIcons: # optional
     - name: Github
       url: https://github.com/atmask
