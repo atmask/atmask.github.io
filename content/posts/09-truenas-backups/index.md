@@ -79,5 +79,12 @@ The above shows an example of doing a partial restore in which the contents of t
 
 After this is all configured you can run the restore task, validate the data, and delete the restore task. I choose to delete the restore task to avoid any accidental invocations.
 
+
+# A Final Note on Backups vs Snapshots
+
+It is important to realize that the backup task will sync all of the data from TrueNAS to the cloud on your scheduled interval. This means that you have always have a copy of your data at the last successful backup run. A consequence of this is, that if data on TrueNAS gets corrupted and then a SYNC occcurs, the corrupted data will be backed up and you won't be able to restore your machine.
+
+To mitigate this I am hoping in the future to explore incremental backups using ZFS snapshots to provide point in time restore functionality.
+
 # References
 [TrueNAS | Cloud Sync Tasks](https://www.truenas.com/docs/core/13.0/coretutorials/tasks/creatingcloudsynctasks/)
