@@ -1,6 +1,6 @@
 ---
-title: 'TrueNAS Backups with B2'
-tags: ["SRE", "Backups", "NAS", "TrueNAS", "b2", "backblaze"]
+title: 'TrueNAS Backups & Restore with B2'
+tags: ["SRE", "Backups", "NAS", "TrueNAS", "b2", "backblaze", "disaster recovery"]
 ShowToc: true
 date: '2025-01-23T19:30:52-05:00'
 draft: false
@@ -54,6 +54,30 @@ There are a few options for transfer mode:
 - **COPY:** Copies each source file to the destination. If a sycned file exists at the source with a matching name then file is overwritten during the sync. 
 - **MOVE:** Files are transferred from the source to the destination. Files from the source are deleted after transfer.
 
+
+# Restoring
+
+If you have made it this far, you are likely also interested in testing your ability to restore from backups in case you lose data. This final section will walk through the step for doing a full and partial restore via the TrueNas UI.
+
+First, you will need to go to the cloud sync task which you have configured to run backups. If you expand the backup job you will see an option "Restore". When you click the Restore button a modal will pop up with several config options. 
+
+![restore modal](./images/restore-modal.png)
+
+Give your restore job a clear name. Choose the SYNC transfer mode to have the authoritative back up copy overwrite the data on the restore target (i.e. your TrueNAS instance). Additionally, you can choose the location on the TrueNAS instance to which you wish to have the data synced. After configuration, you will see a new Cloud Sync Task has been created but not yet run.
+
+![restore task](./images/restore-task.png)
+
+Now, by default if you run this task it will sync the _entire backup contents_ to the location on your TrueNAS instance that you specified. If, like me, your backups contain data spanning multiple applications this might not be what you want. More likely, you wish to restore a subset of that backup data. To do this you need to edit the restore task.
+
+![edit restore task](./images/edit-restore.png)
+
+The above shows an example of doing a partial restore in which the contents of the remote `/pvc-0208d175-db1e-417b-abbf-0ba07cc55f17` are restored into the `/general/pvc-0208d175-db1e-417b-abbf-0ba07cc55f17` folder on the TrueNAS instance/
+
+> 💡 **Note:** The restore process will restore _the contents_ of a folder from a remote _to a folder_ on the TrueNAS instance. This means that if you have a back-up at `/` and `/` contains more than one dir such as `/kuma` and `/movies`, chossing to restore from `/` will recursively sync `/kuma` and `/movies` to the TrueNas instance. However, if you wish to just restore `/kuma` and choose to restore that folder from the remote to `/` on TrueNas instance then the contents of the remote `/kuma` dir will be put directly to `/` on the TrueNAS instance (i.e. the restore process will not create a `/kuma` on the TrueNAS filesystem as part of the restore).
+>
+> To achieve the desired goal, ensure that `/kuma` exists on the TrueNAS filesystem and restore the contents of the remote `/kuma` to the TrueNAS `/kuma`.
+
+After this is all configured you can run the restore task, validate the data, and delete the restore task. I choose to delete the restore task to avoid any accidental invocations.
 
 # References
 [TrueNAS | Cloud Sync Tasks](https://www.truenas.com/docs/core/13.0/coretutorials/tasks/creatingcloudsynctasks/)
