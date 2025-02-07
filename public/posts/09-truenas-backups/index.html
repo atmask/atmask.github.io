@@ -5,8 +5,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="noindex, nofollow">
-<title>TrueNAS Backups with B2 | Ben Mask</title>
-<meta name="keywords" content="SRE, Backups, NAS, TrueNAS, b2, backblaze">
+<title>TrueNAS Backups &amp; Restore with B2 | Ben Mask</title>
+<meta name="keywords" content="SRE, Backups, NAS, TrueNAS, b2, backblaze, disaster recovery">
 <meta name="description" content="Big Idea
 The goal of this post will be to capture the steps required for the backup and restore process of my TrueNAS server. Currenty, my TrueNAS server consists of two 4TB drives in a vdev with a RAID1 (Mirror) config. My goal is to back this up to Backblaze&rsquo;s S3-compatible B2 storage and test recovery before migrating data out of my old 1TB SSD.
 
@@ -125,9 +125,9 @@ Once I have these backups in places the 3-2-1 rule will be satisfied:">
   <header class="post-header">
     <div class="breadcrumbs"><a href="http://localhost:1313/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/posts/">Posts</a></div>
     <h1 class="post-title entry-hint-parent">
-      TrueNAS Backups with B2
+      TrueNAS Backups &amp; Restore with B2
     </h1>
-    <div class="post-meta"><span title='2025-01-23 19:30:52 -0500 EST'>January 23, 2025</span>&nbsp;·&nbsp;3 min
+    <div class="post-meta"><span title='2025-01-23 19:30:52 -0500 EST'>January 23, 2025</span>&nbsp;·&nbsp;6 min
 
 </div>
   </header> <div class="toc">
@@ -147,6 +147,10 @@ Once I have these backups in places the 3-2-1 rule will be satisfied:">
                     <a href="#create-a-dataset" aria-label="Create a Dataset">Create a Dataset</a></li>
                 <li>
                     <a href="#creating-a-cloud-sync-task" aria-label="Creating a Cloud Sync Task">Creating a Cloud Sync Task</a></li>
+                <li>
+                    <a href="#restoring" aria-label="Restoring">Restoring</a></li>
+                <li>
+                    <a href="#a-final-note-on-backups-vs-snapshots" aria-label="A Final Note on Backups vs Snapshots">A Final Note on Backups vs Snapshots</a></li>
                 <li>
                     <a href="#references" aria-label="References">References</a>
                 </li>
@@ -195,6 +199,26 @@ Once I have these backups in places the 3-2-1 rule will be satisfied:">
 <li><strong>COPY:</strong> Copies each source file to the destination. If a sycned file exists at the source with a matching name then file is overwritten during the sync.</li>
 <li><strong>MOVE:</strong> Files are transferred from the source to the destination. Files from the source are deleted after transfer.</li>
 </ul>
+<h1 id="restoring">Restoring<a hidden class="anchor" aria-hidden="true" href="#restoring">#</a></h1>
+<p>If you have made it this far, you are likely also interested in testing your ability to restore from backups in case you lose data. This final section will walk through the step for doing a full and partial restore via the TrueNas UI.</p>
+<p>First, you will need to go to the cloud sync task which you have configured to run backups. If you expand the backup job you will see an option &ldquo;Restore&rdquo;. When you click the Restore button a modal will pop up with several config options.</p>
+<p><img loading="lazy" src="./images/restore-modal.png" alt="restore modal"  />
+</p>
+<p>Give your restore job a clear name. Choose the SYNC transfer mode to have the authoritative back up copy overwrite the data on the restore target (i.e. your TrueNAS instance). Additionally, you can choose the location on the TrueNAS instance to which you wish to have the data synced. After configuration, you will see a new Cloud Sync Task has been created but not yet run.</p>
+<p><img loading="lazy" src="./images/restore-task.png" alt="restore task"  />
+</p>
+<p>Now, by default if you run this task it will sync the <em>entire backup contents</em> to the location on your TrueNAS instance that you specified. If, like me, your backups contain data spanning multiple applications this might not be what you want. More likely, you wish to restore a subset of that backup data. To do this you need to edit the restore task.</p>
+<p><img loading="lazy" src="./images/edit-restore.png" alt="edit restore task"  />
+</p>
+<p>The above shows an example of doing a partial restore in which the contents of the remote <code>/pvc-0208d175-db1e-417b-abbf-0ba07cc55f17</code> are restored into the <code>/general/pvc-0208d175-db1e-417b-abbf-0ba07cc55f17</code> folder on the TrueNAS instance/</p>
+<blockquote>
+<p>💡 <strong>Note:</strong> The restore process will restore <em>the contents</em> of a folder from a remote <em>to a folder</em> on the TrueNAS instance. This means that if you have a back-up at <code>/</code> and <code>/</code> contains more than one dir such as <code>/kuma</code> and <code>/movies</code>, chossing to restore from <code>/</code> will recursively sync <code>/kuma</code> and <code>/movies</code> to the TrueNas instance. However, if you wish to just restore <code>/kuma</code> and choose to restore that folder from the remote to <code>/</code> on TrueNas instance then the contents of the remote <code>/kuma</code> dir will be put directly to <code>/</code> on the TrueNAS instance (i.e. the restore process will not create a <code>/kuma</code> on the TrueNAS filesystem as part of the restore).</p>
+<p>To achieve the desired goal, ensure that <code>/kuma</code> exists on the TrueNAS filesystem and restore the contents of the remote <code>/kuma</code> to the TrueNAS <code>/kuma</code>.</p>
+</blockquote>
+<p>After this is all configured you can run the restore task, validate the data, and delete the restore task. I choose to delete the restore task to avoid any accidental invocations.</p>
+<h1 id="a-final-note-on-backups-vs-snapshots">A Final Note on Backups vs Snapshots<a hidden class="anchor" aria-hidden="true" href="#a-final-note-on-backups-vs-snapshots">#</a></h1>
+<p>It is important to realize that the backup task will sync all of the data from TrueNAS to the cloud on your scheduled interval. This means that you have always have a copy of your data at the last successful backup run. A consequence of this is, that if data on TrueNAS gets corrupted and then a SYNC occcurs, the corrupted data will be backed up and you won&rsquo;t be able to restore your machine.</p>
+<p>To mitigate this I am hoping in the future to explore incremental backups using ZFS snapshots to provide point in time restore functionality.</p>
 <h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
 <p><a href="https://www.truenas.com/docs/core/13.0/coretutorials/tasks/creatingcloudsynctasks/">TrueNAS | Cloud Sync Tasks</a></p>
 
@@ -209,8 +233,14 @@ Once I have these backups in places the 3-2-1 rule will be satisfied:">
       <li><a href="http://localhost:1313/tags/truenas/">TrueNAS</a></li>
       <li><a href="http://localhost:1313/tags/b2/">B2</a></li>
       <li><a href="http://localhost:1313/tags/backblaze/">Backblaze</a></li>
+      <li><a href="http://localhost:1313/tags/disaster-recovery/">Disaster Recovery</a></li>
     </ul>
 <nav class="paginav">
+  <a class="prev" href="http://localhost:1313/posts/10-tenets/">
+    <span class="title">« Prev</span>
+    <br>
+    <span>Tenets of Engineering</span>
+  </a>
   <a class="next" href="http://localhost:1313/posts/08-url-shortener/">
     <span class="title">Next »</span>
     <br>
