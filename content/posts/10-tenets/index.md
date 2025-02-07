@@ -8,7 +8,7 @@ draft: false
 
 # Big Idea
 
-I am getting to the stage of my career know where I have started picking up guiding principles that guide my socio-technical endeavors. I am sure I will continue to learn more and add them here or come back revise these with more wisdom and insight but what I want to start here is a collection of tenets. These tenets are not implementation details or design patterns but are more like paradigms for how we relate to problems, the natural systems that emerge from people thrown into teams, and more.
+I am getting to the stage of my career now where I have started picking up guiding principles that guide my socio-technical endeavors. I am sure I will continue to learn more and add them here or come back revise these with more wisdom and insight but what I want to start here is a collection of tenets. These tenets are not implementation details or design patterns but are more like paradigms for how we relate to problems, the natural systems that emerge from people thrown into teams, and more.
 
 
 # Tenets
