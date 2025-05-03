@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>Etcd on Ben Mask</title>
-    <link>http://localhost:1313/tags/etcd/</link>
-    <description>Recent content in Etcd on Ben Mask</description>
+    <title>HA on Ben Mask</title>
+    <link>http://localhost:1313/tags/ha/</link>
+    <description>Recent content in HA on Ben Mask</description>
     <generator>Hugo -- 0.135.0</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 23 Feb 2025 21:10:27 -0500</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/etcd/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/ha/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Making my K8s Control Plan HA</title>
       <link>http://localhost:1313/posts/11-ha-k8s/</link>

@@ -5,11 +5,14 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="noindex, nofollow">
-<title>Posts | Ben Mask</title>
-<meta name="keywords" content="">
-<meta name="description" content="Posts - Ben Mask">
+<title>Making my K8s Control Plan HA | Ben Mask</title>
+<meta name="keywords" content="SRE, Kubernetes, HA, homelab, etcd">
+<meta name="description" content="Big Idea
+For a while the K8s cluster in my homelab has been in the precarious situation of only having a single master node. This has bitten me a couple of times when the master node (i.e the &ldquo;server node&rdquo; in k3s) has been snafu&rsquo;ed.
+
+">
 <meta name="author" content="">
-<link rel="canonical" href="http://localhost:1313/posts/">
+<link rel="canonical" href="http://localhost:1313/posts/11-ha-k8s/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.fc220c15db4aef0318bbf30adc45d33d4d7c88deff3238b23eb255afdc472ca6.css" integrity="sha256-/CIMFdtK7wMYu/MK3EXTPU18iN7/MjiyPrJVr9xHLKY=" rel="preload stylesheet" as="style">
 <link rel="icon" href="http://localhost:1313/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
@@ -18,8 +21,7 @@
 <link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" type="application/rss+xml" href="http://localhost:1313/posts/index.xml">
-<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/11-ha-k8s/">
 <noscript>
     <style>
         #theme-toggle,
@@ -59,7 +61,7 @@
 </noscript>
 </head>
 
-<body class="list" id="top">
+<body class="" id="top">
 <script>
     if (localStorage.getItem("pref-theme") === "dark") {
         document.body.classList.add('dark');
@@ -101,7 +103,7 @@
         <ul id="menu">
             <li>
                 <a href="http://localhost:1313/posts/" title="Posts">
-                    <span class="active">Posts</span>
+                    <span>Posts</span>
                 </a>
             </li>
             <li>
@@ -117,46 +119,44 @@
         </ul>
     </nav>
 </header>
-<main class="main"> 
-<header class="page-header"><div class="breadcrumbs"><a href="http://localhost:1313/">Home</a></div>
-  <h1>
-    Posts
-  </h1>
-</header>
+<main class="main">
 
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Part 1: Building a Bare-metal Kubernetes Cluster on Raspberry Pis
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Big Idea From the start of my career, I have been fascinated by Kubernetes. I love distributed systems and the rich history of how we have arrived where we are today with distributed computing. We live in the ongoing evolution of our communal vision for cloud computing. In the early years, the vision was to present a homogenous Unix-like interface for managing an underlying collection of servers such as BOINC. Now, we live in the world of many small virtualized unix environments distributed across servers and sharing compute.
-...</p>
-  </div>
-  <footer class="entry-footer"><span title='2024-07-10 20:29:01 -0400 EDT'>July 10, 2024</span>&nbsp;·&nbsp;10 min</footer>
-  <a class="entry-link" aria-label="post link to Part 1: Building a Bare-metal Kubernetes Cluster on Raspberry Pis" href="http://localhost:1313/posts/02-bare-metal-k3s-on-rpi-part-1/"></a>
-</article>
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://localhost:1313/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/posts/">Posts</a></div>
+    <h1 class="post-title entry-hint-parent">
+      Making my K8s Control Plan HA
+    </h1>
+    <div class="post-meta"><span title='2025-02-23 21:10:27 -0500 EST'>February 23, 2025</span>&nbsp;·&nbsp;1 min
 
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Getting Started with Hugo &amp; GitHub Pages
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Big Idea The goal of this post is to capture the steps required to get started with Hugo and GitHub Pages. Hugo is a Go-based static site generation tool. GitHub Pages is a feature of GitHub that allows anyone with a GitHub account to host a static site.
-Part 1: Setting up GitHub Pages In order to serve your site, you will need somewhere to host it. GitHub offers a free service called GitHub Pages that we will use for this purpose. GitHub Pages offers the free hosting of static website content. This means we will be able to build our Hugo site into a static site and then serve that via GitHub Pages.
-...</p>
+</div>
+  </header> 
+  <div class="post-content"><h1 id="big-idea">Big Idea<a hidden class="anchor" aria-hidden="true" href="#big-idea">#</a></h1>
+<p>For a while the K8s cluster in my homelab has been in the precarious situation of only having a single master node. This has bitten me a couple of times when the master node (i.e the &ldquo;server node&rdquo; in k3s) has been snafu&rsquo;ed.</p>
+<p><img loading="lazy" src="./images/meme.png" alt="meme"  />
+</p>
+
+
   </div>
-  <footer class="entry-footer"><span title='2024-07-05 17:54:14 -0400 EDT'>July 5, 2024</span>&nbsp;·&nbsp;9 min</footer>
-  <a class="entry-link" aria-label="post link to Getting Started with Hugo & GitHub Pages" href="http://localhost:1313/posts/01-getting-started-w-hugo/"></a>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://localhost:1313/tags/sre/">SRE</a></li>
+      <li><a href="http://localhost:1313/tags/kubernetes/">Kubernetes</a></li>
+      <li><a href="http://localhost:1313/tags/ha/">HA</a></li>
+      <li><a href="http://localhost:1313/tags/homelab/">Homelab</a></li>
+      <li><a href="http://localhost:1313/tags/etcd/">Etcd</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="next" href="http://localhost:1313/posts/10-tenets/">
+    <span class="title">Next »</span>
+    <br>
+    <span>Tenets of Engineering</span>
+  </a>
+</nav>
+
+  </footer>
 </article>
-<footer class="page-footer">
-  <nav class="pagination">
-    <a class="prev" href="http://localhost:1313/posts/">
-      «&nbsp;Prev&nbsp;
-    </a>
-  </nav>
-</footer>
     </main>
     
 <footer class="footer">
@@ -240,6 +240,53 @@ Part 1: Setting up GitHub Pages In order to serve your site, you will need somew
         }
     })
 
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
 </script>
 </body>
 

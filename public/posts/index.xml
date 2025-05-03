@@ -6,15 +6,25 @@
     <description>Recent content in Posts on Ben Mask</description>
     <generator>Hugo -- 0.135.0</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 06 Feb 2025 21:07:51 -0500</lastBuildDate>
+    <lastBuildDate>Sun, 23 Feb 2025 21:10:27 -0500</lastBuildDate>
     <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Making my K8s Control Plan HA</title>
+      <link>http://localhost:1313/posts/11-ha-k8s/</link>
+      <pubDate>Sun, 23 Feb 2025 21:10:27 -0500</pubDate>
+      <guid>http://localhost:1313/posts/11-ha-k8s/</guid>
+      <description>&lt;h1 id=&#34;big-idea&#34;&gt;Big Idea&lt;/h1&gt;
+&lt;p&gt;For a while the K8s cluster in my homelab has been in the precarious situation of only having a single master node. This has bitten me a couple of times when the master node (i.e the &amp;ldquo;server node&amp;rdquo; in k3s) has been snafu&amp;rsquo;ed.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;./images/meme.png&#34; alt=&#34;meme&#34;  /&gt;
+&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Tenets of Engineering</title>
       <link>http://localhost:1313/posts/10-tenets/</link>
       <pubDate>Thu, 06 Feb 2025 21:07:51 -0500</pubDate>
       <guid>http://localhost:1313/posts/10-tenets/</guid>
       <description>&lt;h1 id=&#34;big-idea&#34;&gt;Big Idea&lt;/h1&gt;
-&lt;p&gt;I am getting to the stage of my career know where I have started picking up guiding principles that guide my socio-technical endeavors. I am sure I will continue to learn more and add them here or come back revise these with more wisdom an insight but what I want to start here is a collection of tenets. These tenets are not implementation details or design patterns but are more like paradigms for how we relate to problems, the natural systems that a bunch of teams in an org form, and more.&lt;/p&gt;</description>
+&lt;p&gt;I am getting to the stage of my career now where I have started picking up guiding principles that guide my socio-technical endeavors. I am sure I will continue to learn more and add them here or come back revise these with more wisdom and insight but what I want to start here is a collection of tenets. These tenets are not implementation details or design patterns but are more like paradigms for how we relate to problems, the natural systems that emerge from people thrown into teams, and more.&lt;/p&gt;</description>
     </item>
     <item>
       <title>TrueNAS Backups &amp; Restore with B2</title>
