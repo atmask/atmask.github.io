@@ -1,5 +1,5 @@
 ---
-title: '12 Python Async'
+title: 'An Introduction to Async Programming in Python'
 date: 2025-05-03T15:24:28-04:00
 draft: false
 ---
