@@ -1,7 +1,7 @@
 ---
 title: 'Index Condition Pushdown Optimization in MySQL'
 date: 2025-06-02T21:56:17-04:00
-draft: true
+draft: false
 tags: ["SRE", "Systems", "MySQL", "Optimization", "Architecture", "explainer", "DBA", "Databases"]
 ---
 # Big Idea
@@ -22,3 +22,9 @@ The MySQL server is split into two main layers: the MySQL server and the the Sto
 
 
 
+# Resources
+- [High-Performance MySQL](https://www.oreilly.com/library/view/high-performance-mysql/9781449332471/ch01.html)
+- [InnoDB Architecture](https://dev.mysql.com/doc/refman/8.4/en/innodb-architecture.html)
+- [GeeksForGeeks: MySQL Architecture](https://www.geeksforgeeks.org/architecture-of-mysql/)
+- [Yt: MySQL Architecture](https://www.youtube.com/watch?v=aKOaQfpW7to)
+- [MySQL ICP](https://dev.mysql.com/doc/refman/8.4/en/index-condition-pushdown-optimization.html)
