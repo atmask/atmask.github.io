@@ -3,7 +3,7 @@ title: 'Making my K8s Control Plane HA'
 tags: ["SRE", "Kubernetes", "HA", "homelab", "etcd"]
 ShowToc: false
 date: '2025-02-23T21:10:27-05:00'
-draft: true
+draft: false
 ---
 
 # Big Idea

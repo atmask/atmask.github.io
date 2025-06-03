@@ -3,7 +3,7 @@ title: 'Distributed Concensus: Raft'
 tags: ["raft", "etcd", "distributed systems", 'concensus']
 ShowToc: false
 date: '2025-01-12T10:58:42-05:00'
-draft: true 
+draft: false 
 ---
 # Big Idea
 
