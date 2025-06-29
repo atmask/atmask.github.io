@@ -1,7 +1,7 @@
 ---
 title: 'Datadog Tracing Configurations'
 date: 2025-06-28T20:51:31-04:00
-draft: false
+draft: true
 tags: ["SRE", "monitoring", "observability", "datadog", "otel"]
 ShowToc: true
 ---
