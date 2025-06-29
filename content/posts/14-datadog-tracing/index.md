@@ -1,7 +1,8 @@
 ---
-title: '14 Datadog Tracing'
+title: 'Datadog Tracing Configurations'
 date: 2025-06-28T20:51:31-04:00
 draft: false
+tags: ["SRE", "monitoring", "observability", "datadog", "otel"]
 ---
 # Big Idea
 
