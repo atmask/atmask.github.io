@@ -172,19 +172,19 @@ Dependency Injection (the &lsquo;D&rsquo; in SOLID design principles) is an impo
 <p>What we can say about methods is that <em>they are executed in the context of a struct instance</em>. This means that the configuration of a particular struct can configure the methods it used. This configurability is important because this is how dependency injection (DI) works in Go.</p>
 <p>Suppose we were making a Go program that stores data from an event to some data source. That data source could be a DB but maybe we want the flexibility to change the backing data source over time from SQL to NoSQL or from MySQL to Postgres or even to send it out to another service. Let&rsquo;s look at an example using DI to see how we could achieve this:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// Define an interface for any backing repository
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">IRepository</span> <span style="color:#66d9ef">interface</span> {
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Define an interface for any backing repository</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">IRepository</span> <span style="color:#66d9ef">interface</span> {
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Store</span>(<span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">error</span>
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// Allow any struct that implements the reposiory interface be injected into the Application
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Application</span> <span style="color:#66d9ef">struct</span>{
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Allow any struct that implements the reposiory interface be injected into the Application</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Application</span> <span style="color:#66d9ef">struct</span>{
 </span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Repository</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">IRepository</span>
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">app</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Application</span>) <span style="color:#a6e22e">processEvent</span>(<span style="color:#a6e22e">s</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">error</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Use the injected instance
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">Repository</span>.<span style="color:#a6e22e">Store</span>(<span style="color:#a6e22e">s</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Use the injected instance</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">Repository</span>.<span style="color:#a6e22e">Store</span>(<span style="color:#a6e22e">s</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
 </span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>

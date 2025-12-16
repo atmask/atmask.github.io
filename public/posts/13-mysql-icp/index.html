@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Index Condition Pushdown Optimization in MySQL | Ben Mask</title>
+<meta name="keywords" content="SRE, Systems, MySQL, Optimization, Architecture, explainer, DBA, Databases">
+<meta name="description" content="Big Idea
+Getting under the hood of database implementations is becoming an area of growing interest for me. Early in my career, I was always content with SQL as an interface to a datastore that &ldquo;just works.&rdquo; That is, until it doesn&rsquo;t anymore. It&rsquo;s at those points that I am now being pushed to understand why a particular database implementation has certain behavioral characteristics in different circumstances. Further, I have never crossed paths with a professional DBA and often feel like there&rsquo;s a whole sphere of mystery for me here. As I plunge these depths for the first time, however, I find many of the same interesting aspects of design and layering that have made K8s of interest to me.">
+<meta name="author" content="">
+<link rel="canonical" href="http://localhost:1313/posts/13-mysql-icp/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.fc220c15db4aef0318bbf30adc45d33d4d7c88deff3238b23eb255afdc472ca6.css" integrity="sha256-/CIMFdtK7wMYu/MK3EXTPU18iN7/MjiyPrJVr9xHLKY=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/13-mysql-icp/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/" accesskey="h" title="Ben Mask (Alt + H)">Ben Mask</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/posts/" title="Posts">
+                    <span>Posts</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://localhost:1313/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/posts/">Posts</a></div>
+    <h1 class="post-title entry-hint-parent">
+      Index Condition Pushdown Optimization in MySQL
+    </h1>
+    <div class="post-meta"><span title='2025-06-02 21:56:17 -0400 EDT'>June 2, 2025</span>&nbsp;·&nbsp;4 min
+
+</div>
+  </header> 
+  <div class="post-content"><h1 id="big-idea">Big Idea<a hidden class="anchor" aria-hidden="true" href="#big-idea">#</a></h1>
+<p>Getting under the hood of database implementations is becoming an area of growing interest for me. Early in my career, I was always content with SQL as an interface to a datastore that &ldquo;just works.&rdquo; That is, until it doesn&rsquo;t anymore. It&rsquo;s at those points that I am now being pushed to understand why a particular database implementation has certain behavioral characteristics in different circumstances. Further, I have never crossed paths with a professional DBA and often feel like there&rsquo;s a whole sphere of mystery for me here. As I plunge these depths for the first time, however, I find many of the same interesting aspects of design and layering that have made K8s of interest to me.</p>
+<p>With that said, I&rsquo;m kicking off what may become a series of DB-related posts with a short and niche post about MySQL&rsquo;s Index Condition Pushdown (ICP) optimization.</p>
+<h1 id="enough-mysql-architecture-to-be-dangerous">Enough MySQL Architecture to be Dangerous<a hidden class="anchor" aria-hidden="true" href="#enough-mysql-architecture-to-be-dangerous">#</a></h1>
+<p>Before diving right into how ICP works, it&rsquo;s helpful to understand just enough MySQL architecture to be dangerous on the topic. While I will note for the sake of completeness that MySQL follows a client/server architecture, that is not the key part of MySQL that is important at the moment. What is important is the architecture of the MySQL server.</p>
+<p>The MySQL server is split into two main layers: the MySQL server and the Storage Engine. MySQL was designed with a strong interface that separates the logical responsibilities of the relational database management system (parsing, optimization, caching) from the actual implementation of data storage on a particular medium. These two sides of the interface correspond to the server layer and the storage engine layer, respectively. The separation of the MySQL server application from the underlying storage implementation has allowed the MySQL community to create a pluggable storage engine layer with different implementations for disk storage, memory storage, and CSV storage. The most widely adopted engine at this time is the InnoDB engine.</p>
+<h1 id="optimizing-query-execution-with-index-condition-pushdown-icp">Optimizing Query Execution with Index Condition Pushdown (ICP)<a hidden class="anchor" aria-hidden="true" href="#optimizing-query-execution-with-index-condition-pushdown-icp">#</a></h1>
+<p>Now that we have a basic grasp that MySQL architecture has distinct layers between the MySQL server and the lower-level storage engine plugin, it makes more sense to explain ICP. In its simplest form, ICP is an optimization in which the responsibility of filtering — which would normally be done by the MySQL server <em>after</em> the storage engine fetched and returned rows — is delegated to (i.e. pushed down to) the storage engine when the column being filtered on is part of a composite index for which the leftmost part of the index has been used in the selected key.</p>
+<p>That&rsquo;s still a lot to unpack, so let&rsquo;s list that out one by one to understand the attributes of ICP:</p>
+<ul>
+<li><strong>Optimization</strong>: Filtering at the storage engine layer rather than passing data back to the server is an optimization that reduces the amount of I/O a query performs. I/O is reduced because the storage engine <em>does not need to read the full row from disk</em> but can instead filter just based on the relevant index key.</li>
+<li><strong>Filtering on a Composite Index</strong>: A composite index is an index of multiple ordered columns. For example, an index on just the <code>id</code> col is not composite but and index across (<code>id</code>, <code>uuid</code>) would be composite and the order of the cols in the index matters.</li>
+<li><strong>Directly Filtering the Leftmost Parts of the Index</strong>: When querying, a composite index is useable by the optimizer iff a leftmost prefix of the index is specified in the WHERE clause of the query. This is known as the leftmost prefix rule.</li>
+</ul>
+<p>To give a more precise picture of how this is an optimization it&rsquo;s important to understand how indexes are structured in MYSQL. The primary index is referred to as the clustered index. When you look up data on the primary index the result is a full disk read of the fetched row contained in the index. Secondary indicies, however, only contain the indexed columns and a pointer to the primary key in the clustered index. By enabling filtering at the storage engine layer, we are able to filter rows using the contents of the secondary index alone without the expensive IO that would be performed when getting all unfilitered rows that are part of the index range filter otherwise.</p>
+<h1 id="resources">Resources<a hidden class="anchor" aria-hidden="true" href="#resources">#</a></h1>
+<ul>
+<li><a href="https://www.oreilly.com/library/view/high-performance-mysql/9781449332471/ch01.html">High-Performance MySQL</a></li>
+<li><a href="https://dev.mysql.com/doc/refman/8.4/en/innodb-architecture.html">InnoDB Architecture</a></li>
+<li><a href="https://www.geeksforgeeks.org/architecture-of-mysql/">GeeksForGeeks: MySQL Architecture</a></li>
+<li><a href="https://www.youtube.com/watch?v=aKOaQfpW7to">Yt: MySQL Architecture</a></li>
+<li><a href="https://dev.mysql.com/doc/refman/8.4/en/index-condition-pushdown-optimization.html">MySQL ICP</a></li>
+<li><a href="https://dev.mysql.com/doc/refman/8.4/en/multiple-column-indexes.html#:~:text=If%20the%20table%20has%20a,if%20you%20have%20a%20three%2Dcolumn">Leftmost Prefix Rule</a></li>
+<li><a href="https://dev.mysql.com/doc/refman/8.4/en/innodb-index-types.html">Clustered and Secondary Indexes</a></li>
+<li><a href="https://dev.mysql.com/doc/refman/8.4/en/innodb-physical-structure.html">The Physical Structure of the InnoDB Index</a></li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://localhost:1313/tags/sre/">SRE</a></li>
+      <li><a href="http://localhost:1313/tags/systems/">Systems</a></li>
+      <li><a href="http://localhost:1313/tags/mysql/">MySQL</a></li>
+      <li><a href="http://localhost:1313/tags/optimization/">Optimization</a></li>
+      <li><a href="http://localhost:1313/tags/architecture/">Architecture</a></li>
+      <li><a href="http://localhost:1313/tags/explainer/">Explainer</a></li>
+      <li><a href="http://localhost:1313/tags/dba/">DBA</a></li>
+      <li><a href="http://localhost:1313/tags/databases/">Databases</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://localhost:1313/posts/14-immich/">
+    <span class="title">« Prev</span>
+    <br>
+    <span>Immich: Up &amp; Running</span>
+  </a>
+  <a class="next" href="http://localhost:1313/posts/12-python-async/">
+    <span class="title">Next »</span>
+    <br>
+    <span>An Introduction to Async Programming in Python</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2025 <a href="http://localhost:1313/">Ben Mask</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+
+
+<style>
+  img[src$='#wide'] {
+    display: block;
+    width: 80vw;
+    max-width: none;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    border-radius: 0;
+  }
+</style>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

@@ -4,19 +4,50 @@
     <title>Posts on Ben Mask</title>
     <link>http://localhost:1313/posts/</link>
     <description>Recent content in Posts on Ben Mask</description>
-    <generator>Hugo -- 0.135.0</generator>
+    <generator>Hugo -- 0.152.2</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 23 Feb 2025 21:10:27 -0500</lastBuildDate>
+    <lastBuildDate>Sun, 14 Dec 2025 22:43:07 -0500</lastBuildDate>
     <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Making my K8s Control Plan HA</title>
+      <title>Immich: Up &amp; Running</title>
+      <link>http://localhost:1313/posts/14-immich/</link>
+      <pubDate>Sun, 14 Dec 2025 22:43:07 -0500</pubDate>
+      <guid>http://localhost:1313/posts/14-immich/</guid>
+      <description>&lt;h1 id=&#34;overview&#34;&gt;Overview&lt;/h1&gt;
+&lt;p&gt;I recently started hosting &lt;a href=&#34;https://github.com/immich-app&#34;&gt;Immich&lt;/a&gt; on my homelab. If you&amp;rsquo;re not familiar with Immich, it is a self-hosted Google Photos replacement.
+If you want to learn more I highly reccomend giving a listen to &lt;a href=&#34;https://selfhosted.show/110?t=1198&#34;&gt;this podcast interview&lt;/a&gt; with the creator of Immich on the Self-Hosted podcast.&lt;/p&gt;
+&lt;p&gt;The goal of this post is to cover how I set this up and some of the obstacles I faced in the process.&lt;/p&gt;
+&lt;h1 id=&#34;immich-architecture-and-storage&#34;&gt;Immich Architecture and Storage&lt;/h1&gt;
+&lt;p&gt;There wasn&amp;rsquo;t much to plan out before deploying Immich. The main pain point came with respect to getting Postgres running up on my cluster prior to deploying Immich which I&amp;rsquo;ll cover more below.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Index Condition Pushdown Optimization in MySQL</title>
+      <link>http://localhost:1313/posts/13-mysql-icp/</link>
+      <pubDate>Mon, 02 Jun 2025 21:56:17 -0400</pubDate>
+      <guid>http://localhost:1313/posts/13-mysql-icp/</guid>
+      <description>&lt;h1 id=&#34;big-idea&#34;&gt;Big Idea&lt;/h1&gt;
+&lt;p&gt;Getting under the hood of database implementations is becoming an area of growing interest for me. Early in my career, I was always content with SQL as an interface to a datastore that &amp;ldquo;just works.&amp;rdquo; That is, until it doesn&amp;rsquo;t anymore. It&amp;rsquo;s at those points that I am now being pushed to understand why a particular database implementation has certain behavioral characteristics in different circumstances. Further, I have never crossed paths with a professional DBA and often feel like there&amp;rsquo;s a whole sphere of mystery for me here. As I plunge these depths for the first time, however, I find many of the same interesting aspects of design and layering that have made K8s of interest to me.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>An Introduction to Async Programming in Python</title>
+      <link>http://localhost:1313/posts/12-python-async/</link>
+      <pubDate>Sat, 03 May 2025 15:24:28 -0400</pubDate>
+      <guid>http://localhost:1313/posts/12-python-async/</guid>
+      <description>&lt;h1 id=&#34;big-idea&#34;&gt;Big Idea&lt;/h1&gt;
+&lt;p&gt;In this post I want to capture some introductory notes to async programming in Python. I want to capture the motivation for async programming, some examples of how async implemented in Python via the high-level apis of Python&amp;rsquo;s stdlib async programming module: &lt;code&gt;asyncio&lt;/code&gt;, and finally I want to explore the mechanics of the event loop which enable async programming.&lt;/p&gt;
+&lt;h1 id=&#34;motivation-the-problem-of-io-bound-programs&#34;&gt;Motivation: The Problem of IO Bound Programs&lt;/h1&gt;
+&lt;p&gt;The goal of Python&amp;rsquo;s asyncio is module is improving the efficieny of IO bound programs. To understand what that means we need to understand the characteristics and the inefficiency of IO bound programs in the absennce of async programming apis.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Making my K8s Control Plane HA</title>
       <link>http://localhost:1313/posts/11-ha-k8s/</link>
       <pubDate>Sun, 23 Feb 2025 21:10:27 -0500</pubDate>
       <guid>http://localhost:1313/posts/11-ha-k8s/</guid>
       <description>&lt;h1 id=&#34;big-idea&#34;&gt;Big Idea&lt;/h1&gt;
 &lt;p&gt;For a while the K8s cluster in my homelab has been in the precarious situation of only having a single master node. This has bitten me a couple of times when the master node (i.e the &amp;ldquo;server node&amp;rdquo; in k3s) has been snafu&amp;rsquo;ed.&lt;/p&gt;
 &lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;./images/meme.png&#34; alt=&#34;meme&#34;  /&gt;
-&lt;/p&gt;</description>
+&lt;/p&gt;
+&lt;p&gt;Now that I have compute available on my proxmox server, I want to take the time to virtualize two additional master nodes. Doing this will require understanding a few things at the outset:&lt;/p&gt;</description>
     </item>
     <item>
       <title>Tenets of Engineering</title>
@@ -47,6 +78,14 @@
 &lt;br&gt;
 &lt;img loading=&#34;lazy&#34; src=&#34;./images/url_shortener.svg#wide&#34; alt=&#34;URL Shortener&#34;  /&gt;
 &lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Distributed Concensus: Raft</title>
+      <link>http://localhost:1313/posts/09-raft/</link>
+      <pubDate>Sun, 12 Jan 2025 10:58:42 -0500</pubDate>
+      <guid>http://localhost:1313/posts/09-raft/</guid>
+      <description>&lt;h1 id=&#34;big-idea&#34;&gt;Big Idea&lt;/h1&gt;
+&lt;p&gt;With the addition of a Proxmox server to my homelab I have been planning to scale out the control plane of my k3s cluster by virtualizing an additional two master nodes for a HA set up. I was aware that this would involve replicated state in my etcd backed control plane and that etcd itself relies on the Raft concensus algorithm. For this reason, I decided to take a deeper dive into the inner workings of Raft.&lt;/p&gt;</description>
     </item>
     <item>
       <title>ZFS: A Primer</title>

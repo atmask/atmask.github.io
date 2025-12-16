@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>SMB on Ben Mask</title>
+    <link>http://localhost:1313/tags/smb/</link>
+    <description>Recent content in SMB on Ben Mask</description>
+    <generator>Hugo -- 0.152.2</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 14 Dec 2025 22:43:07 -0500</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/smb/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Immich: Up &amp; Running</title>
+      <link>http://localhost:1313/posts/14-immich/</link>
+      <pubDate>Sun, 14 Dec 2025 22:43:07 -0500</pubDate>
+      <guid>http://localhost:1313/posts/14-immich/</guid>
+      <description>&lt;h1 id=&#34;overview&#34;&gt;Overview&lt;/h1&gt;
+&lt;p&gt;I recently started hosting &lt;a href=&#34;https://github.com/immich-app&#34;&gt;Immich&lt;/a&gt; on my homelab. If you&amp;rsquo;re not familiar with Immich, it is a self-hosted Google Photos replacement.
+If you want to learn more I highly reccomend giving a listen to &lt;a href=&#34;https://selfhosted.show/110?t=1198&#34;&gt;this podcast interview&lt;/a&gt; with the creator of Immich on the Self-Hosted podcast.&lt;/p&gt;
+&lt;p&gt;The goal of this post is to cover how I set this up and some of the obstacles I faced in the process.&lt;/p&gt;
+&lt;h1 id=&#34;immich-architecture-and-storage&#34;&gt;Immich Architecture and Storage&lt;/h1&gt;
+&lt;p&gt;There wasn&amp;rsquo;t much to plan out before deploying Immich. The main pain point came with respect to getting Postgres running up on my cluster prior to deploying Immich which I&amp;rsquo;ll cover more below.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

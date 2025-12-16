@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>DBA on Ben Mask</title>
+    <link>http://localhost:1313/tags/dba/</link>
+    <description>Recent content in DBA on Ben Mask</description>
+    <generator>Hugo -- 0.152.2</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 02 Jun 2025 21:56:17 -0400</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/dba/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Index Condition Pushdown Optimization in MySQL</title>
+      <link>http://localhost:1313/posts/13-mysql-icp/</link>
+      <pubDate>Mon, 02 Jun 2025 21:56:17 -0400</pubDate>
+      <guid>http://localhost:1313/posts/13-mysql-icp/</guid>
+      <description>&lt;h1 id=&#34;big-idea&#34;&gt;Big Idea&lt;/h1&gt;
+&lt;p&gt;Getting under the hood of database implementations is becoming an area of growing interest for me. Early in my career, I was always content with SQL as an interface to a datastore that &amp;ldquo;just works.&amp;rdquo; That is, until it doesn&amp;rsquo;t anymore. It&amp;rsquo;s at those points that I am now being pushed to understand why a particular database implementation has certain behavioral characteristics in different circumstances. Further, I have never crossed paths with a professional DBA and often feel like there&amp;rsquo;s a whole sphere of mystery for me here. As I plunge these depths for the first time, however, I find many of the same interesting aspects of design and layering that have made K8s of interest to me.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

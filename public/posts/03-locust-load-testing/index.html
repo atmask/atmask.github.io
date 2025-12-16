@@ -275,9 +275,9 @@ I was recently tasked with configuring automated load tests to validate the heal
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AuthenticatedUser</span>(HttpUser):
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self, user_auth_config: UserAuthConfig, <span style="color:#f92672">*</span>args, <span style="color:#f92672">**</span>kwargs):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, user_auth_config: UserAuthConfig, <span style="color:#f92672">*</span>args, <span style="color:#f92672">**</span>kwargs):
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>_user_auth_config <span style="color:#f92672">=</span> user_auth_config
-</span></span><span style="display:flex;"><span>        super()<span style="color:#f92672">.</span>__init__(<span style="color:#f92672">*</span>args, <span style="color:#f92672">**</span>kwargs)
+</span></span><span style="display:flex;"><span>        super()<span style="color:#f92672">.</span><span style="color:#a6e22e">__init__</span>(<span style="color:#f92672">*</span>args, <span style="color:#f92672">**</span>kwargs)
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">on_start</span>(self):
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;&#39;&#39;Locust call on_start when a simulated user starts running&#39;&#39;&#39;</span>
@@ -341,10 +341,10 @@ I was recently tasked with configuring automated load tests to validate the heal
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TokenAuthUser</span>(IAuthUser):
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self, user_auth_config: UserAuthConfig, <span style="color:#f92672">*</span>args, <span style="color:#f92672">**</span>kwargs):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, user_auth_config: UserAuthConfig, <span style="color:#f92672">*</span>args, <span style="color:#f92672">**</span>kwargs):
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>_user_auth_config <span style="color:#f92672">=</span> user_auth_config
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>_token <span style="color:#f92672">=</span> <span style="color:#66d9ef">None</span>
-</span></span><span style="display:flex;"><span>        super()<span style="color:#f92672">.</span>__init__(<span style="color:#f92672">*</span>args, <span style="color:#f92672">**</span>kwargs)
+</span></span><span style="display:flex;"><span>        super()<span style="color:#f92672">.</span><span style="color:#a6e22e">__init__</span>(<span style="color:#f92672">*</span>args, <span style="color:#f92672">**</span>kwargs)
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_authenticate_user</span>(self):
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;&#39;&#39;Implement the authentication method using basic auth&#39;&#39;&#39;</span>
@@ -375,15 +375,15 @@ I was recently tasked with configuring automated load tests to validate the heal
 </span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> settings <span style="color:#f92672">import</span> user_auth_config
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">UnauthenticatedUser</span>(unauthenticatedUser<span style="color:#f92672">.</span>UnauthenticatedUser):
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self, environment):
-</span></span><span style="display:flex;"><span>        super()<span style="color:#f92672">.</span>__init__(environment)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, environment):
+</span></span><span style="display:flex;"><span>        super()<span style="color:#f92672">.</span><span style="color:#a6e22e">__init__</span>(environment)
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AuthenticatedUser</span>(authenticatedUser<span style="color:#f92672">.</span>AuthenticatedUser):
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self, environment):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, environment):
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;&#39;&#39; Get the user_auth_config object from settings.py and pass via super&#39;&#39;&#39;</span>
-</span></span><span style="display:flex;"><span>        super()<span style="color:#f92672">.</span>__init__(user_auth_config, environment)
+</span></span><span style="display:flex;"><span>        super()<span style="color:#f92672">.</span><span style="color:#a6e22e">__init__</span>(user_auth_config, environment)
 </span></span></code></pre></div><blockquote>
 <p><strong>Note:</strong> Locust will only pick up and run classes defined in the locustfile (i.e. not instances of classes so create a subclass of each that is configured). You will notice that both of these classes only take <code>self</code> and <code>environment</code> as constructor args. The AuthenticatedUser class, however, passes a <code>user_auth_config</code> object to its parent when initialized.</p>
 </blockquote>

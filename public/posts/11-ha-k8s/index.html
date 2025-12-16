@@ -5,12 +5,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="noindex, nofollow">
-<title>Making my K8s Control Plan HA | Ben Mask</title>
+<title>Making my K8s Control Plane HA | Ben Mask</title>
 <meta name="keywords" content="SRE, Kubernetes, HA, homelab, etcd">
 <meta name="description" content="Big Idea
 For a while the K8s cluster in my homelab has been in the precarious situation of only having a single master node. This has bitten me a couple of times when the master node (i.e the &ldquo;server node&rdquo; in k3s) has been snafu&rsquo;ed.
 
-">
+
+Now that I have compute available on my proxmox server, I want to take the time to virtualize two additional master nodes. Doing this will require understanding a few things at the outset:">
 <meta name="author" content="">
 <link rel="canonical" href="http://localhost:1313/posts/11-ha-k8s/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.fc220c15db4aef0318bbf30adc45d33d4d7c88deff3238b23eb255afdc472ca6.css" integrity="sha256-/CIMFdtK7wMYu/MK3EXTPU18iN7/MjiyPrJVr9xHLKY=" rel="preload stylesheet" as="style">
@@ -125,9 +126,9 @@ For a while the K8s cluster in my homelab has been in the precarious situation o
   <header class="post-header">
     <div class="breadcrumbs"><a href="http://localhost:1313/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/posts/">Posts</a></div>
     <h1 class="post-title entry-hint-parent">
-      Making my K8s Control Plan HA
+      Making my K8s Control Plane HA
     </h1>
-    <div class="post-meta"><span title='2025-02-23 21:10:27 -0500 EST'>February 23, 2025</span>&nbsp;·&nbsp;1 min
+    <div class="post-meta"><span title='2025-02-23 21:10:27 -0500 EST'>February 23, 2025</span>&nbsp;·&nbsp;3 min
 
 </div>
   </header> 
@@ -135,7 +136,31 @@ For a while the K8s cluster in my homelab has been in the precarious situation o
 <p>For a while the K8s cluster in my homelab has been in the precarious situation of only having a single master node. This has bitten me a couple of times when the master node (i.e the &ldquo;server node&rdquo; in k3s) has been snafu&rsquo;ed.</p>
 <p><img loading="lazy" src="./images/meme.png" alt="meme"  />
 </p>
-
+<p>Now that I have compute available on my proxmox server, I want to take the time to virtualize two additional master nodes. Doing this will require understanding a few things at the outset:</p>
+<ul>
+<li>Since the datastore for my cluster is etcd, I will need two additional nodes for a total of three in order to meet quorum. This is a requirement of Raft, the concensus algorithm used by etcd.</li>
+<li>I get a bit closer to a HA configutration with the addition of these nodes, however, two of them being on one machine is less than ideal. With three master nodes, the cluster can handle the failure of one master node. This means that the failure of my physical master node (bondsmith) or the failure of one virtualized node will not result in downtime but the failure of my proxmox server will bring the cluster offline.</li>
+</ul>
+<blockquote>
+<p>Some might object that I could convert another of my Raspberry pi nodes into a third isolated master node. While this is a good observation, I have chose not to since my other RPi nodes are using SD cards for storage which could not manage the IO of the etcd cluster for long. My single RPi node that currently acts as the master node has an SSD volume for storage.</p>
+</blockquote>
+<h1 id="exploring-etcd">Exploring etcd<a hidden class="anchor" aria-hidden="true" href="#exploring-etcd">#</a></h1>
+<p>Before getting started with adding the addition of the the two new master nodes I want to step back and explore etcd a bit. To do this I will add instructions for installing <code>etcdctl</code>, a cli tool for managing etcd clusters. It is wirth noting that thew following instructions will be specific to k3s on my installation.</p>
+<blockquote>
+<p>By default, <code>etcdctl</code> is not installed or wrapped by k3s so you will need to manually install it.</p>
+</blockquote>
+<p>First, you will want to find what version of etcd is being used on your k3s cluster in order to install a compatible version of <code>etcdctl</code>. To do this, we will need to check the version of k3s (<code>k3s version</code>) and then cross-reference the <a href="https://docs.k3s.io/release-notes/v1.32.X">k3s release notes</a> to see what version of etcd is installed.</p>
+<p>Second, you will need to install <code>etcdctl</code>. Be mindful of the architecture of the machine you are installing <code>etcdctl</code> onto so that you install the correct binary.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ETCD_VERSION<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;v3.5.5&#34;</span>
+</span></span><span style="display:flex;"><span>ARCH<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;amd64&#34;</span> <span style="color:#75715e"># or arm64 for ARM </span>
+</span></span><span style="display:flex;"><span>ETCD_URL<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;https://github.com/etcd-io/etcd/releases/download/</span><span style="color:#e6db74">${</span>ETCD_VERSION<span style="color:#e6db74">}</span><span style="color:#e6db74">/etcd-</span><span style="color:#e6db74">${</span>ETCD_VERSION<span style="color:#e6db74">}</span><span style="color:#e6db74">-linux-</span><span style="color:#e6db74">${</span>ARCH<span style="color:#e6db74">}</span><span style="color:#e6db74">.tar.gz&#34;</span>
+</span></span><span style="display:flex;"><span>curl -sL <span style="color:#e6db74">${</span>ETCD_URL<span style="color:#e6db74">}</span> | sudo tar -zxv --strip-components<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> -C /usr/local/bin
+</span></span></code></pre></div><p>Third, you can now execute commands against etcd by passing the necessary flags for authentication:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo etcdctl version <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --cacert<span style="color:#f92672">=</span>/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --cert<span style="color:#f92672">=</span>/var/lib/rancher/k3s/server/tls/etcd/client.crt <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --key<span style="color:#f92672">=</span>/var/lib/rancher/k3s/server/tls/etcd/client.key
+</span></span></code></pre></div>
 
   </div>
 
@@ -148,6 +173,11 @@ For a while the K8s cluster in my homelab has been in the precarious situation o
       <li><a href="http://localhost:1313/tags/etcd/">Etcd</a></li>
     </ul>
 <nav class="paginav">
+  <a class="prev" href="http://localhost:1313/posts/12-python-async/">
+    <span class="title">« Prev</span>
+    <br>
+    <span>An Introduction to Async Programming in Python</span>
+  </a>
   <a class="next" href="http://localhost:1313/posts/10-tenets/">
     <span class="title">Next »</span>
     <br>
