@@ -7,7 +7,7 @@ draft: false
 ---
 # Big Idea
 
-In part 1 of this post, I covered the basics of getting started building my Kubernetes cluster on Raspberry Pis. In particular, I laid out my goals and requirements, the build list, the network topology and setup, and the installation of K3s on each of the nodes. I recommend going back and checking out that post first if you haven't already ([Part 1: Building a Bare-metal Kubernetes Cluster on Raspberry Pis](https://blog.fallow.app/posts/02-bare-metal-k3s-on-rpi-part-1/)).
+In part 1 of this post, I covered the basics of getting started building my Kubernetes cluster on Raspberry Pis. In particular, I laid out my goals and requirements, the build list, the network topology and setup, and the installation of K3s on each of the nodes. I recommend going back and checking out that post first if you haven't already ([Part 1: Building a Bare-metal Kubernetes Cluster on Raspberry Pis](https://benmask.com/posts/02-bare-metal-k3s-on-rpi-part-1/)).
 
 A summary from that post is that I created the subnet `10.100.0.0/24` on my home network for the cluster network. Using DHCP I reserved a small address space of IPs for my nodes and statically assigned the node IPs from within that range. Of my four RPis, three will be part of the cluster. The fourth node will not run as part of the cluster but will instead run a TailScale subnet router and Pi-Hole for DNS resolution on the cluster network.
 
