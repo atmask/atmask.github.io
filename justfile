@@ -6,3 +6,6 @@ create post-name:
     @echo "Creating new Hugo post: {{post-name}}"
     mkdir -p content/posts/{{post-name}}
     hugo new content content/posts/{{post-name}}/index.md 
+
+serve:
+  hugo serve

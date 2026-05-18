@@ -3,12 +3,48 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://localhost:1313/</loc>
+    <lastmod>2026-05-17T12:44:43-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/colima/</loc>
+    <lastmod>2026-05-17T12:44:43-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/containers/</loc>
+    <lastmod>2026-05-17T12:44:43-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/docker/</loc>
+    <lastmod>2026-05-17T12:44:43-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/lima/</loc>
+    <lastmod>2026-05-17T12:44:43-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/</loc>
+    <lastmod>2026-05-17T12:44:43-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/16-colima/</loc>
+    <lastmod>2026-05-17T12:44:43-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/</loc>
+    <lastmod>2026-05-17T12:44:43-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/concepts/</loc>
+    <lastmod>2025-12-20T12:44:43-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/creativity/</loc>
+    <lastmod>2025-12-20T12:44:43-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/design/</loc>
     <lastmod>2025-12-20T12:44:43-05:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/posts/15-steph-ango/</loc>
     <lastmod>2025-12-20T12:44:43-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/</loc>
+    <loc>http://localhost:1313/tags/obsidian/</loc>
+    <lastmod>2025-12-20T12:44:43-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/review/</loc>
+    <lastmod>2025-12-20T12:44:43-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/steph-ango/</loc>
     <lastmod>2025-12-20T12:44:43-05:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/homelab/</loc>
@@ -33,9 +69,6 @@
     <lastmod>2025-12-14T22:43:07-05:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/storage/</loc>
-    <lastmod>2025-12-14T22:43:07-05:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/</loc>
     <lastmod>2025-12-14T22:43:07-05:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/architecture/</loc>

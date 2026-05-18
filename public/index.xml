@@ -6,8 +6,16 @@
     <description>Recent content on Ben Mask</description>
     <generator>Hugo -- 0.152.2</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 20 Dec 2025 12:44:43 -0500</lastBuildDate>
+    <lastBuildDate>Sun, 17 May 2026 12:44:43 -0500</lastBuildDate>
     <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Replacing Docker Desktop with Colima</title>
+      <link>http://localhost:1313/posts/16-colima/</link>
+      <pubDate>Sun, 17 May 2026 12:44:43 -0500</pubDate>
+      <guid>http://localhost:1313/posts/16-colima/</guid>
+      <description>&lt;h1 id=&#34;overview&#34;&gt;Overview&lt;/h1&gt;
+&lt;p&gt;I&amp;rsquo;ve recently been setting up my new machine. As I&amp;rsquo;ve been more exposed to &lt;a href=&#34;https://github.com/nixos/nix&#34;&gt;Nix&lt;/a&gt; and &lt;a href=&#34;https://flox.dev/&#34;&gt;Flox&lt;/a&gt; I&amp;rsquo;ve been steering away from local containerization where possible, however, that is not always an option. Part of me has been hesitant to install Docker Desktop to my new laptop. Some of that is just my own leanings. I don&amp;rsquo;t want to be asked to sign in to things I shouldn&amp;rsquo;t need to, I don&amp;rsquo;t enjoy apps which proliferate large amounts of data in my system leaving me trying to scour and clean up when I am ready to remove those apps. In light of that I started looking for a better alternative.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Discovering Steph Ango</title>
       <link>http://localhost:1313/posts/15-steph-ango/</link>
@@ -146,7 +154,7 @@ If you want to learn more I highly reccomend giving a listen to &lt;a href=&#34;
       <pubDate>Sun, 21 Jul 2024 20:30:55 -0400</pubDate>
       <guid>http://localhost:1313/posts/02-bare-metal-k3s-on-rpi-part-2/</guid>
       <description>&lt;h1 id=&#34;big-idea&#34;&gt;Big Idea&lt;/h1&gt;
-&lt;p&gt;In part 1 of this post, I covered the basics of getting started building my Kubernetes cluster on Raspberry Pis. In particular, I laid out my goals and requirements, the build list, the network topology and setup, and the installation of K3s on each of the nodes. I recommend going back and checking out that post first if you haven&amp;rsquo;t already (&lt;a href=&#34;https://blog.fallow.app/posts/02-bare-metal-k3s-on-rpi-part-1/&#34;&gt;Part 1: Building a Bare-metal Kubernetes Cluster on Raspberry Pis&lt;/a&gt;).&lt;/p&gt;</description>
+&lt;p&gt;In part 1 of this post, I covered the basics of getting started building my Kubernetes cluster on Raspberry Pis. In particular, I laid out my goals and requirements, the build list, the network topology and setup, and the installation of K3s on each of the nodes. I recommend going back and checking out that post first if you haven&amp;rsquo;t already (&lt;a href=&#34;https://benmask.com/posts/02-bare-metal-k3s-on-rpi-part-1/&#34;&gt;Part 1: Building a Bare-metal Kubernetes Cluster on Raspberry Pis&lt;/a&gt;).&lt;/p&gt;</description>
     </item>
     <item>
       <title>Part 1: Building a Bare-metal Kubernetes Cluster on Raspberry Pis</title>
