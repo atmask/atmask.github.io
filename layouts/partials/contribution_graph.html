@@ -1,0 +1,80 @@
+{{- /* Build a date -> []Page map of posts */ -}}
+{{- $posts := where site.RegularPages "Section" "posts" -}}
+{{- $byDate := dict -}}
+{{- range $posts -}}
+  {{- $key := .Date.Format "2006-01-02" -}}
+  {{- $existing := index $byDate $key -}}
+  {{- if $existing -}}
+    {{- $byDate = merge $byDate (dict $key (append . $existing)) -}}
+  {{- else -}}
+    {{- $byDate = merge $byDate (dict $key (slice .)) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* End on the Saturday of the current week; show 53 weeks total (~1 year) */ -}}
+{{- $today := now -}}
+{{- $dowToday := int (printf "%d" $today.Weekday) -}}
+{{- $endDate := $today.AddDate 0 0 (sub 6 $dowToday) -}}
+{{- $startDate := $endDate.AddDate 0 0 -370 -}}
+
+<div class="contrib-graph" aria-label="Posts in the last year">
+  <h3 class="contrib-title">Recent posts</h3>
+  <div class="contrib-months">
+    {{- range $w := seq 0 52 -}}
+      {{- $weekStart := $startDate.AddDate 0 0 (mul $w 7) -}}
+      {{- $weekEnd := $weekStart.AddDate 0 0 6 -}}
+      {{- if or (eq $weekStart.Day 1) (ne ($weekStart.Format "Jan") ($weekEnd.Format "Jan")) -}}
+        <span class="contrib-month" style="grid-column: {{ add $w 1 }}">{{ $weekEnd.Format "Jan" }}</span>
+      {{- end -}}
+    {{- end -}}
+  </div>
+  <div class="contrib-body">
+    <div class="contrib-days">
+      <span style="grid-row: 2">Mon</span>
+      <span style="grid-row: 4">Wed</span>
+      <span style="grid-row: 6">Fri</span>
+    </div>
+    <div class="contrib-grid">
+      {{- range $w := seq 0 52 -}}
+        <div class="contrib-week">
+          {{- range $d := seq 0 6 -}}
+            {{- $offset := add (mul $w 7) $d -}}
+            {{- $date := $startDate.AddDate 0 0 $offset -}}
+            {{- $key := $date.Format "2006-01-02" -}}
+            {{- $dayPosts := index $byDate $key -}}
+            {{- $count := 0 -}}
+            {{- with $dayPosts }}{{ $count = len . }}{{ end -}}
+            {{- $level := 0 -}}
+            {{- if ge $count 1 }}{{ $level = 1 }}{{ end -}}
+            {{- if ge $count 2 }}{{ $level = 2 }}{{ end -}}
+            {{- if ge $count 3 }}{{ $level = 3 }}{{ end -}}
+            {{- if ge $count 4 }}{{ $level = 4 }}{{ end -}}
+            {{- $future := $date.After $today -}}
+            {{- $label := "" -}}
+            {{- if eq $count 0 -}}
+              {{- $label = printf "No posts — %s" ($date.Format "Mon, Jan 2") -}}
+            {{- else if eq $count 1 -}}
+              {{- $label = printf "%s — %s" (index $dayPosts 0).Title ($date.Format "Jan 2, 2006") -}}
+            {{- else -}}
+              {{- $label = printf "%d posts — %s" $count ($date.Format "Mon, Jan 2, 2006") -}}
+            {{- end -}}
+            {{- if and $dayPosts (not $future) -}}
+              <a href="{{ (index $dayPosts 0).RelPermalink }}" class="contrib-day contrib-link" data-level="{{ $level }}" data-label="{{ $label }}" aria-label="{{ $label }}"></a>
+            {{- else -}}
+              <span class="contrib-day{{ if $future }} contrib-future{{ end }}" data-level="{{ $level }}" data-label="{{ $label }}" aria-label="{{ $label }}"></span>
+            {{- end -}}
+          {{- end -}}
+        </div>
+      {{- end -}}
+    </div>
+  </div>
+  <div class="contrib-legend">
+    <span>Less</span>
+    <span class="contrib-day" data-level="0"></span>
+    <span class="contrib-day" data-level="1"></span>
+    <span class="contrib-day" data-level="2"></span>
+    <span class="contrib-day" data-level="3"></span>
+    <span class="contrib-day" data-level="4"></span>
+    <span>More</span>
+  </div>
+</div>
