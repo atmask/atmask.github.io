@@ -21,7 +21,7 @@
   <h3 class="contrib-title">Recent posts</h3>
   <div class="contrib-months">
     {{- range $w := seq 0 52 -}}
-      {{- $weekStart := $startDate.AddDate 0 0 (mul $w 7) -}}
+      {{- $weekStart := $startDate.AddDate 0 0 (int (mul $w 7)) -}}
       {{- $weekEnd := $weekStart.AddDate 0 0 6 -}}
       {{- if or (eq $weekStart.Day 1) (ne ($weekStart.Format "Jan") ($weekEnd.Format "Jan")) -}}
         <span class="contrib-month" style="grid-column: {{ add $w 1 }}">{{ $weekEnd.Format "Jan" }}</span>
@@ -38,7 +38,7 @@
       {{- range $w := seq 0 52 -}}
         <div class="contrib-week">
           {{- range $d := seq 0 6 -}}
-            {{- $offset := add (mul $w 7) $d -}}
+            {{- $offset := int (add (mul $w 7) $d) -}}
             {{- $date := $startDate.AddDate 0 0 $offset -}}
             {{- $key := $date.Format "2006-01-02" -}}
             {{- $dayPosts := index $byDate $key -}}
