@@ -14,7 +14,7 @@
 {{- /* End on the Saturday of the current week; show 53 weeks total (~1 year) */ -}}
 {{- $today := now -}}
 {{- $dowToday := int (printf "%d" $today.Weekday) -}}
-{{- $endDate := $today.AddDate 0 0 (sub 6 $dowToday) -}}
+{{- $endDate := $today.AddDate 0 0 (int (sub 6 $dowToday)) -}}
 {{- $startDate := $endDate.AddDate 0 0 -370 -}}
 
 <div class="contrib-graph" aria-label="Posts in the last year">
