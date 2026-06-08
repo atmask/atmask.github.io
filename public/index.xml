@@ -6,8 +6,25 @@
     <description>Recent content on Ben Mask</description>
     <generator>Hugo -- 0.152.2</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 17 May 2026 12:44:43 -0500</lastBuildDate>
+    <lastBuildDate>Mon, 08 Jun 2026 10:26:32 -0400</lastBuildDate>
     <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Enabling experimental mode on Nix</title>
+      <link>http://localhost:1313/posts/18-nix-experimental/</link>
+      <pubDate>Mon, 08 Jun 2026 10:26:32 -0400</pubDate>
+      <guid>http://localhost:1313/posts/18-nix-experimental/</guid>
+      <description>&lt;h1 id=&#34;overview&#34;&gt;Overview&lt;/h1&gt;
+&lt;p&gt;Here&amp;rsquo;s a short one! Ever run into the following with Nix?&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;error: experimental Nix feature &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;nix-command&amp;#39;&lt;/span&gt; is disabled; add &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;--extra-experimental-features nix-command&amp;#39;&lt;/span&gt; to enable it
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Let&amp;rsquo;s talk about it&lt;/p&gt;
+&lt;h1 id=&#34;flakes-are-experimental&#34;&gt;Flakes are experimental?&lt;/h1&gt;
+&lt;p&gt;So flakes are experimental? Yes, in Nix flakes are still gated as experimental. Want to get around it quickly?&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nix --extra-experimental-features &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;nix-command flakes&amp;#39;&lt;/span&gt; flake check
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;For a longer term ease of use you are better off just enabling this permanently:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mkdir -p ~/.config/nix &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;  echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;experimental-features = nix-command flakes&amp;#39;&lt;/span&gt; &amp;gt;&amp;gt; ~/.config/nix/nix.conf
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
     <item>
       <title>Replacing Docker Desktop with Colima</title>
       <link>http://localhost:1313/posts/16-colima/</link>

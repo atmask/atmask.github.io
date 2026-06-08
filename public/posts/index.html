@@ -254,6 +254,22 @@
 
 <article class="post-entry"> 
   <header class="entry-header">
+    <h2 class="entry-hint-parent">Enabling experimental mode on Nix
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Overview Here’s a short one! Ever run into the following with Nix?
+error: experimental Nix feature &#39;nix-command&#39; is disabled; add &#39;--extra-experimental-features nix-command&#39; to enable it Let’s talk about it
+Flakes are experimental? So flakes are experimental? Yes, in Nix flakes are still gated as experimental. Want to get around it quickly?
+nix --extra-experimental-features &#39;nix-command flakes&#39; flake check For a longer term ease of use you are better off just enabling this permanently:
+mkdir -p ~/.config/nix &amp;&amp; \ echo &#39;experimental-features = nix-command flakes&#39; &gt;&gt; ~/.config/nix/nix.conf </p>
+  </div>
+  <footer class="entry-footer"><span title='2026-06-08 10:26:32 -0400 EDT'>June 8, 2026</span>&nbsp;·&nbsp;1 min</footer>
+  <a class="entry-link" aria-label="post link to Enabling experimental mode on Nix" href="http://localhost:1313/posts/18-nix-experimental/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
     <h2 class="entry-hint-parent">Replacing Docker Desktop with Colima
     </h2>
   </header>
@@ -373,19 +389,6 @@ Once I have these backups in places the 3-2-1 rule will be satisfied:
   </div>
   <footer class="entry-footer"><span title='2025-01-13 20:49:46 -0500 EST'>January 13, 2025</span>&nbsp;·&nbsp;1 min</footer>
   <a class="entry-link" aria-label="post link to Visual: URL Shortener" href="http://localhost:1313/posts/08-url-shortener/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Distributed Concensus: Raft
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Big Idea With the addition of a Proxmox server to my homelab I have been planning to scale out the control plane of my k3s cluster by virtualizing an additional two master nodes for a HA set up. I was aware that this would involve replicated state in my etcd backed control plane and that etcd itself relies on the Raft concensus algorithm. For this reason, I decided to take a deeper dive into the inner workings of Raft.
-...</p>
-  </div>
-  <footer class="entry-footer"><span title='2025-01-12 10:58:42 -0500 EST'>January 12, 2025</span>&nbsp;·&nbsp;5 min</footer>
-  <a class="entry-link" aria-label="post link to Distributed Concensus: Raft" href="http://localhost:1313/posts/09-raft/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
