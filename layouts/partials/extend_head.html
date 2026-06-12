@@ -7,10 +7,25 @@
     --accent: #b85c38;
     --accent-soft: #d9846a;
     --font-serif: "Instrument Serif", Georgia, serif;
+    /* Darken light-mode tertiary so muted UI (nav links, dates, hero links) stays readable */
+    --tertiary: #8a8a8a;
+    --border: #e2e2e2;
   }
-  .dark { --accent: #e08163; --accent-soft: #b85c38; }
+  /* Keep the contrib graph's empty cells light — they shouldn't compete with the green cells */
+  :root .contrib-day { --c0: #ebedf0; }
+  .dark {
+    --accent: #e08163;
+    --accent-soft: #b85c38;
+    /* Flat black dark palette */
+    --theme: #111111;
+    --entry: #1a1a1a;
+    --code-bg: #1d1d1d;
+    --border: #262626;
+    --tertiary: #4a4a4a;
+  }
+  .dark.list { background: var(--theme); }
 
-  /* === Nav (quieter, mo.io-style) === */
+  /* === Nav (quieter, minimal) === */
   .header { border-bottom: none; }
   .nav { padding: 18px var(--gap, 24px) !important; }
   .nav .logo { align-items: center !important; }
@@ -43,7 +58,7 @@
   #theme-toggle svg { width: 16px; height: 16px; display: block; }
   .logo-switches { align-items: center !important; margin: 0 0 0 4px !important; }
 
-  /* === Recent posts list (homepage) — mo.io style === */
+  /* === Recent posts list (homepage) — compact === */
   body.list .post-entry,
   body.list .first-entry:not(.home-info) {
     background: transparent !important;

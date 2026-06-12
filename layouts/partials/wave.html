@@ -1,5 +1,4 @@
-{{- /* Animated flow lines, inspired by mo.io.
-       Pass position="top" or position="bottom" via dict. */ -}}
+{{- /* Animated flow lines. Pass position="top" or position="bottom" via dict. */ -}}
 {{- $pos := .position | default "top" -}}
 {{- $isBottom := eq $pos "bottom" -}}
 {{- $height := cond $isBottom 180 60 -}}
