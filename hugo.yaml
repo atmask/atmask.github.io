@@ -45,6 +45,8 @@ params:
     - { name: "Email", url: "mailto:benjaminajm@gmail.com" }
   favorites:
     - /posts/10-tenets/
+    - /posts/02-bare-metal-k3s-on-rpi-part-1/
+    - /posts/02-bare-metal-k3s-on-rpi-part-2/
     - /posts/15-steph-ango/
     - /posts/18-nix-experimental/
   socialIcons: # optional
