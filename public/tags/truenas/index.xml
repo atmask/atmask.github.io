@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>TrueNAS on Ben Mask</title>
-    <link>http://localhost:1313/tags/truenas/</link>
+    <link>https://benmask.com/tags/truenas/</link>
     <description>Recent content in TrueNAS on Ben Mask</description>
     <generator>Hugo -- 0.152.2</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 23 Jan 2025 19:30:52 -0500</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/truenas/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://benmask.com/tags/truenas/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>TrueNAS Backups &amp; Restore with B2</title>
-      <link>http://localhost:1313/posts/09-truenas-backups/</link>
+      <link>https://benmask.com/posts/09-truenas-backups/</link>
       <pubDate>Thu, 23 Jan 2025 19:30:52 -0500</pubDate>
-      <guid>http://localhost:1313/posts/09-truenas-backups/</guid>
+      <guid>https://benmask.com/posts/09-truenas-backups/</guid>
       <description>&lt;h1 id=&#34;big-idea&#34;&gt;Big Idea&lt;/h1&gt;
 &lt;p&gt;The goal of this post will be to capture the steps required for the backup and restore process of my TrueNAS server. Currenty, my TrueNAS server consists of two 4TB drives in a vdev with a RAID1 (Mirror) config. My goal is to back this up to Backblaze&amp;rsquo;s S3-compatible B2 storage and test recovery before migrating data out of my old 1TB SSD.&lt;/p&gt;
 &lt;blockquote&gt;

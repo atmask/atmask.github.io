@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Colima on Ben Mask</title>
-    <link>http://localhost:1313/tags/colima/</link>
+    <link>https://benmask.com/tags/colima/</link>
     <description>Recent content in Colima on Ben Mask</description>
     <generator>Hugo -- 0.152.2</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 17 May 2026 12:44:43 -0500</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/colima/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://benmask.com/tags/colima/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Replacing Docker Desktop with Colima</title>
-      <link>http://localhost:1313/posts/16-colima/</link>
+      <link>https://benmask.com/posts/16-colima/</link>
       <pubDate>Sun, 17 May 2026 12:44:43 -0500</pubDate>
-      <guid>http://localhost:1313/posts/16-colima/</guid>
+      <guid>https://benmask.com/posts/16-colima/</guid>
       <description>&lt;h1 id=&#34;overview&#34;&gt;Overview&lt;/h1&gt;
 &lt;p&gt;I&amp;rsquo;ve recently been setting up my new machine. As I&amp;rsquo;ve been more exposed to &lt;a href=&#34;https://github.com/nixos/nix&#34;&gt;Nix&lt;/a&gt; and &lt;a href=&#34;https://flox.dev/&#34;&gt;Flox&lt;/a&gt; I&amp;rsquo;ve been steering away from local containerization where possible, however, that is not always an option. Part of me has been hesitant to install Docker Desktop to my new laptop. Some of that is just my own leanings. I don&amp;rsquo;t want to be asked to sign in to things I shouldn&amp;rsquo;t need to, I don&amp;rsquo;t enjoy apps which proliferate large amounts of data in my system leaving me trying to scour and clean up when I am ready to remove those apps. In light of that I started looking for a better alternative.&lt;/p&gt;</description>
     </item>

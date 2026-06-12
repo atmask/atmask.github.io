@@ -2,25 +2,25 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>SRE on Ben Mask</title>
-    <link>http://localhost:1313/tags/sre/</link>
+    <link>https://benmask.com/tags/sre/</link>
     <description>Recent content in SRE on Ben Mask</description>
     <generator>Hugo -- 0.152.2</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 02 Jun 2025 21:56:17 -0400</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/sre/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://benmask.com/tags/sre/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Index Condition Pushdown Optimization in MySQL</title>
-      <link>http://localhost:1313/posts/13-mysql-icp/</link>
+      <link>https://benmask.com/posts/13-mysql-icp/</link>
       <pubDate>Mon, 02 Jun 2025 21:56:17 -0400</pubDate>
-      <guid>http://localhost:1313/posts/13-mysql-icp/</guid>
+      <guid>https://benmask.com/posts/13-mysql-icp/</guid>
       <description>&lt;h1 id=&#34;big-idea&#34;&gt;Big Idea&lt;/h1&gt;
 &lt;p&gt;Getting under the hood of database implementations is becoming an area of growing interest for me. Early in my career, I was always content with SQL as an interface to a datastore that &amp;ldquo;just works.&amp;rdquo; That is, until it doesn&amp;rsquo;t anymore. It&amp;rsquo;s at those points that I am now being pushed to understand why a particular database implementation has certain behavioral characteristics in different circumstances. Further, I have never crossed paths with a professional DBA and often feel like there&amp;rsquo;s a whole sphere of mystery for me here. As I plunge these depths for the first time, however, I find many of the same interesting aspects of design and layering that have made K8s of interest to me.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Making my K8s Control Plane HA</title>
-      <link>http://localhost:1313/posts/11-ha-k8s/</link>
+      <link>https://benmask.com/posts/11-ha-k8s/</link>
       <pubDate>Sun, 23 Feb 2025 21:10:27 -0500</pubDate>
-      <guid>http://localhost:1313/posts/11-ha-k8s/</guid>
+      <guid>https://benmask.com/posts/11-ha-k8s/</guid>
       <description>&lt;h1 id=&#34;big-idea&#34;&gt;Big Idea&lt;/h1&gt;
 &lt;p&gt;For a while the K8s cluster in my homelab has been in the precarious situation of only having a single master node. This has bitten me a couple of times when the master node (i.e the &amp;ldquo;server node&amp;rdquo; in k3s) has been snafu&amp;rsquo;ed.&lt;/p&gt;
 &lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;./images/meme.png&#34; alt=&#34;meme&#34;  /&gt;
@@ -29,17 +29,17 @@
     </item>
     <item>
       <title>Tenets of Engineering</title>
-      <link>http://localhost:1313/posts/10-tenets/</link>
+      <link>https://benmask.com/posts/10-tenets/</link>
       <pubDate>Thu, 06 Feb 2025 21:07:51 -0500</pubDate>
-      <guid>http://localhost:1313/posts/10-tenets/</guid>
+      <guid>https://benmask.com/posts/10-tenets/</guid>
       <description>&lt;h1 id=&#34;big-idea&#34;&gt;Big Idea&lt;/h1&gt;
 &lt;p&gt;I am getting to the stage of my career now where I have started picking up guiding principles that guide my socio-technical endeavors. I am sure I will continue to learn more and add them here or come back revise these with more wisdom and insight but what I want to start here is a collection of tenets. These tenets are not implementation details or design patterns but are more like paradigms for how we relate to problems, the natural systems that emerge from people thrown into teams, and more.&lt;/p&gt;</description>
     </item>
     <item>
       <title>TrueNAS Backups &amp; Restore with B2</title>
-      <link>http://localhost:1313/posts/09-truenas-backups/</link>
+      <link>https://benmask.com/posts/09-truenas-backups/</link>
       <pubDate>Thu, 23 Jan 2025 19:30:52 -0500</pubDate>
-      <guid>http://localhost:1313/posts/09-truenas-backups/</guid>
+      <guid>https://benmask.com/posts/09-truenas-backups/</guid>
       <description>&lt;h1 id=&#34;big-idea&#34;&gt;Big Idea&lt;/h1&gt;
 &lt;p&gt;The goal of this post will be to capture the steps required for the backup and restore process of my TrueNAS server. Currenty, my TrueNAS server consists of two 4TB drives in a vdev with a RAID1 (Mirror) config. My goal is to back this up to Backblaze&amp;rsquo;s S3-compatible B2 storage and test recovery before migrating data out of my old 1TB SSD.&lt;/p&gt;
 &lt;blockquote&gt;
@@ -47,18 +47,18 @@
     </item>
     <item>
       <title>ZFS: A Primer</title>
-      <link>http://localhost:1313/posts/07-zfs-primer/</link>
+      <link>https://benmask.com/posts/07-zfs-primer/</link>
       <pubDate>Sun, 05 Jan 2025 21:20:26 -0500</pubDate>
-      <guid>http://localhost:1313/posts/07-zfs-primer/</guid>
+      <guid>https://benmask.com/posts/07-zfs-primer/</guid>
       <description>&lt;h1 id=&#34;big-idea&#34;&gt;Big Idea&lt;/h1&gt;
 &lt;p&gt;Zettabit File System (ZFS) is a file system that is very popular in the Homelab community for it&amp;rsquo;s powerful capabilities as a file system and volume manager. It is designed to ensure data integrity and scalbility. While I am not an expert in ZFS, I hope to create guide here that outlines some of the fundamantal concepts of ZFS that I can return to over time.&lt;/p&gt;
 &lt;p&gt;ZFS has a few key features that I will outline here:&lt;/p&gt;</description>
     </item>
     <item>
       <title>Load Testing Applications with Locust</title>
-      <link>http://localhost:1313/posts/03-locust-load-testing/</link>
+      <link>https://benmask.com/posts/03-locust-load-testing/</link>
       <pubDate>Mon, 22 Jul 2024 21:22:31 -0400</pubDate>
-      <guid>http://localhost:1313/posts/03-locust-load-testing/</guid>
+      <guid>https://benmask.com/posts/03-locust-load-testing/</guid>
       <description>&lt;h1 id=&#34;big-idea&#34;&gt;Big Idea&lt;/h1&gt;
 &lt;p&gt;I was recently tasked with configuring automated load tests to validate the health of a service under load and to identify bottlenecks and limits at which the service became overloaded. Up until this point, I had not worked first-hand with any load-testing frameworks. Although there are many great load testing tools out there like JMeter, K6s, and Locust, I decided to get started with Locust as it is a framework I had heard of before and is a pure Python framework (Python is the language I think in right now). To rewind, load testing frameworks allow engineers to programmatically produce stress on a system by simulating a large volume of incoming requests to that system. Requests can be, but are not limited to, HTTP calls. You can also load test with gRPC or IoT protocols like MQTT. Locust is an open-source Python-based load testing framework. With Locust, all user behaviour is defined in Python code and tests can be executed from a single machine or distributed across many machines.&lt;/p&gt;</description>
     </item>

@@ -6,7 +6,7 @@
 ##
 ## -------------------------------------------------------------------
 # Flox manifest version managed by Flox CLI
-version = 1
+schema-version = "1.12.0"
 
 
 ## Install Packages --------------------------------------------------
@@ -17,6 +17,7 @@ version = 1
 [install]
 hugo.pkg-path = "hugo"
 just.pkg-path = "just"
+just.outputs = "all"
 # gum.pkg-path = "gum"
 # gum.version = "^0.14.5"
 

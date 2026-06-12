@@ -2,266 +2,266 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:1313/</loc>
+    <loc>https://benmask.com/</loc>
     <lastmod>2026-06-08T10:26:32-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/18-nix-experimental/</loc>
+    <loc>https://benmask.com/posts/18-nix-experimental/</loc>
     <lastmod>2026-06-08T10:26:32-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/</loc>
+    <loc>https://benmask.com/posts/</loc>
     <lastmod>2026-06-08T10:26:32-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/colima/</loc>
+    <loc>https://benmask.com/tags/colima/</loc>
     <lastmod>2026-05-17T12:44:43-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/containers/</loc>
+    <loc>https://benmask.com/tags/containers/</loc>
     <lastmod>2026-05-17T12:44:43-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/docker/</loc>
+    <loc>https://benmask.com/tags/docker/</loc>
     <lastmod>2026-05-17T12:44:43-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/lima/</loc>
+    <loc>https://benmask.com/tags/lima/</loc>
     <lastmod>2026-05-17T12:44:43-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/16-colima/</loc>
+    <loc>https://benmask.com/posts/16-colima/</loc>
     <lastmod>2026-05-17T12:44:43-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/</loc>
+    <loc>https://benmask.com/tags/</loc>
     <lastmod>2026-05-17T12:44:43-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/concepts/</loc>
+    <loc>https://benmask.com/tags/concepts/</loc>
     <lastmod>2025-12-20T12:44:43-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/creativity/</loc>
+    <loc>https://benmask.com/tags/creativity/</loc>
     <lastmod>2025-12-20T12:44:43-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/design/</loc>
+    <loc>https://benmask.com/tags/design/</loc>
     <lastmod>2025-12-20T12:44:43-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/15-steph-ango/</loc>
+    <loc>https://benmask.com/posts/15-steph-ango/</loc>
     <lastmod>2025-12-20T12:44:43-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/obsidian/</loc>
+    <loc>https://benmask.com/tags/obsidian/</loc>
     <lastmod>2025-12-20T12:44:43-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/review/</loc>
+    <loc>https://benmask.com/tags/review/</loc>
     <lastmod>2025-12-20T12:44:43-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/steph-ango/</loc>
+    <loc>https://benmask.com/tags/steph-ango/</loc>
     <lastmod>2025-12-20T12:44:43-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/homelab/</loc>
+    <loc>https://benmask.com/tags/homelab/</loc>
     <lastmod>2025-12-14T22:43:07-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/immich/</loc>
+    <loc>https://benmask.com/tags/immich/</loc>
     <lastmod>2025-12-14T22:43:07-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/14-immich/</loc>
+    <loc>https://benmask.com/posts/14-immich/</loc>
     <lastmod>2025-12-14T22:43:07-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/kubernetes/</loc>
+    <loc>https://benmask.com/tags/kubernetes/</loc>
     <lastmod>2025-12-14T22:43:07-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/nfs/</loc>
+    <loc>https://benmask.com/tags/nfs/</loc>
     <lastmod>2025-12-14T22:43:07-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/postgres/</loc>
+    <loc>https://benmask.com/tags/postgres/</loc>
     <lastmod>2025-12-14T22:43:07-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/smb/</loc>
+    <loc>https://benmask.com/tags/smb/</loc>
     <lastmod>2025-12-14T22:43:07-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/storage/</loc>
+    <loc>https://benmask.com/tags/storage/</loc>
     <lastmod>2025-12-14T22:43:07-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/architecture/</loc>
+    <loc>https://benmask.com/tags/architecture/</loc>
     <lastmod>2025-06-02T21:56:17-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/databases/</loc>
+    <loc>https://benmask.com/tags/databases/</loc>
     <lastmod>2025-06-02T21:56:17-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/dba/</loc>
+    <loc>https://benmask.com/tags/dba/</loc>
     <lastmod>2025-06-02T21:56:17-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/explainer/</loc>
+    <loc>https://benmask.com/tags/explainer/</loc>
     <lastmod>2025-06-02T21:56:17-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/13-mysql-icp/</loc>
+    <loc>https://benmask.com/posts/13-mysql-icp/</loc>
     <lastmod>2025-06-02T21:56:17-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/mysql/</loc>
+    <loc>https://benmask.com/tags/mysql/</loc>
     <lastmod>2025-06-02T21:56:17-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/optimization/</loc>
+    <loc>https://benmask.com/tags/optimization/</loc>
     <lastmod>2025-06-02T21:56:17-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/sre/</loc>
+    <loc>https://benmask.com/tags/sre/</loc>
     <lastmod>2025-06-02T21:56:17-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/systems/</loc>
+    <loc>https://benmask.com/tags/systems/</loc>
     <lastmod>2025-06-02T21:56:17-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/12-python-async/</loc>
+    <loc>https://benmask.com/posts/12-python-async/</loc>
     <lastmod>2025-05-03T15:24:28-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/etcd/</loc>
+    <loc>https://benmask.com/tags/etcd/</loc>
     <lastmod>2025-02-23T21:10:27-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/ha/</loc>
+    <loc>https://benmask.com/tags/ha/</loc>
     <lastmod>2025-02-23T21:10:27-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/11-ha-k8s/</loc>
+    <loc>https://benmask.com/posts/11-ha-k8s/</loc>
     <lastmod>2025-02-23T21:10:27-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/engineering-management/</loc>
+    <loc>https://benmask.com/tags/engineering-management/</loc>
     <lastmod>2025-02-06T21:07:51-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/opinion/</loc>
+    <loc>https://benmask.com/tags/opinion/</loc>
     <lastmod>2025-02-06T21:07:51-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/10-tenets/</loc>
+    <loc>https://benmask.com/posts/10-tenets/</loc>
     <lastmod>2025-02-06T21:07:51-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/b2/</loc>
+    <loc>https://benmask.com/tags/b2/</loc>
     <lastmod>2025-01-23T19:30:52-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/backblaze/</loc>
+    <loc>https://benmask.com/tags/backblaze/</loc>
     <lastmod>2025-01-23T19:30:52-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/backups/</loc>
+    <loc>https://benmask.com/tags/backups/</loc>
     <lastmod>2025-01-23T19:30:52-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/disaster-recovery/</loc>
+    <loc>https://benmask.com/tags/disaster-recovery/</loc>
     <lastmod>2025-01-23T19:30:52-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/nas/</loc>
+    <loc>https://benmask.com/tags/nas/</loc>
     <lastmod>2025-01-23T19:30:52-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/truenas/</loc>
+    <loc>https://benmask.com/tags/truenas/</loc>
     <lastmod>2025-01-23T19:30:52-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/09-truenas-backups/</loc>
+    <loc>https://benmask.com/posts/09-truenas-backups/</loc>
     <lastmod>2025-01-23T19:30:52-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/systems-design/</loc>
+    <loc>https://benmask.com/tags/systems-design/</loc>
     <lastmod>2025-01-13T20:49:46-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/url-shortener/</loc>
+    <loc>https://benmask.com/tags/url-shortener/</loc>
     <lastmod>2025-01-13T20:49:46-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/visual/</loc>
+    <loc>https://benmask.com/tags/visual/</loc>
     <lastmod>2025-01-13T20:49:46-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/08-url-shortener/</loc>
+    <loc>https://benmask.com/posts/08-url-shortener/</loc>
     <lastmod>2025-01-13T20:49:46-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/concensus/</loc>
+    <loc>https://benmask.com/tags/concensus/</loc>
     <lastmod>2025-01-12T10:58:42-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/09-raft/</loc>
+    <loc>https://benmask.com/posts/09-raft/</loc>
     <lastmod>2025-01-12T10:58:42-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/distributed-systems/</loc>
+    <loc>https://benmask.com/tags/distributed-systems/</loc>
     <lastmod>2025-01-12T10:58:42-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/raft/</loc>
+    <loc>https://benmask.com/tags/raft/</loc>
     <lastmod>2025-01-12T10:58:42-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/linux/</loc>
+    <loc>https://benmask.com/tags/linux/</loc>
     <lastmod>2025-01-05T21:20:26-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/zfs/</loc>
+    <loc>https://benmask.com/tags/zfs/</loc>
     <lastmod>2025-01-05T21:20:26-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/07-zfs-primer/</loc>
+    <loc>https://benmask.com/posts/07-zfs-primer/</loc>
     <lastmod>2025-01-05T21:20:26-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/clean-architecture/</loc>
+    <loc>https://benmask.com/tags/clean-architecture/</loc>
     <lastmod>2024-09-07T19:57:08-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/dependency-injection/</loc>
+    <loc>https://benmask.com/tags/dependency-injection/</loc>
     <lastmod>2024-09-07T19:57:08-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/06-go-dependency-injection/</loc>
+    <loc>https://benmask.com/posts/06-go-dependency-injection/</loc>
     <lastmod>2024-09-07T19:57:08-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/go/</loc>
+    <loc>https://benmask.com/tags/go/</loc>
     <lastmod>2024-09-07T19:57:08-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/solid/</loc>
+    <loc>https://benmask.com/tags/solid/</loc>
     <lastmod>2024-09-07T19:57:08-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/autoscaling/</loc>
+    <loc>https://benmask.com/tags/autoscaling/</loc>
     <lastmod>2024-09-06T19:57:08-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/cloud/</loc>
+    <loc>https://benmask.com/tags/cloud/</loc>
     <lastmod>2024-09-06T19:57:08-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/05-intro-to-k8s-autoscaling/</loc>
+    <loc>https://benmask.com/posts/05-intro-to-k8s-autoscaling/</loc>
     <lastmod>2024-09-06T19:57:08-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/ip/</loc>
+    <loc>https://benmask.com/tags/ip/</loc>
     <lastmod>2024-08-09T20:01:16-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/networking/</loc>
+    <loc>https://benmask.com/tags/networking/</loc>
     <lastmod>2024-08-09T20:01:16-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/04-understanding-ipv4-addressing/</loc>
+    <loc>https://benmask.com/posts/04-understanding-ipv4-addressing/</loc>
     <lastmod>2024-08-09T20:01:16-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/load-testing/</loc>
+    <loc>https://benmask.com/tags/load-testing/</loc>
     <lastmod>2024-07-22T21:22:31-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/03-locust-load-testing/</loc>
+    <loc>https://benmask.com/posts/03-locust-load-testing/</loc>
     <lastmod>2024-07-22T21:22:31-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/locust/</loc>
+    <loc>https://benmask.com/tags/locust/</loc>
     <lastmod>2024-07-22T21:22:31-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/poetry/</loc>
+    <loc>https://benmask.com/tags/poetry/</loc>
     <lastmod>2024-07-22T21:22:31-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/python/</loc>
+    <loc>https://benmask.com/tags/python/</loc>
     <lastmod>2024-07-22T21:22:31-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/ansible/</loc>
+    <loc>https://benmask.com/tags/ansible/</loc>
     <lastmod>2024-07-21T20:30:55-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/clusters/</loc>
+    <loc>https://benmask.com/tags/clusters/</loc>
     <lastmod>2024-07-21T20:30:55-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/k3s/</loc>
+    <loc>https://benmask.com/tags/k3s/</loc>
     <lastmod>2024-07-21T20:30:55-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/02-bare-metal-k3s-on-rpi-part-2/</loc>
+    <loc>https://benmask.com/posts/02-bare-metal-k3s-on-rpi-part-2/</loc>
     <lastmod>2024-07-21T20:30:55-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/pi-hole/</loc>
+    <loc>https://benmask.com/tags/pi-hole/</loc>
     <lastmod>2024-07-21T20:30:55-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/raspberry-pi/</loc>
+    <loc>https://benmask.com/tags/raspberry-pi/</loc>
     <lastmod>2024-07-21T20:30:55-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/tailscale/</loc>
+    <loc>https://benmask.com/tags/tailscale/</loc>
     <lastmod>2024-07-21T20:30:55-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/02-bare-metal-k3s-on-rpi-part-1/</loc>
+    <loc>https://benmask.com/posts/02-bare-metal-k3s-on-rpi-part-1/</loc>
     <lastmod>2024-07-10T20:29:01-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/01-getting-started-w-hugo/</loc>
+    <loc>https://benmask.com/posts/01-getting-started-w-hugo/</loc>
     <lastmod>2024-07-05T17:54:14-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/github-pages/</loc>
+    <loc>https://benmask.com/tags/github-pages/</loc>
     <lastmod>2024-07-05T17:54:14-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/hugo/</loc>
+    <loc>https://benmask.com/tags/hugo/</loc>
     <lastmod>2024-07-05T17:54:14-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/tutorial/</loc>
+    <loc>https://benmask.com/tags/tutorial/</loc>
     <lastmod>2024-07-05T17:54:14-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/categories/</loc>
+    <loc>https://benmask.com/categories/</loc>
   </url><url>
-    <loc>http://localhost:1313/search/</loc>
+    <loc>https://benmask.com/search/</loc>
   </url>
 </urlset>

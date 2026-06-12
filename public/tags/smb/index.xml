@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>SMB on Ben Mask</title>
-    <link>http://localhost:1313/tags/smb/</link>
+    <link>https://benmask.com/tags/smb/</link>
     <description>Recent content in SMB on Ben Mask</description>
     <generator>Hugo -- 0.152.2</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 14 Dec 2025 22:43:07 -0500</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/smb/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://benmask.com/tags/smb/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Immich: Up &amp; Running</title>
-      <link>http://localhost:1313/posts/14-immich/</link>
+      <link>https://benmask.com/posts/14-immich/</link>
       <pubDate>Sun, 14 Dec 2025 22:43:07 -0500</pubDate>
-      <guid>http://localhost:1313/posts/14-immich/</guid>
+      <guid>https://benmask.com/posts/14-immich/</guid>
       <description>&lt;h1 id=&#34;overview&#34;&gt;Overview&lt;/h1&gt;
 &lt;p&gt;I recently started hosting &lt;a href=&#34;https://github.com/immich-app&#34;&gt;Immich&lt;/a&gt; on my homelab. If you&amp;rsquo;re not familiar with Immich, it is a self-hosted Google Photos replacement.
 If you want to learn more I highly reccomend giving a listen to &lt;a href=&#34;https://selfhosted.show/110?t=1198&#34;&gt;this podcast interview&lt;/a&gt; with the creator of Immich on the Self-Hosted podcast.&lt;/p&gt;

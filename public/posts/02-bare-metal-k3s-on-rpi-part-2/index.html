@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="index, follow">
 <title>Part 2: Building a Bare-metal Kubernetes Cluster on Raspberry Pis | Ben Mask</title>
 <meta name="keywords" content="kubernetes, raspberry pi, k3s, clusters, homelab, ansible, tailscale, networking, pi-hole, cloud">
 <meta name="description" content="Big Idea
 In part 1 of this post, I covered the basics of getting started building my Kubernetes cluster on Raspberry Pis. In particular, I laid out my goals and requirements, the build list, the network topology and setup, and the installation of K3s on each of the nodes. I recommend going back and checking out that post first if you haven&rsquo;t already (Part 1: Building a Bare-metal Kubernetes Cluster on Raspberry Pis).">
 <meta name="author" content="">
-<link rel="canonical" href="http://localhost:1313/posts/02-bare-metal-k3s-on-rpi-part-2/">
+<link rel="canonical" href="https://benmask.com/posts/02-bare-metal-k3s-on-rpi-part-2/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.fc220c15db4aef0318bbf30adc45d33d4d7c88deff3238b23eb255afdc472ca6.css" integrity="sha256-/CIMFdtK7wMYu/MK3EXTPU18iN7/MjiyPrJVr9xHLKY=" rel="preload stylesheet" as="style">
-<link rel="icon" href="http://localhost:1313/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
-<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
-<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<link rel="icon" href="https://benmask.com/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://benmask.com/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://benmask.com/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://benmask.com/apple-touch-icon.png">
+<link rel="mask-icon" href="https://benmask.com/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/02-bare-metal-k3s-on-rpi-part-2/">
+<link rel="alternate" hreflang="en" href="https://benmask.com/posts/02-bare-metal-k3s-on-rpi-part-2/">
 <noscript>
     <style>
         #theme-toggle,
@@ -56,7 +56,490 @@ In part 1 of this post, I covered the basics of getting started building my Kube
         }
 
     </style>
-</noscript><style>
+</noscript><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --accent: #b85c38;
+    --accent-soft: #d9846a;
+    --font-serif: "Instrument Serif", Georgia, serif;
+  }
+  .dark { --accent: #e08163; --accent-soft: #b85c38; }
+
+   
+  .header { border-bottom: none; }
+  .nav { padding: 18px var(--gap, 24px) !important; }
+  .nav .logo { align-items: center !important; }
+  .nav .logo a {
+    font-size: 0.95rem !important;
+    font-weight: 500 !important;
+    color: var(--secondary) !important;
+    letter-spacing: 0.01em;
+    line-height: 1 !important;
+    display: inline-flex;
+    align-items: center;
+  }
+  .nav .logo a:hover { color: var(--primary) !important; }
+   
+  body.list:has(.home-hero) .nav .logo a:first-child { display: none; }
+
+  #menu { gap: 1.25rem !important; }
+  #menu li a, #menu .active { font-size: 0.88rem !important; }
+  #menu li a span { color: var(--tertiary); transition: color 0.15s ease; }
+  #menu li a:hover span { color: var(--accent); }
+  #menu .active { font-weight: 500 !important; }
+  #menu .active::after { display: none; }  
+
+  #theme-toggle {
+    padding: 6px !important;
+    margin: 0 0 0 4px !important;
+    display: inline-flex !important;
+    align-items: center;
+  }
+  #theme-toggle svg { width: 16px; height: 16px; display: block; }
+  .logo-switches { align-items: center !important; margin: 0 0 0 4px !important; }
+
+   
+  body.list .post-entry,
+  body.list .first-entry:not(.home-info) {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0.4rem 0 0.4rem 0.9rem !important;
+    margin: 0 !important;
+    position: relative;
+  }
+  body.list .post-entry::before,
+  body.list .first-entry:not(.home-info)::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0.65rem; bottom: 0.65rem;
+    width: 2px;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+  body.list .post-entry:hover::before,
+  body.list .first-entry:not(.home-info):hover::before { opacity: 0.7; }
+  body.list .post-entry .entry-cover,
+  body.list .post-entry .entry-content,
+  body.list .first-entry:not(.home-info) .entry-cover,
+  body.list .first-entry:not(.home-info) .entry-content { display: none !important; }
+  body.list .post-entry,
+  body.list .first-entry:not(.home-info) {
+    display: flex !important;
+    flex-direction: column-reverse;
+  }
+  body.list .post-entry .entry-header,
+  body.list .first-entry:not(.home-info) .entry-header { margin: 0; padding: 0; }
+  body.list .post-entry .entry-header h2,
+  body.list .first-entry:not(.home-info) .entry-header h2 {
+    font-size: 1.05rem !important;
+    font-weight: 500 !important;
+    line-height: 1.3 !important;
+    margin: 0 !important;
+    letter-spacing: -0.01em;
+  }
+  body.list .post-entry .entry-footer,
+  body.list .first-entry:not(.home-info) .entry-footer {
+    font-size: 0.72rem !important;
+    color: var(--tertiary) !important;
+    margin: 0 0 0.1rem !important;
+    padding: 0 !important;
+    letter-spacing: 0.03em;
+  }
+
+  .paginav { margin-top: 2rem !important; }
+
+   
+  .home-footer-graph {
+    max-width: var(--main-width, 720px);
+    margin: 2.5rem auto 1rem;
+    padding: 0 var(--gap, 24px);
+  }
+  .home-footer-graph .contrib-graph {
+    margin: 0 auto;
+  }
+  .footer {
+    border-top: 1px solid var(--border);
+    margin-top: 0;
+    padding: 1.25rem var(--gap) !important;
+    font-size: 0.8rem;
+    color: var(--tertiary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+  }
+  .footer a { color: var(--tertiary); transition: color 0.15s ease; }
+  .footer a:hover { color: var(--accent); }
+  .footer .footer-dot { opacity: 0.5; }
+
+   
+  .wave-container {
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+    width: 100%;
+  }
+  .wave-container.wave-top {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    height: 60px;
+    opacity: 0.55;
+  }
+  .wave-container.wave-bottom {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    height: 180px;
+    opacity: 0.45;
+    margin-top: 2rem;
+  }
+  .wave-svg { width: 100%; height: 100%; display: block; }
+  .wave-path {
+    fill: none;
+    stroke: var(--primary);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+  }
+  .wave-bottom .wave-path { stroke-width: 3; }
+  .wave-1 { opacity: 1; }
+  .wave-2 { opacity: 0.7; }
+  .wave-3 { opacity: 0.4; }
+  .wave-4 { opacity: 0.9; }
+  .wave-5 { opacity: 0.6; }
+  .wave-6 { opacity: 0.8; }
+  .wave-7 { opacity: 0.5; }
+  .wave-8 { opacity: 0.7; }
+  .wave-9 { opacity: 0.3; }
+  @media (prefers-reduced-motion: reduce) {
+    .wave-container.wave-top { display: none; }
+  }
+
+   
+  .home-hero {
+    padding: 4rem 0 1.5rem;
+    text-align: center;
+    border-bottom: none;
+  }
+  .home-hero .hero-name {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: clamp(64px, 13vw, 112px);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin: 0 0 0.75rem;
+  }
+  .home-hero .hero-tagline {
+    font-size: 1.05rem;
+    color: var(--secondary);
+    margin: 0 0 1.25rem;
+    line-height: 1.55;
+  }
+  .home-hero .hero-tagline a { color: var(--secondary); border-bottom: 1px solid var(--tertiary); }
+  .home-hero .hero-tagline a:hover { color: var(--primary); border-bottom-color: var(--accent); }
+  .home-hero .hero-now {
+    font-size: 0.92rem;
+    color: var(--tertiary);
+    margin: 0.25rem 0 1.5rem;
+    font-style: italic;
+  }
+  .home-hero .hero-now::before {
+    content: "now · ";
+    font-family: var(--font-serif);
+    font-style: normal;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+  }
+  .home-hero .hero-now a {
+    color: var(--tertiary);
+    text-decoration: underline;
+    text-decoration-color: var(--accent-soft);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    font-weight: 500;
+    transition: color 0.15s ease, text-decoration-color 0.15s ease;
+  }
+  .home-hero .hero-now a:hover {
+    color: var(--secondary);
+    text-decoration-color: var(--accent);
+  }
+  .home-hero .hero-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+    font-size: 0.9rem;
+  }
+  .home-hero .hero-links a {
+    color: var(--tertiary);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+  .home-hero .hero-links a:hover { color: var(--accent); }
+
+   
+  .home-section { margin: 2.5rem 0 1rem; }
+  .home-section-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--secondary);
+    margin: 0 0 0.75rem;
+  }
+  .fav-list { list-style: none; padding: 0; margin: 0; }
+  .fav-item { padding: 0.4rem 0 0.4rem 0.9rem; position: relative; }
+  .fav-item::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0.65rem; bottom: 0.65rem;
+    width: 2px;
+    background: var(--accent);
+    opacity: 0.5;
+    transition: opacity 0.15s ease;
+  }
+  .fav-item:hover::before { opacity: 1; }
+  .fav-item a { text-decoration: none; color: var(--primary); display: block; }
+  .fav-date { display: block; font-size: 0.72rem; color: var(--tertiary); margin-bottom: 0.1rem; letter-spacing: 0.03em; }
+  .fav-title { font-size: 1.05rem; font-weight: 500; line-height: 1.3; }
+
+   
+  .first-entry.home-info { border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; margin-bottom: 1.5rem; }
+
+   
+  .page-header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+  }
+  .page-header h1 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: clamp(2.4rem, 6vw, 3.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    margin: 0.5rem 0 0.25rem;
+  }
+  .page-header .breadcrumbs {
+    font-size: 0.78rem;
+    color: var(--tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .page-header .breadcrumbs a:hover { color: var(--accent); }
+  .page-header .post-description {
+    font-size: 1rem;
+    color: var(--secondary);
+    margin-top: 0.25rem;
+  }
+
+   
+  .terms-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.75rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .terms-tags li { margin: 0 !important; }
+  .terms-tags li a {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    padding: 0.35rem 0.7rem;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 0.85rem;
+    color: var(--secondary);
+    text-decoration: none;
+    transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+  }
+  .terms-tags li a:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: transparent;
+  }
+  .terms-tags li a sup { font-size: 0.65rem; color: var(--tertiary); }
+  .terms-tags li a:hover sup { color: var(--accent-soft); }
+
+   
+  .post-single { padding-top: 1rem; }
+  .post-single .post-header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1.25rem;
+    margin-bottom: 2rem;
+  }
+  .post-single .breadcrumbs {
+    font-size: 0.78rem;
+    color: var(--tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.5rem;
+  }
+  .post-single .breadcrumbs a:hover { color: var(--accent); }
+  .post-single .post-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    margin: 0.25rem 0 0.5rem;
+  }
+  .post-single .post-description {
+    font-size: 1.05rem;
+    color: var(--secondary);
+    font-style: italic;
+    margin-bottom: 0.5rem;
+  }
+  .post-single .post-meta {
+    font-size: 0.78rem;
+    color: var(--tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .post-single .post-meta a { color: var(--tertiary); }
+  .post-single .post-meta a:hover { color: var(--accent); }
+
+  .post-content { font-size: 1.02rem; line-height: 1.7; }
+  .post-content h2, .post-content h3, .post-content h4 {
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    margin-top: 2.25rem;
+    margin-bottom: 0.6rem;
+  }
+  .post-content h2 { font-size: 1.55rem; }
+  .post-content h3 { font-size: 1.25rem; }
+  .post-content a {
+    color: var(--primary);
+    text-decoration: underline;
+    text-decoration-color: var(--accent-soft);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    transition: text-decoration-color 0.15s ease;
+  }
+  .post-content a:hover { text-decoration-color: var(--accent); }
+  .post-content blockquote {
+    border-left: 2px solid var(--accent);
+    padding: 0.1rem 0 0.1rem 1rem;
+    margin: 1.5rem 0;
+    color: var(--secondary);
+    font-style: italic;
+  }
+  .post-content blockquote p { margin: 0.5rem 0; }
+  .post-content code:not(pre code) {
+    background: var(--code-bg, var(--tertiary));
+    padding: 0.1rem 0.35rem;
+    border-radius: 3px;
+    font-size: 0.9em;
+  }
+  .post-content hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2.5rem auto;
+    width: 40%;
+  }
+
+   
+  .post-single .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.6rem;
+    list-style: none;
+    padding: 0;
+    margin: 2rem 0 1rem;
+  }
+  .post-single .post-tags li { margin: 0 !important; }
+  .post-single .post-tags li a {
+    display: inline-block;
+    padding: 0.25rem 0.6rem;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 0.78rem;
+    color: var(--secondary);
+    text-decoration: none;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  .post-single .post-tags li a:hover { border-color: var(--accent); color: var(--accent); }
+
+   
+  .paginav {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2.5rem !important;
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+  }
+  .paginav a {
+    flex: 1;
+    padding: 0.9rem 1rem;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: border-color 0.15s ease;
+  }
+  .paginav a:hover { border-color: var(--accent); }
+  .paginav .title { font-size: 0.95rem; color: var(--primary); font-weight: 500; }
+  .paginav .prev::before, .paginav .next::before {
+    color: var(--tertiary);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+   
+  #searchbox { margin-top: 1.5rem; }
+  #searchInput {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    font-size: 1rem;
+    font-family: inherit;
+    background: var(--theme);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--primary);
+    transition: border-color 0.15s ease;
+  }
+  #searchInput:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  #searchInput::placeholder { color: var(--tertiary); }
+  #searchResults {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0 0;
+  }
+  #searchResults li {
+    padding: 0.6rem 0 0.6rem 0.9rem;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  #searchResults li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0.8rem; bottom: 0.8rem;
+    width: 2px;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+  #searchResults li:hover::before { opacity: 0.7; }
+  #searchResults li a { text-decoration: none; color: var(--primary); display: block; }
+  #searchResults li a:hover { color: var(--primary); }
+
   .contrib-graph {
     --cell: 10px;
     --gap: 3px;
@@ -185,6 +668,82 @@ In part 1 of this post, I covered the basics of getting started building my Kube
   .contrib-legend .contrib-day { display: inline-block; }
 </style>
 
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-H8WZT724E8"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-H8WZT724E8');
+        }
+      </script><meta property="og:title" content="Part 2: Building a Bare-metal Kubernetes Cluster on Raspberry Pis" />
+<meta property="og:description" content="Big Idea
+In part 1 of this post, I covered the basics of getting started building my Kubernetes cluster on Raspberry Pis. In particular, I laid out my goals and requirements, the build list, the network topology and setup, and the installation of K3s on each of the nodes. I recommend going back and checking out that post first if you haven&rsquo;t already (Part 1: Building a Bare-metal Kubernetes Cluster on Raspberry Pis)." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://benmask.com/posts/02-bare-metal-k3s-on-rpi-part-2/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-07-21T20:30:55-04:00" />
+<meta property="article:modified_time" content="2024-07-21T20:30:55-04:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Part 2: Building a Bare-metal Kubernetes Cluster on Raspberry Pis"/>
+<meta name="twitter:description" content="Big Idea
+In part 1 of this post, I covered the basics of getting started building my Kubernetes cluster on Raspberry Pis. In particular, I laid out my goals and requirements, the build list, the network topology and setup, and the installation of K3s on each of the nodes. I recommend going back and checking out that post first if you haven&rsquo;t already (Part 1: Building a Bare-metal Kubernetes Cluster on Raspberry Pis)."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://benmask.com/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Part 2: Building a Bare-metal Kubernetes Cluster on Raspberry Pis",
+      "item": "https://benmask.com/posts/02-bare-metal-k3s-on-rpi-part-2/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Part 2: Building a Bare-metal Kubernetes Cluster on Raspberry Pis",
+  "name": "Part 2: Building a Bare-metal Kubernetes Cluster on Raspberry Pis",
+  "description": "Big Idea In part 1 of this post, I covered the basics of getting started building my Kubernetes cluster on Raspberry Pis. In particular, I laid out my goals and requirements, the build list, the network topology and setup, and the installation of K3s on each of the nodes. I recommend going back and checking out that post first if you haven\u0026rsquo;t already (Part 1: Building a Bare-metal Kubernetes Cluster on Raspberry Pis).\n",
+  "keywords": [
+    "kubernetes", "raspberry pi", "k3s", "clusters", "homelab", "ansible", "tailscale", "networking", "pi-hole", "cloud"
+  ],
+  "articleBody": "Big Idea In part 1 of this post, I covered the basics of getting started building my Kubernetes cluster on Raspberry Pis. In particular, I laid out my goals and requirements, the build list, the network topology and setup, and the installation of K3s on each of the nodes. I recommend going back and checking out that post first if you haven’t already (Part 1: Building a Bare-metal Kubernetes Cluster on Raspberry Pis).\nA summary from that post is that I created the subnet 10.100.0.0/24 on my home network for the cluster network. Using DHCP I reserved a small address space of IPs for my nodes and statically assigned the node IPs from within that range. Of my four RPis, three will be part of the cluster. The fourth node will not run as part of the cluster but will instead run a TailScale subnet router and Pi-Hole for DNS resolution on the cluster network.\nIn this post, I will review how I configured the Nginx Ingress controller and Cert-Manager for managing HTTPs traffic to my cluster. I will also cover my persistent storage solution that implements PV’s in Kubernetes using an SMB share. Finally, I will briefly show my backup strategy that leverages rclone and Backblaze B2 storage.\nAs usual, all of my configurations for deploying charts can be found on my GitHub: https://github.com/atmask/helm-charts/tree/main\nLoad-Balancing, Ingress, and SSL/TLS Management Now that I had my cluster up and running with a CNI installed (I’ll do more posts about Calico CNI in the future) I wanted to get the networking setup to access services on my cluster. To achieve this, I added three different installations to my cluster: MetalLB, Nginx Ingress, and Cert-Manager.\nKubernetes has a resource type called Services. Services function as load balancers by providing a single IP for balancing traffic among a backing set of ephemeral pods running a workload. Kubernetes services resources have a few kinds, namely, ClusterIP, NodePort, and LoadBalancer. There are default implementations for the first two service types in Kubernetes but none for LoadBalancer-type services. Most major cloud providers you use will have their own implementation with their Kubernetes offerings that will configure a Load Balancer with a public IP from their platform to manage the incoming traffic to your service. MetalLB is a solution for those running their own Kubernetes clusters to support services of type LoadBalancer.\nNginx-Ingress is an Nginx-based solution for managing network traffic entering the cluster. To use the nginx ingress controller, you expose it behind a LoadBalancer. All incoming traffic can then be routed based on various routing rules such as the path to other services in the cluster. This has the advantage of having a single point for managing TLS termination and in cloud environments can save you the cost additional LBs would incur if you exposed each service via an LB.\nFinally, Cert-Manager. Cert-Manager is an X.509 certificate management service for Kubernetes. It integrates nicely with Let’s Encrypt for automatically generating and rotating SSL/TLS certs on domains that you own. It also (with some configuration) integrates with Nginx Ingress for automatically provisioning and managing certificates for new domains and subdomains.\nMetalLB Concepts IPPools MetalLB is not able to give you IP addresses out of thin air. This means that you will need to tell it which IP addresses it can allocate to LoadBalancer services by defining IPPools for your MetalLB installation to use. This IPPool should not overlap with the IP range that the DHCP is configured to assign IPs from. This is where it may be helpful to share the network topology again: External Announcements and Layer 2 Routing MetalLB can assign an IP to your LoadBalancer Kubernetes service, however, it also needs to make the network outside of your cluster pod traffic aware of these IPs to make them routable. MetalLB has two different modes for achieving this goal: BGP and Layer 2. I will focus on Layer 2 mode as that is what I am running and familiar with.\nMetalLB in Layer 2 mode works by taking an available IP from the IPPool that you previously allocated and assigning that IP to a node in your cluster. From an outside perspective, it looks as if the node has multiple IPs on the network. This is called Layer 2 mode because of how it makes use of ARP (address resolution protocol). ARP is a protocol that takes place in layer 2 of the OSI networking model. In short, ARP works by the source machine sending out a broadcast message for the destination IP of the packet it is trying to route. If a machine has that IP leased then it responds to the original ARP request by returning its MAC address. The MAC address is then used in layer 2 networking to send the packet on to the node in the cluster.\nOnce the packet is routed to the node in the cluster then kube-proxy takes over and routes the packet to one of the services. kubey-proxy is an agent that manages iptables in the cluster to support the routing of packets from the virtual IPs of services to the IPs of pods assigned via the CNI. This may be the subject of another post in the future but for now, I’d refer you to this article: Kube-Proxy: What is it and How it Works\nDeploying MetalLB Now, to the fun part! MetalLB can be deployed via Helm charts to your cluster. The Helm chart can be found on Artifact Hub. The first install of the MetalLB chart additionally installs custom CRDs to the cluster. CRDs are “Custom Resource Definitions” and allow for the creation of custom resources (like pods or deployments) but more relevant to a specific application. In the case of MetalLB, we care about the IPAddressPool and L2Advertisement CRDs. After the initial install of the chart, we will want to deploy an IPAddressPool resource to to tell MetalLB what IP range we have set aside in our subnet for LoadBalancer IPs. We will also deploy an L2Advertisement resource that tells Metallb to advertise IPs in that pool via Layer 2 networking.\nI prefer to use Helm’s subcharting functionality to keep all of my chart configurations and versions in VCS over time but, in general, the installation process would look like this:\nhelm install -n metallb metallb oci://registry-1.docker.io/bitnamicharts/metallb --create-namespace Then create the IPAddressPool in ippool.yaml\n# The address-pools lists the IP addresses that MetalLB is # allowed to allocate. You can have as many # address pools as you want. apiVersion: metallb.io/v1beta1 kind: IPAddressPool metadata: # A name for the address pool. Services can request allocation # from a specific address pool using this name. name: lb-ip-pool namespace: metallb-system spec: # A list of IP address ranges over which MetalLB has # authority. You can list multiple ranges in a single pool, they # will all share the same settings. Each range can be either a # CIDR prefix, or an explicit start-end range of IPs. addresses: - 10.100.0.50-10.100.0.75 and the L2Advertisement in advertisement-l2.yaml\napiVersion: metallb.io/v1beta1 kind: L2Advertisement metadata: name: ip-pool-advertisement namespace: metallb-system spec: ipAddressPools: - lb-ip-pool then apply both files to the cluster:\nkubectl apply -n metallb -f ippool.yaml kubectl apply -n metallb -f advertisement-l2.yaml Note: This is the quick and dirty way to do this. I reccommend checking out my repo linked at the start of this article to see how subchartting can be used for maintaining the configuration of third-party charts.\nValidate with LoadBalancer If you don’t have any applications deployed and want to validate that the metallb installation is working you can apply the following LoadBalancer Service to your cluster and verify that an IP from your IPPool is attached to the service as an external-ip\n### lb-svc.yaml apiVersion: v1 kind: Service metadata: name: my-service namespace: default spec: selector: app: my-app ports: - protocol: TCP port: 80 targetPort: 8080 type: LoadBalancer and apply with kubectl apply -f lb-svc.yaml. Then use kubectl get svc to verify that an external-ip has been assigned to the service named “my-service”.\nDeploying Nginx-Ingress Now that we can provision IPs for an implementation of LoadBalancer-type services we can move on to our installation of Nginx Ingress. Yes, technically, NodePort could have been used instead of setting up MetalLB but this is about learning new things! The Nginx Ingress controller will act as a single point of entry for all traffic to workloads running in my cluster. Nginx Ingress supports host and path-based routing and I will make use of this when setting DNS records for my apps later on. A large benefit of using Nginx Ingress as a single point of entry for all incoming traffic is that I can integrate Nginx Ingress with Cert-Manager so that it is also the single point for managing all TLS termination of incoming traffic. This reduces the management overhead for me.\nAs with MetalLB, my configuration of the Nginx Ingress controller chart can be found in my charts repo linked at the top of this post. There is a lot less configuration to do for this deployment. I will provide a quick and dirty installation here as well though. All that you need to configure via the values file is the service resource that will act as the load balancer to the ingress controller.\n### nginx-ingress-values.yaml controller: service: enabled: true type: \"LoadBalancer\" annotations: metallb.universe.tf/address-pool: lb-ip-pool # Add the annotation so that metallb will use the previously configured ippool and then install:\nhelm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx helm repo update helm install -n nginx-ingress nginx-ingress ingress-nginx/ingress-nginx -f nginx-ingress-values.yaml --create-namespace Hura-ah! The Nginx Ingress controller should now be installed. It will watch of the creation ingress resources in the cluster. ingress resources are typically deployed with your application and configure how the Nginx Ingress Controller should route traffic to that application.\nConfiguring Cert-Manager As of right now, with MetalLB and the Nginx Ingress controller set up, I would be ready to access my applications. The problem is, any web browser will give me a page saying that the page I am trying to access is insecure and I would have to click through to access my applications. This is an annoyance and so I have set up Cert-Manager to solve this problem.\nCert-Manager is a tool that can be integrated with Nginx Ingress to automatically provision and rotate SSL/TLS certs for your domains. The SSL/TLS certs are used to encrypt the HTTP traffic between your servers and clients. This is what gives us HTTPs.\nAn important thing to know before setting up Cert-Manager is that SSL/TLS certificates can only be issued for domains that you own. When Cert-Manager attempts to provision or rotate a cert for your service it must pass one of two tests known as ACME challenges (DNS-01 or HTTP-01) to verify that you are the owner of the domain for which you are provisioning a certificate.\nInstalling Cert-Manager Cert-Manager, like MetalLB, has a set of CRDs that are needed for configuring the installation. This means that I had to do the initial Helm install to get the CRDs and then a subsequent Helm upgrade to add configurations. There is one additional CRD needed when setting up Cert-Manager. The required CRD, for my use case and setup at least, is the ClusterIssuer. The ClusterIssuer configures which Certificate Authority (CA) Cert-Manager will use to generate the SSL/TLS certificates. In my installation, I have used Let’s Encrypt as my CA. Let’s Encrypt provides free certificates and has a generous quota on their production service.\nThe initial Cert-Manager installation can be added as follows:\nhelm repo add jetstack https://charts.jetstack.io --force-update helm install cert-manager -n cert-manager --version v1.15.1 jetstack/cert-manager --set installCRDs=true --create-namespace After the initial installation, I deployed the ClusterIssuer. As I mentioned earlier, certificates can only be issued for domains that you own. This means that the CA you choose will attempt to execute a DNS-01 or HTTP-01 challenge successfully before provisioning your cert. DNS-01 is more secure so I cover that here. With DNS-01 you must configure your ClusterIssuer with an API key for the registrar where you manage your domain. In my case, this is Cloudflare. The DNS-01 challenge works by the CA requesting that you configure a TXT record on your domain with specific values that the CA provides under the subdomain _acme-challenge.. If the CA validates that this has been done, then your ownership of the domain is verified and the certificate is issued. Using my provided API key, Cert-Manager will do this all on my behalf.\n## cluster-issuer.yaml apiVersion: cert-manager.io/v1 kind: ClusterIssuer metadata: name: letsencrypt spec: acme: # You must replace this email address with your own. # Let's Encrypt will use this to contact you about expiring # certificates, and issues related to your account. email: server: https://acme-v02.api.letsencrypt.org/directory privateKeySecretRef: # Secret resource that will be used to store the account's private key. name: # Add a single challenge solver solvers: - dns01: cloudflare: apiTokenSecretRef: name: registrar-api-key key: api-token ## secret.yaml apiVersion: v1 kind: Secret metadata: name: registrar-api-key type: Opaque stringData: api-token: {{ .Values.cloudflareApiToken }} Note: If you are setting this up for the first time it is recommended to use the Let’s Encrypt staging servers to not waste your quota on the production servers. The staging server can be gotten by replacing acme-v02 with acme-staging-v02 in the server configuration.\nWith Cert-Manager and a ClusterIssuer installed, I was now able to create new ingress resources containing routing rules and integrated with Cert-Manager via annotations for the automatic provisioning of SSL/TLS certs. Using the API token for Cloudflare, Cert-Manager completes the DNS-01 ACME challenge on my behalf.\nLocal DNS Management with Pi-Hole One more small detail about my cluster pertains to DNS records. I did not want all the DNS records for my services available on the public internet. Although the services running on my local network would be unreachable to anyone on the public internet, storing the DNS records with the private IPs for my hosted services in Cloudflare or any other public DNS provider would have meant that anyone could discover the private IPs at which I host services. For me, this was not ideal. This was the motivation for setting up Pi-Hole as a DNS server on my home network. Pi-Hole will act like an Azure Private DNS Zone or Private Hosted Zones in AWS Route53.\nThe first step to achieving this goal was installing Pi-Hole on one of my Pis. I chose to do the installation on stoneward (refer to the network diagram for the naming of my nodes). This is the same Pi that runs TailScale and does not serve any role in the K3s cluster. After completing the Pi-Hole installation I was able to navigate to Local DNS \u003e DNS Records in the Pi-Hole admin web UI and configure DNS records for reaching the nginx-ingress controller and other common IPs such as the cluster node IPs.\nNote: I had to adjust the DNS server’s Interface Settings in the Pi-Hole admin web UI. By default, only local requests from devices one hop away are allowed which does not work with my Tailnat. Since my DNS server is only accessible on my private home network I changed this setting to permit all origins for DNS queries.\nThe second and final step for setting up the private DNS requires configuring TailScale. The TailScale admin portal allows you to configure the DNS nameserver to use for anyone connecting to your Tailnet. This must be updated with the IP of stoneward and the override local DNS setting set to true. When this is configured. All DNS requests for users connected to your Tailnet will be routed via the Subnet Router’s advertised CIDR range to the DNS running at home. This will allow only users connected to my local network to resolve the DNS records for services running in my homelab.\nPersistent Storage The final part of my cluster configuration that I will cover in this post is my implementation of persistent storage. I wanted to be able to have a reliable persistent storage solution as I intend to store data that matters to me on my services. However, I also wanted a solution that required a small amount of effort and minimal cost. This ruled out using Kubernetes hostPath since the micro SD cards that act as my primary storage on the RPis in not very reliable. The hostPath solution also has the issue that data would be tied to a specific node meaning that pods could not be scheduled interchangeably on any node. Exploring a distributed file storage solution such as Rook Ceph or Longhorn was interesting to me but not something I really had the bandwidth to explore and seemed overkill for my use case.\nIn order to de-couple my storage solution from the nodes I chose to set up a 1TB SSD as an SMB share that could be mounted by any node in the cluster via the SBM CSI driver. The SMB CSI driver is a Kubernetes CSI implementation that enables pods to access an SMB share via Persistent Volumes and Persistent Volume Claims.\nCreating the SMB share When I set up my cluster, I only had one node that had a significant amount of RAM. This was my k3s master node, bondsmith, which had 8Gb of memory. As a result, I decided to expose the 1TB SSD from this node\nI connected my 1 TB SSD to the Pi through a SATA to USB converter cable. The cluster case I used also had a convenient place to mount the drive on the same ejectable rack that the Pi was connected to. After powering on the PI with the PoE connection I connected the Tb drive and configured the SMB share.\nThe first part of setting up the SMB share was installing Samba to the bondsmith node. After installation I mounted the TB drive to the /nas dir at the root of my machine. Using the lsblk command I was able to find my drive on the system and then use the mount command to mount the drive to the /nas dir.\n## Mount the drive sudo mount /dev/sda2 /nas Note: It’s a good idea to create a new user and group for access to the SMB share on the system. I created a user and group for SMB users and changed the access permissions and ownership of the mounted drive to that user\nOnce the drive is mounted you can configure Samba to share the drive to the network. This can be done by configuring and smb.conf file and restarting the smb service.\n## /etc/samba/smb.conf [nas] path=/nas writeable=Yes create mask=0777 directory mask=0777 public=no The last step is adding the newly created smb user to Samba using smbpasswd.\nSetting up the SMB CSI Driver The SMB CSI driver was easily installed into the cluster via the Helm chart. In order to enable the use of PVCs/PVs it was necessary to configure a StorageClass resource along with the Helm chart. The storage class specifies the connection details for mounting the SMB share. The storage class is then used in PVCs to automatically connect to the network drive and access data.\n## storageclass.yaml apiVersion: storage.k8s.io/v1 kind: StorageClass metadata: name: smb provisioner: smb.csi.k8s.io parameters: source: /// # if csi.storage.k8s.io/provisioner-secret is provided, will create a sub directory # with PV name under source csi.storage.k8s.io/provisioner-secret-name: smbcreds csi.storage.k8s.io/provisioner-secret-namespace: default csi.storage.k8s.io/node-stage-secret-name: smbcreds csi.storage.k8s.io/node-stage-secret-namespace: default reclaimPolicy: Delete # available values: Delete, Retain volumeBindingMode: Immediate mountOptions: - dir_mode=0777 - file_mode=0777 - uid=1001 - gid=1001 - nobrl # details on using nobrl: ## https://learn.microsoft.com/en-us/troubleshoot/azure/azure-kubernetes/storage/mountoptions-settings-azure-files#other-useful-settings ## https://github.com/dani-garcia/vaultwarden/issues/846 You will also need to create a secret containing the username and password for connecting to the SMB drive:\nkubectl create secret generic smbcreds --from-literal username= --from-literal password= Testing PVC/PV Creation After the above is installed and set up, I was able to validate that storage was provisioned when specifying the persistent volume claim.\napiVersion: apps/v1 kind: StatefulSet metadata: name: ss-smb labels: app: busybox spec: replicas: 1 template: metadata: labels: app: busybox spec: containers: - name: ss-smb image: alpine:latest command: - sleep - infinity volumeMounts: - name: smb mountPath: \"/sc/smb\" tolerations: - key: \"node.kubernetes.io/os\" operator: \"Exists\" effect: \"NoSchedule\" updateStrategy: type: RollingUpdate selector: matchLabels: app: busybox volumeClaimTemplates: - metadata: name: smb annotations: volume.beta.kubernetes.io/storage-class: smb spec: accessModes: [\"ReadWriteMany\"] resources: requests: storage: 10Gi Backups with rclone and Backblaze I wanted to make sure that I keep backups of all my data somewhere cheap in case I need to do some disaster recovery. I chose to use Backblaze since it has an S3 compatible API and is cheap. There are many guides for authenticating to Backblaze with rclone and k3s so I will just add the commands here in case I need to reference them in the future.\nNote: I did not use an in-cluster back-up tool like Velero and Rustic because they require snapshot capabilities from the CSI driver and the SMB CSI driver does not support this.\nBacking up the SMB drive rclone sync -P /nas/ b2: Backing up etcd k3s etcd-snapshot save --s3 --s3-endpoint --s3-bucket --s3-access-key --s3-secret-key ",
+  "wordCount" : "3533",
+  "inLanguage": "en",
+  "datePublished": "2024-07-21T20:30:55-04:00",
+  "dateModified": "2024-07-21T20:30:55-04:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://benmask.com/posts/02-bare-metal-k3s-on-rpi-part-2/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Ben Mask",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://benmask.com/favicon.ico"
+    }
+  }
+}
+</script>
 </head>
 
 <body class="" id="top">
@@ -202,7 +761,7 @@ In part 1 of this post, I covered the basics of getting started building my Kube
 <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="http://localhost:1313/" accesskey="h" title="Ben Mask (Alt + H)">Ben Mask</a>
+            <a href="https://benmask.com/" accesskey="h" title="Ben Mask (Alt + H)">Ben Mask</a>
             <div class="logo-switches">
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
@@ -228,17 +787,17 @@ In part 1 of this post, I covered the basics of getting started building my Kube
         </div>
         <ul id="menu">
             <li>
-                <a href="http://localhost:1313/posts/" title="Posts">
+                <a href="https://benmask.com/posts/" title="Posts">
                     <span>Posts</span>
                 </a>
             </li>
             <li>
-                <a href="http://localhost:1313/tags/" title="Tags">
+                <a href="https://benmask.com/tags/" title="Tags">
                     <span>Tags</span>
                 </a>
             </li>
             <li>
-                <a href="http://localhost:1313/search/" title="Search (Alt &#43; /)" accesskey=/>
+                <a href="https://benmask.com/search/" title="Search (Alt &#43; /)" accesskey=/>
                     <span>Search</span>
                 </a>
             </li>
@@ -249,7 +808,7 @@ In part 1 of this post, I covered the basics of getting started building my Kube
 
 <article class="post-single">
   <header class="post-header">
-    <div class="breadcrumbs"><a href="http://localhost:1313/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/posts/">Posts</a></div>
+    <div class="breadcrumbs"><a href="https://benmask.com/">Home</a>&nbsp;»&nbsp;<a href="https://benmask.com/posts/">Posts</a></div>
     <h1 class="post-title entry-hint-parent">
       Part 2: Building a Bare-metal Kubernetes Cluster on Raspberry Pis
     </h1>
@@ -575,24 +1134,24 @@ you must configure your <code>ClusterIssuer</code> with an API key for the regis
 
   <footer class="post-footer">
     <ul class="post-tags">
-      <li><a href="http://localhost:1313/tags/kubernetes/">Kubernetes</a></li>
-      <li><a href="http://localhost:1313/tags/raspberry-pi/">Raspberry Pi</a></li>
-      <li><a href="http://localhost:1313/tags/k3s/">K3s</a></li>
-      <li><a href="http://localhost:1313/tags/clusters/">Clusters</a></li>
-      <li><a href="http://localhost:1313/tags/homelab/">Homelab</a></li>
-      <li><a href="http://localhost:1313/tags/ansible/">Ansible</a></li>
-      <li><a href="http://localhost:1313/tags/tailscale/">Tailscale</a></li>
-      <li><a href="http://localhost:1313/tags/networking/">Networking</a></li>
-      <li><a href="http://localhost:1313/tags/pi-hole/">Pi-Hole</a></li>
-      <li><a href="http://localhost:1313/tags/cloud/">Cloud</a></li>
+      <li><a href="https://benmask.com/tags/kubernetes/">Kubernetes</a></li>
+      <li><a href="https://benmask.com/tags/raspberry-pi/">Raspberry Pi</a></li>
+      <li><a href="https://benmask.com/tags/k3s/">K3s</a></li>
+      <li><a href="https://benmask.com/tags/clusters/">Clusters</a></li>
+      <li><a href="https://benmask.com/tags/homelab/">Homelab</a></li>
+      <li><a href="https://benmask.com/tags/ansible/">Ansible</a></li>
+      <li><a href="https://benmask.com/tags/tailscale/">Tailscale</a></li>
+      <li><a href="https://benmask.com/tags/networking/">Networking</a></li>
+      <li><a href="https://benmask.com/tags/pi-hole/">Pi-Hole</a></li>
+      <li><a href="https://benmask.com/tags/cloud/">Cloud</a></li>
     </ul>
 <nav class="paginav">
-  <a class="prev" href="http://localhost:1313/posts/03-locust-load-testing/">
+  <a class="prev" href="https://benmask.com/posts/03-locust-load-testing/">
     <span class="title">« Prev</span>
     <br>
     <span>Load Testing Applications with Locust</span>
   </a>
-  <a class="next" href="http://localhost:1313/posts/02-bare-metal-k3s-on-rpi-part-1/">
+  <a class="next" href="https://benmask.com/posts/02-bare-metal-k3s-on-rpi-part-1/">
     <span class="title">Next »</span>
     <br>
     <span>Part 1: Building a Bare-metal Kubernetes Cluster on Raspberry Pis</span>
@@ -604,13 +1163,9 @@ you must configure your <code>ClusterIssuer</code> with an API key for the regis
     </main>
     
 <footer class="footer">
-        <span>&copy; 2026 <a href="http://localhost:1313/">Ben Mask</a></span> · 
-
-    <span>
-        Powered by
-        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
-        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
-    </span>
+    <span>&copy; 2026 <a href="https://benmask.com/">Ben Mask</a></span>
+    <span class="footer-dot">·</span>
+    <a href="/index.xml" class="footer-link">RSS</a>
 </footer>
 <a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
@@ -618,18 +1173,6 @@ you must configure your <code>ClusterIssuer</code> with an API key for the regis
     </svg>
 </a>
 
-
-
-<style>
-  img[src$='#wide'] {
-    display: block;
-    width: 80vw;
-    max-width: none;
-    margin-left: 50%;
-    transform: translateX(-50%);
-    border-radius: 0;
-  }
-</style>
 
 <script>
     let menu = document.getElementById('menu')
@@ -658,7 +1201,6 @@ you must configure your <code>ClusterIssuer</code> with an API key for the regis
             }
         });
     });
-
 </script>
 <script>
     var mybutton = document.getElementById("top-link");
@@ -671,7 +1213,6 @@ you must configure your <code>ClusterIssuer</code> with an API key for the regis
             mybutton.style.opacity = "0";
         }
     };
-
 </script>
 <script>
     document.getElementById("theme-toggle").addEventListener("click", () => {
@@ -683,7 +1224,6 @@ you must configure your <code>ClusterIssuer</code> with an API key for the regis
             localStorage.setItem("pref-theme", 'dark');
         }
     })
-
 </script>
 <script>
     document.querySelectorAll('pre > code').forEach((codeblock) => {
@@ -724,10 +1264,8 @@ you must configure your <code>ClusterIssuer</code> with an API key for the regis
         } else if (container.parentNode.firstChild == container) {
             
         } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
-            
             codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
         } else {
-            
             codeblock.parentNode.appendChild(copybutton);
         }
     });

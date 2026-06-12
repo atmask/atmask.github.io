@@ -31,23 +31,22 @@ params:
     favicon16x16: "/favicon-16x16.png"
     favicon32x32: "/favicon-32x32.png"
   homeInfoParams:
-    title: Hi there! 👋
-    # subtitle: Software Engineer/DevOps/Cloud Developer
-    Content: |
-      My name's Ben. Welcome to my blog!
-      I'm a: \
-      \
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🧑‍🌾 Human \
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;👨‍💻 Software Engineer & SRE \
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;💡 Homelabber \
-      \
-      In my free time you'll find me:\
-      \
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;☕ Making Coffee \
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📚 Reading or listening to a podcast \
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🧐 Tinkering and Learning \
-      \
-      I have  a passion for understanding systems, interactions, abstractions, and architecture. I'm always looking for new opportunities to learn and grow. Feel free to reach out if you're interested in any of my work and want to chat!
+    Name: Ben Mask
+    Tagline: >-
+      Senior SRE at <a href="https://fellow.app">Fellow</a>. Writing about
+      systems, infrastructure, and the things I tinker with on the side.
+    Now: >-
+      Building <a href="https://containix.dev">Containix</a>. Tweaking the homelab.
+      Out in the garden.
+  heroLinks:
+    - { name: "GitHub", url: "https://github.com/atmask" }
+    - { name: "LinkedIn", url: "https://www.linkedin.com/in/ben-mask-936b49185/" }
+    - { name: "RSS", url: "/index.xml" }
+    - { name: "Email", url: "mailto:benjaminajm@gmail.com" }
+  favorites:
+    - /posts/10-tenets/
+    - /posts/15-steph-ango/
+    - /posts/18-nix-experimental/
   socialIcons: # optional
     - name: Github
       url: https://github.com/atmask

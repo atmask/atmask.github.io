@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="index, follow">
 <title>Immich: Up &amp; Running | Ben Mask</title>
 <meta name="keywords" content="immich, postgres, kubernetes, homelab, storage, SMB, NFS">
 <meta name="description" content="Overview
@@ -14,16 +14,16 @@ The goal of this post is to cover how I set this up and some of the obstacles I 
 Immich Architecture and Storage
 There wasn&rsquo;t much to plan out before deploying Immich. The main pain point came with respect to getting Postgres running up on my cluster prior to deploying Immich which I&rsquo;ll cover more below.">
 <meta name="author" content="">
-<link rel="canonical" href="http://localhost:1313/posts/14-immich/">
+<link rel="canonical" href="https://benmask.com/posts/14-immich/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.fc220c15db4aef0318bbf30adc45d33d4d7c88deff3238b23eb255afdc472ca6.css" integrity="sha256-/CIMFdtK7wMYu/MK3EXTPU18iN7/MjiyPrJVr9xHLKY=" rel="preload stylesheet" as="style">
-<link rel="icon" href="http://localhost:1313/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
-<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
-<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<link rel="icon" href="https://benmask.com/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://benmask.com/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://benmask.com/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://benmask.com/apple-touch-icon.png">
+<link rel="mask-icon" href="https://benmask.com/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/14-immich/">
+<link rel="alternate" hreflang="en" href="https://benmask.com/posts/14-immich/">
 <noscript>
     <style>
         #theme-toggle,
@@ -60,7 +60,490 @@ There wasn&rsquo;t much to plan out before deploying Immich. The main pain point
         }
 
     </style>
-</noscript><style>
+</noscript><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --accent: #b85c38;
+    --accent-soft: #d9846a;
+    --font-serif: "Instrument Serif", Georgia, serif;
+  }
+  .dark { --accent: #e08163; --accent-soft: #b85c38; }
+
+   
+  .header { border-bottom: none; }
+  .nav { padding: 18px var(--gap, 24px) !important; }
+  .nav .logo { align-items: center !important; }
+  .nav .logo a {
+    font-size: 0.95rem !important;
+    font-weight: 500 !important;
+    color: var(--secondary) !important;
+    letter-spacing: 0.01em;
+    line-height: 1 !important;
+    display: inline-flex;
+    align-items: center;
+  }
+  .nav .logo a:hover { color: var(--primary) !important; }
+   
+  body.list:has(.home-hero) .nav .logo a:first-child { display: none; }
+
+  #menu { gap: 1.25rem !important; }
+  #menu li a, #menu .active { font-size: 0.88rem !important; }
+  #menu li a span { color: var(--tertiary); transition: color 0.15s ease; }
+  #menu li a:hover span { color: var(--accent); }
+  #menu .active { font-weight: 500 !important; }
+  #menu .active::after { display: none; }  
+
+  #theme-toggle {
+    padding: 6px !important;
+    margin: 0 0 0 4px !important;
+    display: inline-flex !important;
+    align-items: center;
+  }
+  #theme-toggle svg { width: 16px; height: 16px; display: block; }
+  .logo-switches { align-items: center !important; margin: 0 0 0 4px !important; }
+
+   
+  body.list .post-entry,
+  body.list .first-entry:not(.home-info) {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0.4rem 0 0.4rem 0.9rem !important;
+    margin: 0 !important;
+    position: relative;
+  }
+  body.list .post-entry::before,
+  body.list .first-entry:not(.home-info)::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0.65rem; bottom: 0.65rem;
+    width: 2px;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+  body.list .post-entry:hover::before,
+  body.list .first-entry:not(.home-info):hover::before { opacity: 0.7; }
+  body.list .post-entry .entry-cover,
+  body.list .post-entry .entry-content,
+  body.list .first-entry:not(.home-info) .entry-cover,
+  body.list .first-entry:not(.home-info) .entry-content { display: none !important; }
+  body.list .post-entry,
+  body.list .first-entry:not(.home-info) {
+    display: flex !important;
+    flex-direction: column-reverse;
+  }
+  body.list .post-entry .entry-header,
+  body.list .first-entry:not(.home-info) .entry-header { margin: 0; padding: 0; }
+  body.list .post-entry .entry-header h2,
+  body.list .first-entry:not(.home-info) .entry-header h2 {
+    font-size: 1.05rem !important;
+    font-weight: 500 !important;
+    line-height: 1.3 !important;
+    margin: 0 !important;
+    letter-spacing: -0.01em;
+  }
+  body.list .post-entry .entry-footer,
+  body.list .first-entry:not(.home-info) .entry-footer {
+    font-size: 0.72rem !important;
+    color: var(--tertiary) !important;
+    margin: 0 0 0.1rem !important;
+    padding: 0 !important;
+    letter-spacing: 0.03em;
+  }
+
+  .paginav { margin-top: 2rem !important; }
+
+   
+  .home-footer-graph {
+    max-width: var(--main-width, 720px);
+    margin: 2.5rem auto 1rem;
+    padding: 0 var(--gap, 24px);
+  }
+  .home-footer-graph .contrib-graph {
+    margin: 0 auto;
+  }
+  .footer {
+    border-top: 1px solid var(--border);
+    margin-top: 0;
+    padding: 1.25rem var(--gap) !important;
+    font-size: 0.8rem;
+    color: var(--tertiary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+  }
+  .footer a { color: var(--tertiary); transition: color 0.15s ease; }
+  .footer a:hover { color: var(--accent); }
+  .footer .footer-dot { opacity: 0.5; }
+
+   
+  .wave-container {
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+    width: 100%;
+  }
+  .wave-container.wave-top {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    height: 60px;
+    opacity: 0.55;
+  }
+  .wave-container.wave-bottom {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    height: 180px;
+    opacity: 0.45;
+    margin-top: 2rem;
+  }
+  .wave-svg { width: 100%; height: 100%; display: block; }
+  .wave-path {
+    fill: none;
+    stroke: var(--primary);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+  }
+  .wave-bottom .wave-path { stroke-width: 3; }
+  .wave-1 { opacity: 1; }
+  .wave-2 { opacity: 0.7; }
+  .wave-3 { opacity: 0.4; }
+  .wave-4 { opacity: 0.9; }
+  .wave-5 { opacity: 0.6; }
+  .wave-6 { opacity: 0.8; }
+  .wave-7 { opacity: 0.5; }
+  .wave-8 { opacity: 0.7; }
+  .wave-9 { opacity: 0.3; }
+  @media (prefers-reduced-motion: reduce) {
+    .wave-container.wave-top { display: none; }
+  }
+
+   
+  .home-hero {
+    padding: 4rem 0 1.5rem;
+    text-align: center;
+    border-bottom: none;
+  }
+  .home-hero .hero-name {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: clamp(64px, 13vw, 112px);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin: 0 0 0.75rem;
+  }
+  .home-hero .hero-tagline {
+    font-size: 1.05rem;
+    color: var(--secondary);
+    margin: 0 0 1.25rem;
+    line-height: 1.55;
+  }
+  .home-hero .hero-tagline a { color: var(--secondary); border-bottom: 1px solid var(--tertiary); }
+  .home-hero .hero-tagline a:hover { color: var(--primary); border-bottom-color: var(--accent); }
+  .home-hero .hero-now {
+    font-size: 0.92rem;
+    color: var(--tertiary);
+    margin: 0.25rem 0 1.5rem;
+    font-style: italic;
+  }
+  .home-hero .hero-now::before {
+    content: "now · ";
+    font-family: var(--font-serif);
+    font-style: normal;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+  }
+  .home-hero .hero-now a {
+    color: var(--tertiary);
+    text-decoration: underline;
+    text-decoration-color: var(--accent-soft);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    font-weight: 500;
+    transition: color 0.15s ease, text-decoration-color 0.15s ease;
+  }
+  .home-hero .hero-now a:hover {
+    color: var(--secondary);
+    text-decoration-color: var(--accent);
+  }
+  .home-hero .hero-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+    font-size: 0.9rem;
+  }
+  .home-hero .hero-links a {
+    color: var(--tertiary);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+  .home-hero .hero-links a:hover { color: var(--accent); }
+
+   
+  .home-section { margin: 2.5rem 0 1rem; }
+  .home-section-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--secondary);
+    margin: 0 0 0.75rem;
+  }
+  .fav-list { list-style: none; padding: 0; margin: 0; }
+  .fav-item { padding: 0.4rem 0 0.4rem 0.9rem; position: relative; }
+  .fav-item::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0.65rem; bottom: 0.65rem;
+    width: 2px;
+    background: var(--accent);
+    opacity: 0.5;
+    transition: opacity 0.15s ease;
+  }
+  .fav-item:hover::before { opacity: 1; }
+  .fav-item a { text-decoration: none; color: var(--primary); display: block; }
+  .fav-date { display: block; font-size: 0.72rem; color: var(--tertiary); margin-bottom: 0.1rem; letter-spacing: 0.03em; }
+  .fav-title { font-size: 1.05rem; font-weight: 500; line-height: 1.3; }
+
+   
+  .first-entry.home-info { border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; margin-bottom: 1.5rem; }
+
+   
+  .page-header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+  }
+  .page-header h1 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: clamp(2.4rem, 6vw, 3.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    margin: 0.5rem 0 0.25rem;
+  }
+  .page-header .breadcrumbs {
+    font-size: 0.78rem;
+    color: var(--tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .page-header .breadcrumbs a:hover { color: var(--accent); }
+  .page-header .post-description {
+    font-size: 1rem;
+    color: var(--secondary);
+    margin-top: 0.25rem;
+  }
+
+   
+  .terms-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.75rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .terms-tags li { margin: 0 !important; }
+  .terms-tags li a {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    padding: 0.35rem 0.7rem;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 0.85rem;
+    color: var(--secondary);
+    text-decoration: none;
+    transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+  }
+  .terms-tags li a:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: transparent;
+  }
+  .terms-tags li a sup { font-size: 0.65rem; color: var(--tertiary); }
+  .terms-tags li a:hover sup { color: var(--accent-soft); }
+
+   
+  .post-single { padding-top: 1rem; }
+  .post-single .post-header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1.25rem;
+    margin-bottom: 2rem;
+  }
+  .post-single .breadcrumbs {
+    font-size: 0.78rem;
+    color: var(--tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.5rem;
+  }
+  .post-single .breadcrumbs a:hover { color: var(--accent); }
+  .post-single .post-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    margin: 0.25rem 0 0.5rem;
+  }
+  .post-single .post-description {
+    font-size: 1.05rem;
+    color: var(--secondary);
+    font-style: italic;
+    margin-bottom: 0.5rem;
+  }
+  .post-single .post-meta {
+    font-size: 0.78rem;
+    color: var(--tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .post-single .post-meta a { color: var(--tertiary); }
+  .post-single .post-meta a:hover { color: var(--accent); }
+
+  .post-content { font-size: 1.02rem; line-height: 1.7; }
+  .post-content h2, .post-content h3, .post-content h4 {
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    margin-top: 2.25rem;
+    margin-bottom: 0.6rem;
+  }
+  .post-content h2 { font-size: 1.55rem; }
+  .post-content h3 { font-size: 1.25rem; }
+  .post-content a {
+    color: var(--primary);
+    text-decoration: underline;
+    text-decoration-color: var(--accent-soft);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    transition: text-decoration-color 0.15s ease;
+  }
+  .post-content a:hover { text-decoration-color: var(--accent); }
+  .post-content blockquote {
+    border-left: 2px solid var(--accent);
+    padding: 0.1rem 0 0.1rem 1rem;
+    margin: 1.5rem 0;
+    color: var(--secondary);
+    font-style: italic;
+  }
+  .post-content blockquote p { margin: 0.5rem 0; }
+  .post-content code:not(pre code) {
+    background: var(--code-bg, var(--tertiary));
+    padding: 0.1rem 0.35rem;
+    border-radius: 3px;
+    font-size: 0.9em;
+  }
+  .post-content hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2.5rem auto;
+    width: 40%;
+  }
+
+   
+  .post-single .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.6rem;
+    list-style: none;
+    padding: 0;
+    margin: 2rem 0 1rem;
+  }
+  .post-single .post-tags li { margin: 0 !important; }
+  .post-single .post-tags li a {
+    display: inline-block;
+    padding: 0.25rem 0.6rem;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 0.78rem;
+    color: var(--secondary);
+    text-decoration: none;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  .post-single .post-tags li a:hover { border-color: var(--accent); color: var(--accent); }
+
+   
+  .paginav {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2.5rem !important;
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+  }
+  .paginav a {
+    flex: 1;
+    padding: 0.9rem 1rem;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: border-color 0.15s ease;
+  }
+  .paginav a:hover { border-color: var(--accent); }
+  .paginav .title { font-size: 0.95rem; color: var(--primary); font-weight: 500; }
+  .paginav .prev::before, .paginav .next::before {
+    color: var(--tertiary);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+   
+  #searchbox { margin-top: 1.5rem; }
+  #searchInput {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    font-size: 1rem;
+    font-family: inherit;
+    background: var(--theme);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--primary);
+    transition: border-color 0.15s ease;
+  }
+  #searchInput:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  #searchInput::placeholder { color: var(--tertiary); }
+  #searchResults {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0 0;
+  }
+  #searchResults li {
+    padding: 0.6rem 0 0.6rem 0.9rem;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  #searchResults li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0.8rem; bottom: 0.8rem;
+    width: 2px;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+  #searchResults li:hover::before { opacity: 0.7; }
+  #searchResults li a { text-decoration: none; color: var(--primary); display: block; }
+  #searchResults li a:hover { color: var(--primary); }
+
   .contrib-graph {
     --cell: 10px;
     --gap: 3px;
@@ -189,6 +672,90 @@ There wasn&rsquo;t much to plan out before deploying Immich. The main pain point
   .contrib-legend .contrib-day { display: inline-block; }
 </style>
 
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-H8WZT724E8"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-H8WZT724E8');
+        }
+      </script><meta property="og:title" content="Immich: Up &amp; Running" />
+<meta property="og:description" content="Overview
+I recently started hosting Immich on my homelab. If you&rsquo;re not familiar with Immich, it is a self-hosted Google Photos replacement.
+If you want to learn more I highly reccomend giving a listen to this podcast interview with the creator of Immich on the Self-Hosted podcast.
+The goal of this post is to cover how I set this up and some of the obstacles I faced in the process.
+Immich Architecture and Storage
+There wasn&rsquo;t much to plan out before deploying Immich. The main pain point came with respect to getting Postgres running up on my cluster prior to deploying Immich which I&rsquo;ll cover more below." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://benmask.com/posts/14-immich/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2025-12-14T22:43:07-05:00" />
+<meta property="article:modified_time" content="2025-12-14T22:43:07-05:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Immich: Up &amp; Running"/>
+<meta name="twitter:description" content="Overview
+I recently started hosting Immich on my homelab. If you&rsquo;re not familiar with Immich, it is a self-hosted Google Photos replacement.
+If you want to learn more I highly reccomend giving a listen to this podcast interview with the creator of Immich on the Self-Hosted podcast.
+The goal of this post is to cover how I set this up and some of the obstacles I faced in the process.
+Immich Architecture and Storage
+There wasn&rsquo;t much to plan out before deploying Immich. The main pain point came with respect to getting Postgres running up on my cluster prior to deploying Immich which I&rsquo;ll cover more below."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://benmask.com/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Immich: Up \u0026 Running",
+      "item": "https://benmask.com/posts/14-immich/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Immich: Up \u0026 Running",
+  "name": "Immich: Up \u0026 Running",
+  "description": "Overview I recently started hosting Immich on my homelab. If you\u0026rsquo;re not familiar with Immich, it is a self-hosted Google Photos replacement. If you want to learn more I highly reccomend giving a listen to this podcast interview with the creator of Immich on the Self-Hosted podcast.\nThe goal of this post is to cover how I set this up and some of the obstacles I faced in the process.\nImmich Architecture and Storage There wasn\u0026rsquo;t much to plan out before deploying Immich. The main pain point came with respect to getting Postgres running up on my cluster prior to deploying Immich which I\u0026rsquo;ll cover more below.\n",
+  "keywords": [
+    "immich", "postgres", "kubernetes", "homelab", "storage", "SMB", "NFS"
+  ],
+  "articleBody": "Overview I recently started hosting Immich on my homelab. If you’re not familiar with Immich, it is a self-hosted Google Photos replacement. If you want to learn more I highly reccomend giving a listen to this podcast interview with the creator of Immich on the Self-Hosted podcast.\nThe goal of this post is to cover how I set this up and some of the obstacles I faced in the process.\nImmich Architecture and Storage There wasn’t much to plan out before deploying Immich. The main pain point came with respect to getting Postgres running up on my cluster prior to deploying Immich which I’ll cover more below.\nComponents Immich ships two workloads:\nserver: This is the primary Immich server. It’s written in Typescript, manages database operations, serves the web client (built with SvelteKit), and coordinates with the machine learning workload.\nmachine learning: This workload is an HTTP Python service using FastAPI. It processes images running facial detection, recognition, and OCR.\nDatastores Postgres Immich requires a backing Postgres database for storing all user data and media metadata. However, the official Helm chart for Immich does not ship with a postgres deployment to get up and running.\nGiven that I will likely have other applications use Postgres for their backing database in the future I decided to investigate Postgres operators for managing Postgres installations on my cluster. After some brief searching it appeared that general concensus was that CloudNative Postgres (CNPG) was the encumbent Postgres operator of choice.\nRedis The official Immich chart deploys with Valkey as a dependency. Valkey, which is a Redis compatible caching service, is used as the broker for BullMQ for job queues.\nPhoto Storage Photos are stored to my external SMB share running from TrueNas. I have a few free TB here that should be sufficient to get me started.\nHurddles, Lessons Learned, and Gotchas Configuring Postgres Correctly for Immich There is no very well-documented configurations at the moment for how to set up Postgres for Immich. I believe part of this is due the recent migration Immich underwent away from the pgvecto.rs extension to vectorchord leacing lots of material outdated. In addition to this, I had to figure out how to map all of these configurations properly to the cnpg Cluster CRD’s spec.\nAfter some trial and error I was able to get a working spec for the backing postgres instance with the vectorchore extension:\napiVersion: postgresql.cnpg.io/v1 kind: Cluster metadata: name: immich-database spec: instances: 1 storage: storageClass: truenas-postgres size: 5Gi imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16.9-0.4.3 postgresql: shared_preload_libraries: - \"vchord.so\" managed: roles: - name: { { .Values.database.user.username } } superuser: true login: true bootstrap: initdb: database: { { .Values.database.user.database } } owner: { { .Values.database.user.username } } secret: name: { { .Values.database.user.secretName } } postInitSQL: - CREATE EXTENSION vchord CASCADE; - CREATE EXTENSION earthdistance CASCADE; The user creds can be configured in a referenced secret as follows:\napiVersion: v1 kind: Secret metadata: name: { { .Values.database.user.secretName } } stringData: username: { { .Values.database.user.username | quote } } password: { { .Values.database.user.password | quote } } database: { { .Values.database.user.database | quote } } Postgres Needs Posix Semantics I have largely been using a storage class backed by the SMB CSI driver for persistent storage. Without much thought on the weekend that I went to deploy Immich I deployed Postgres using the same storage class. This was when I learned that Postgres cannot run on top of SMB due to the lack of POSIX semantics supported by SMB (make sense. Windows.). So, in the fashion of Yak shaving, I deployed the NFS CSI driver to my cluster and then created and NFS share from TrueNAS. After this was tested and working from my local machine I created the new storageclass with access to the NFS share. Postgres was then satisfied.\nWatch out for NGINX Upload Limits Migrating away from Nginx for ingress will be on my list at some point ahead of the 2026 retirement but for now as I’m using it I will mention the need for the following annotation:\nnginx.ingress.kubernetes.io/proxy-body-size: \"0\" This removes the body limit from the proxy on file uploads\nWhat I’ve learning Writing this Post Even while writing this post there’s a few things I’ll have to revist sometime later as there’s only so much time you get for hobbies. These are a few:\nI’m curious how well the machine learning workload is running on my underpowered machines? I should take a look at my Grafan cloud instance to see and maybe do some optimizations I want to do a deeper dive into block storage, object storage, file stroage and all of the nuances in their implementations. Maybe iSCSI would have been better in this case as the POSIX semantics issue would have been offloaded from TrueNAS. These are nuances that I’m glad to be learning though and mistakes I can afford to make in this environment. ",
+  "wordCount" : "811",
+  "inLanguage": "en",
+  "datePublished": "2025-12-14T22:43:07-05:00",
+  "dateModified": "2025-12-14T22:43:07-05:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://benmask.com/posts/14-immich/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Ben Mask",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://benmask.com/favicon.ico"
+    }
+  }
+}
+</script>
 </head>
 
 <body class="" id="top">
@@ -206,7 +773,7 @@ There wasn&rsquo;t much to plan out before deploying Immich. The main pain point
 <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="http://localhost:1313/" accesskey="h" title="Ben Mask (Alt + H)">Ben Mask</a>
+            <a href="https://benmask.com/" accesskey="h" title="Ben Mask (Alt + H)">Ben Mask</a>
             <div class="logo-switches">
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
@@ -232,17 +799,17 @@ There wasn&rsquo;t much to plan out before deploying Immich. The main pain point
         </div>
         <ul id="menu">
             <li>
-                <a href="http://localhost:1313/posts/" title="Posts">
+                <a href="https://benmask.com/posts/" title="Posts">
                     <span>Posts</span>
                 </a>
             </li>
             <li>
-                <a href="http://localhost:1313/tags/" title="Tags">
+                <a href="https://benmask.com/tags/" title="Tags">
                     <span>Tags</span>
                 </a>
             </li>
             <li>
-                <a href="http://localhost:1313/search/" title="Search (Alt &#43; /)" accesskey=/>
+                <a href="https://benmask.com/search/" title="Search (Alt &#43; /)" accesskey=/>
                     <span>Search</span>
                 </a>
             </li>
@@ -253,7 +820,7 @@ There wasn&rsquo;t much to plan out before deploying Immich. The main pain point
 
 <article class="post-single">
   <header class="post-header">
-    <div class="breadcrumbs"><a href="http://localhost:1313/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/posts/">Posts</a></div>
+    <div class="breadcrumbs"><a href="https://benmask.com/">Home</a>&nbsp;»&nbsp;<a href="https://benmask.com/posts/">Posts</a></div>
     <h1 class="post-title entry-hint-parent">
       Immich: Up &amp; Running
     </h1>
@@ -392,21 +959,21 @@ If you want to learn more I highly reccomend giving a listen to <a href="https:/
 
   <footer class="post-footer">
     <ul class="post-tags">
-      <li><a href="http://localhost:1313/tags/immich/">Immich</a></li>
-      <li><a href="http://localhost:1313/tags/postgres/">Postgres</a></li>
-      <li><a href="http://localhost:1313/tags/kubernetes/">Kubernetes</a></li>
-      <li><a href="http://localhost:1313/tags/homelab/">Homelab</a></li>
-      <li><a href="http://localhost:1313/tags/storage/">Storage</a></li>
-      <li><a href="http://localhost:1313/tags/smb/">SMB</a></li>
-      <li><a href="http://localhost:1313/tags/nfs/">NFS</a></li>
+      <li><a href="https://benmask.com/tags/immich/">Immich</a></li>
+      <li><a href="https://benmask.com/tags/postgres/">Postgres</a></li>
+      <li><a href="https://benmask.com/tags/kubernetes/">Kubernetes</a></li>
+      <li><a href="https://benmask.com/tags/homelab/">Homelab</a></li>
+      <li><a href="https://benmask.com/tags/storage/">Storage</a></li>
+      <li><a href="https://benmask.com/tags/smb/">SMB</a></li>
+      <li><a href="https://benmask.com/tags/nfs/">NFS</a></li>
     </ul>
 <nav class="paginav">
-  <a class="prev" href="http://localhost:1313/posts/15-steph-ango/">
+  <a class="prev" href="https://benmask.com/posts/15-steph-ango/">
     <span class="title">« Prev</span>
     <br>
     <span>Discovering Steph Ango</span>
   </a>
-  <a class="next" href="http://localhost:1313/posts/13-mysql-icp/">
+  <a class="next" href="https://benmask.com/posts/13-mysql-icp/">
     <span class="title">Next »</span>
     <br>
     <span>Index Condition Pushdown Optimization in MySQL</span>
@@ -418,13 +985,9 @@ If you want to learn more I highly reccomend giving a listen to <a href="https:/
     </main>
     
 <footer class="footer">
-        <span>&copy; 2026 <a href="http://localhost:1313/">Ben Mask</a></span> · 
-
-    <span>
-        Powered by
-        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
-        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
-    </span>
+    <span>&copy; 2026 <a href="https://benmask.com/">Ben Mask</a></span>
+    <span class="footer-dot">·</span>
+    <a href="/index.xml" class="footer-link">RSS</a>
 </footer>
 <a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
@@ -432,18 +995,6 @@ If you want to learn more I highly reccomend giving a listen to <a href="https:/
     </svg>
 </a>
 
-
-
-<style>
-  img[src$='#wide'] {
-    display: block;
-    width: 80vw;
-    max-width: none;
-    margin-left: 50%;
-    transform: translateX(-50%);
-    border-radius: 0;
-  }
-</style>
 
 <script>
     let menu = document.getElementById('menu')
@@ -472,7 +1023,6 @@ If you want to learn more I highly reccomend giving a listen to <a href="https:/
             }
         });
     });
-
 </script>
 <script>
     var mybutton = document.getElementById("top-link");
@@ -485,7 +1035,6 @@ If you want to learn more I highly reccomend giving a listen to <a href="https:/
             mybutton.style.opacity = "0";
         }
     };
-
 </script>
 <script>
     document.getElementById("theme-toggle").addEventListener("click", () => {
@@ -497,7 +1046,6 @@ If you want to learn more I highly reccomend giving a listen to <a href="https:/
             localStorage.setItem("pref-theme", 'dark');
         }
     })
-
 </script>
 <script>
     document.querySelectorAll('pre > code').forEach((codeblock) => {
@@ -538,10 +1086,8 @@ If you want to learn more I highly reccomend giving a listen to <a href="https:/
         } else if (container.parentNode.firstChild == container) {
             
         } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
-            
             codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
         } else {
-            
             codeblock.parentNode.appendChild(copybutton);
         }
     });
