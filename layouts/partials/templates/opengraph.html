@@ -1,3 +1,10 @@
+{{- /*
+  Project-level override of themes/PaperMod/layouts/partials/templates/opengraph.html.
+  Patches two incompatibilities with Hugo >= 0.124:
+    1. `partial "partials/templates/_funcs/get-page-images"` → drop the superfluous "partials/" prefix.
+    2. `site.Social.facebook_admin` → `site.Params.social.facebook_admin` (.Site.Social was removed).
+  Keep in sync with the upstream theme partial if/when PaperMod is updated.
+*/ -}}
 <meta property="og:title" content="{{ .Title }}" />
 <meta property="og:description" content="{{ with .Description }}{{ . }}{{ else }}{{if .IsPage}}{{ .Summary }}{{ else }}{{ with site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}" />
 <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}" />

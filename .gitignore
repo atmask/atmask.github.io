@@ -1,0 +1,4 @@
+# Hugo build artifacts — built and deployed by GitHub Actions, never committed.
+public/
+resources/
+.hugo_build.lock

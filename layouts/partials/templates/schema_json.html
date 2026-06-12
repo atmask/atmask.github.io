@@ -1,3 +1,9 @@
+{{- /*
+  Project-level override of themes/PaperMod/layouts/partials/templates/schema_json.html.
+  Patches one incompatibility with Hugo >= 0.124:
+    1. `partial "partials/templates/_funcs/get-page-images"` → drop the superfluous "partials/" prefix.
+  Keep in sync with the upstream theme partial if/when PaperMod is updated.
+*/ -}}
 {{ if .IsHome }}
 <script type="application/ld+json">
 {
