@@ -621,3 +621,21 @@ body.list .first-entry:not(.home-info) .entry-footer {
   font-size: 10px;
 }
 .contrib-legend .contrib-day { display: inline-block; }
+@media (max-width: 768px) {
+  .contrib-graph { width: 100%; }
+  .contrib-body { grid-template-columns: auto 1fr; }
+  .contrib-grid {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--gap);
+    grid-template-columns: none;
+    overflow-x: clip;
+    min-width: 0;
+  }
+  .contrib-week { flex-shrink: 0; }
+  .contrib-months {
+    justify-content: end;
+    overflow-x: clip;
+    min-width: 0;
+  }
+}
