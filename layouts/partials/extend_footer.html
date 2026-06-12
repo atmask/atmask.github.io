@@ -57,7 +57,10 @@
       return;
     }
 
+    let rafId = null;
     function animate() {
+      // Skip work when the tab is hidden — saves CPU/battery without affecting visuals.
+      if (document.hidden) { rafId = null; return; }
       const t = (Date.now() - start) / 1000;
       if (isBottom) {
         paths[0].setAttribute('d', generatePath(t * 0.30, 0, 25, height * 0.15));
@@ -74,8 +77,11 @@
         paths[1].setAttribute('d', generatePath(t * 0.25, 2, 10));
         paths[2].setAttribute('d', generatePath(t * 0.35, 4, 8));
       }
-      requestAnimationFrame(animate);
+      rafId = requestAnimationFrame(animate);
     }
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && rafId === null) animate();
+    });
     animate();
   });
 })();

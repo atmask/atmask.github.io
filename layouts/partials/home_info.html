@@ -24,14 +24,16 @@
   <section class="home-section">
     <h2 class="home-section-title">Favorites</h2>
     <ul class="fav-list">
-      {{- range . -}}
-        {{- with site.GetPage . -}}
+      {{- range $path := . -}}
+        {{- with site.GetPage $path -}}
         <li class="fav-item">
           <a href="{{ .RelPermalink }}">
             <span class="fav-date">{{ .Date.Format "Jan 2006" }}</span>
             <span class="fav-title">{{ .Title }}</span>
           </a>
         </li>
+        {{- else -}}
+          {{- warnf "homepage favorite page not found: %q (check params.favorites in hugo.yaml)" $path -}}
         {{- end -}}
       {{- end }}
     </ul>

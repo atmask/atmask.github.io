@@ -27,8 +27,6 @@ body:not(.dark) .contrib-day { --c0: #ebedf0; }
   --border: #262626;
   --tertiary: #4a4a4a;
 }
-.dark.list { background: var(--theme); }
-
 /* === Nav (quieter, minimal) === */
 .header { border-bottom: none; }
 .nav { padding: 18px var(--gap, 24px); }

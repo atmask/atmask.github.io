@@ -39,8 +39,8 @@ params:
       Building <a href="https://containix.dev">Containix</a>. Tweaking the homelab.
       Out in the garden.
   heroLinks:
-    - { name: "GitHub", url: "https://github.com/atmask" }
-    - { name: "LinkedIn", url: "https://www.linkedin.com/in/ben-mask-936b49185/" }
+    - { name: "GitHub", url: "https://github.com/atmask", external: true }
+    - { name: "LinkedIn", url: "https://www.linkedin.com/in/ben-mask-936b49185/", external: true }
     - { name: "RSS", url: "/index.xml" }
     - { name: "Email", url: "mailto:benjaminajm@gmail.com" }
   favorites:
