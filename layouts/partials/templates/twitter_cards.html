@@ -1,0 +1,45 @@
+{{- /*
+  Project-level override of themes/PaperMod/layouts/partials/templates/twitter_cards.html.
+  Patches two incompatibilities with Hugo >= 0.124:
+    1. `partial "partials/templates/_funcs/get-page-images"` → drop the superfluous "partials/" prefix.
+    2. `site.Social.twitter` → `site.Params.social.twitter` (.Site.Social was removed).
+  Keep in sync with the upstream theme partial if/when PaperMod is updated.
+*/ -}}
+{{- if .Params.cover.image -}}
+<meta name="twitter:card" content="summary_large_image" />
+{{- if (ne $.Params.cover.relative true) }}
+<meta name="twitter:image" content="{{ .Params.cover.image | absURL }}" />
+{{- else }}
+<meta name="twitter:image" content="{{ (path.Join .RelPermalink .Params.cover.image ) | absURL }}" />
+{{- end}}
+{{- else }}
+{{- $images := partial "templates/_funcs/get-page-images" . -}}
+{{- with index $images 0 -}}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="{{ .Permalink }}" />
+{{- else -}}
+<meta name="twitter:card" content="summary"/>
+{{- end -}}
+{{- end }}
+<meta name="twitter:title" content="{{ .Title }}"/>
+<meta name="twitter:description" content="{{ with .Description }}{{ . }}{{ else }}{{if .IsPage}}{{ .Summary }}{{ else }}{{ with site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end -}}"/>
+{{- /* Deprecate site.Social.twitter in favor of site.Params.social.twitter */}}
+{{- $twitterSite := "" }}
+{{- with site.Params.social }}
+  {{- if reflect.IsMap . }}
+    {{- $twitterSite = .twitter }}
+  {{- end }}
+{{- else }}
+  {{- with site.Params.social.twitter }}
+    {{- $twitterSite = . }}
+    {{- warnf "The social key in site configuration is deprecated. Use params.social.twitter instead." }}
+  {{- end }}
+{{- end }}
+
+{{- with $twitterSite }}
+  {{- $content := . }}
+  {{- if not (strings.HasPrefix . "@") }}
+    {{- $content = printf "@%v" $twitterSite }}
+  {{- end }}
+<meta name="twitter:site" content="{{ $content }}"/>
+{{- end }}

@@ -1,14 +1,45 @@
 {{- with site.Params.homeInfoParams }}
+{{ partial "wave.html" (dict "position" "top") }}
 <article class="first-entry home-info">
-    <header class="entry-header">
-        <h1>{{ .Title | markdownify }}</h1>
-    </header>
-    <div class="entry-content">
-        {{ .Content | markdownify }}
+
+  <header class="home-hero">
+    <h1 class="hero-name">{{ .Name | default "Ben Mask" }}</h1>
+
+    {{- with .Tagline }}
+    <p class="hero-tagline">{{ . | safeHTML }}</p>
+    {{- end }}
+
+    {{- with .Now }}
+    <p class="hero-now">{{ . | safeHTML }}</p>
+    {{- end }}
+
+    <div class="hero-links">
+      {{- range site.Params.heroLinks }}
+      <a href="{{ .url }}"{{ if .external }} target="_blank" rel="noopener noreferrer"{{ end }}>{{ .name }}</a>
+      {{- end }}
     </div>
-    {{ partial "contribution_graph.html" . }}
-    <footer class="entry-footer">
-        {{ partial "social_icons.html" (dict "align" site.Params.homeInfoParams.AlignSocialIconsTo) }}
-    </footer>
+  </header>
+
+  {{- with site.Params.favorites }}
+  <section class="home-section">
+    <h2 class="home-section-title">Favorites</h2>
+    <ul class="fav-list">
+      {{- range $path := . -}}
+        {{- with site.GetPage $path -}}
+        <li class="fav-item">
+          <a href="{{ .RelPermalink }}">
+            <span class="fav-date">{{ .Date.Format "Jan 2006" }}</span>
+            <span class="fav-title">{{ .Title }}</span>
+          </a>
+        </li>
+        {{- else -}}
+          {{- warnf "homepage favorite page not found: %q (check params.favorites in hugo.yaml)" $path -}}
+        {{- end -}}
+      {{- end }}
+    </ul>
+  </section>
+  {{- end }}
+
+  <h2 class="home-section-title" style="margin-top: 2rem;">Recent</h2>
 </article>
 {{- end -}}
