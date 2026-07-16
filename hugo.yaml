@@ -40,15 +40,19 @@ params:
       Out in the garden.
   heroLinks:
     - { name: "GitHub", url: "https://github.com/atmask", external: true }
-    - { name: "LinkedIn", url: "https://www.linkedin.com/in/ben-mask-936b49185/", external: true }
+    - {
+        name: "LinkedIn",
+        url: "https://www.linkedin.com/in/ben-mask-936b49185/",
+        external: true,
+      }
     - { name: "RSS", url: "/index.xml" }
     - { name: "Email", url: "mailto:benjaminajm@gmail.com" }
   favorites:
+    - /posts/19-containix/
     - /posts/10-tenets/
     - /posts/02-bare-metal-k3s-on-rpi-part-1/
     - /posts/02-bare-metal-k3s-on-rpi-part-2/
     - /posts/15-steph-ango/
-    - /posts/18-nix-experimental/
   socialIcons: # optional
     - name: Github
       url: https://github.com/atmask
@@ -60,4 +64,3 @@ params:
   ShowBreadCrumbs: true
   ShowReadingTime: true
   ShowPostNavLinks: true
-
