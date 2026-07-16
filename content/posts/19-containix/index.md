@@ -32,7 +32,7 @@ spec:
 
 So why does this matter you may ask? A couple reasons. Namely, this changes the lifecycle of your team's software distribution.
 
-First, no more building and pushing OCI images, no more maintaining dockerfiles. The flake is resolved when it is realized by Nix meaning that on each build of your application where you are not waiting on CI to build and push images. The flake can also be used to ensure consistency across development, test, and production environments.
+First, no more building and pushing OCI images, no more maintaining Dockerfiles. The flake is realized by Nix during pod creation, meaning that during development cycles you are not waiting on CI to build and push images. The flake can also be used to ensure consistency across development, test, and production environments.
 
 Second, there is no more need for registries. You can pre-mount a binary cache to your Kubernetes nodes for fast pod starts.
 
@@ -53,13 +53,6 @@ Interested and want to give it a try? You can either test it on containerd alone
 **1) Get the shim**
 You can do this by downloading the shim to your machine from the distributed `v0.1.0` [artifacts](https://github.com/atmask/containix/releases/tag/containix%2Fv0.1.0), build from source, or use the flake in the project repo.
 
-### Kubernetes
-
-### Containerd
-
-**1) Get the shim**
-You can do this by downloading the shim to your machine from the distributed `v0.1.0` [artifacts](https://github.com/atmask/containix/releases/tag/containix%2Fv0.1.0), build from source, or use the flake in the project repo.
-
 **2) Make sure the host is ready**
 The shim just needs to be on containerd's `PATH` (so it can resolve `io.containerd.containix.v1` → the binary), and a Nix daemon has to be running on the host. On NixOS, the flake's module handles both for you.
 
@@ -67,7 +60,7 @@ The shim just needs to be on containerd's `PATH` (so it can resolve `io.containe
 `ctr` doesn't auto-pull, so grab any small image first (its contents are ignored), then run with the containix runtime and a flake label:
 
 ```bash
-sudo ctr image pull docker.io/library/busybox:latest
+sudo ctr image pull ghcr.io/atmask/containix-empty:0.1.0
 sudo ctr run --rm \
   --runtime io.containerd.containix.v1 \
   --label containix.dev/flake="nixpkgs#hello" \
